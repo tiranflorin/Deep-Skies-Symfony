@@ -1,0 +1,3 @@
+dso_planner_homepage:
+    pattern:  /hello/{name}
+    defaults: { _controller: DsoPlannerBundle:Default:index }

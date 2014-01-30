@@ -1,0 +1,4 @@
+dso_planner:
+    resource: "@DsoPlannerBundle/Resources/config/routing.yml"
+    prefix:   /
+

@@ -1,0 +1,7 @@
+parameters:
+#    dso_planner.example.class: Dso\PlannerBundle\Example
+
+services:
+#    dso_planner.example:
+#        class: %dso_planner.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
