@@ -58,16 +58,16 @@ Notice the "*" separator from the dateTime option.
         $latitude = $input->getOption('latitude');
         $longitude = $input->getOption('longitude');
         $dateTime = $input->getOption('dateTime');
-
+        $dateTime = str_replace('*', ' ', $dateTime);
         if (!$this->validateInput($latitude, $longitude, $dateTime)) {
             return;
         }
 
-        //call a service to do the actual job of creating and populating the table.
+        $visibleObjectsService = $this->getContainer()->get('dso_planner.visible_objects');
+        $visibleObjectsService->setConfigurationDetails($latitude, $longitude, $dateTime);
         try {
-            //TODO: do the shit, if sucessful output:
-            $this->output->writeln('SUCCESS: ' . json_encode('replace this with the result from service'));
-            $this->output->writeln("\nCommand was called with the following arguments:\n\n $latitude \n $longitude \n $dateTime. \n"); //TODO: delete this
+            $result = $visibleObjectsService->executeFlow();
+            $this->output->writeln('SUCCESS: ' . json_encode($result));
         } catch (Exception $e) {
             $this->output->writeln('ERROR: ' . json_encode(array('message' => $e->getMessage())));
         }
