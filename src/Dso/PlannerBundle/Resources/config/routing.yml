@@ -1,3 +1,11 @@
 dso_planner_homepage:
+    pattern:  /
+    defaults: { _controller: DsoPlannerBundle:Home:index }
+
+dso_planner_filter:
+    pattern:  /filter/
+    defaults: { _controller: DsoPlannerBundle:Home:filter }
+
+dso_planner_test:
     pattern:  /hello/{name}
     defaults: { _controller: DsoPlannerBundle:Default:index }

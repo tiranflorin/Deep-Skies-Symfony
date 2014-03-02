@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Deep-Skies</title>
+</head>
+
+<body>
+    <div>
+        {% for key, setting in settings %}
+            <p>{{ key }}: {{ setting | e }}</p>
+        {% endfor %}
+
+    </div>
+    <div>
+        <form action="/projects/Deep-Skies-Symfony/web/app_dev.php/filter/" method="post">
+            Filter Type: <input type="text" name="filter_type"><br/>
+            Selection: <input type="text" name="predefined_selection"><br/><br/>
+            <input type="submit" value="Submit">
+        </form>
+        <hr/>
+        <form action="/projects/Deep-Skies-Symfony/web/app_dev.php/filter/" method="post">
+            Filter Type: <input type="text" name="filter_type"><br/>
+            Const: <input type="text" name="constellation"><br/>
+            Min mag: <input type="text" name="magMin"><br/>
+            Max mag: <input type="text" name="magMax"><br/>
+            Obj Type: <input type="text" name="objectType"><br/><br/>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+</body>
+
+</html>

@@ -7,6 +7,7 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Dso\PlannerBundle\Services\CreateVisibleObjectsTable;
 
 /**
  * Executes the CreateVisibleObjects command
@@ -63,6 +64,7 @@ Notice the "*" separator from the dateTime option.
             return;
         }
 
+        /** @var  CreateVisibleObjectsTable $visibleObjectsService */
         $visibleObjectsService = $this->getContainer()->get('dso_planner.visible_objects');
         $visibleObjectsService->setConfigurationDetails($latitude, $longitude, $dateTime);
         try {

@@ -2,6 +2,7 @@ parameters:
 #    dso_planner.example.class: Dso\PlannerBundle\Example
     dso_planner.mysql_service.class: Dso\PlannerBundle\Services\SQL\MySqlService
     dso_planner.visible_objects.class: Dso\PlannerBundle\Services\CreateVisibleObjectsTable
+    dso_planner.filter_results.class: Dso\PlannerBundle\Services\FilterResults
 
 services:
 #    dso_planner.example:
@@ -12,4 +13,7 @@ services:
         arguments: [@database_connection]
     dso_planner.visible_objects:
         class: %dso_planner.visible_objects.class%
+        arguments: [@dso_planner.mysql_service]
+    dso_planner.filter_results:
+        class: %dso_planner.filter_results.class%
         arguments: [@dso_planner.mysql_service]
