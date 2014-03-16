@@ -1,13 +1,9 @@
 parameters:
-#    dso_planner.example.class: Dso\PlannerBundle\Example
     dso_planner.mysql_service.class: Dso\PlannerBundle\Services\SQL\MySqlService
     dso_planner.visible_objects.class: Dso\PlannerBundle\Services\CreateVisibleObjectsTable
     dso_planner.filter_results.class: Dso\PlannerBundle\Services\FilterResults
 
 services:
-#    dso_planner.example:
-#        class: %dso_planner.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
     dso_planner.mysql_service:
         class: %dso_planner.mysql_service.class%
         arguments: [@database_connection]

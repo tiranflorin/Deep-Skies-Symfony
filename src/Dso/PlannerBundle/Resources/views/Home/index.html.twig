@@ -12,10 +12,15 @@
 
     </div>
     <div>
+        <!--
         <form action="/projects/Deep-Skies-Symfony/web/app_dev.php/filter/" method="post">
             Filter Type: <input type="text" name="filter_type"><br/>
             Selection: <input type="text" name="predefined_selection"><br/><br/>
             <input type="submit" value="Submit">
+        </form>
+        -->
+        <form action="{{ path('dso_planner_predefined_filter') }}" method="post" {{ form_enctype(formPredefinedFilters) }}>
+            {{ form_widget(formPredefinedFilters) }}
         </form>
         <hr/>
         <form action="/projects/Deep-Skies-Symfony/web/app_dev.php/filter/" method="post">

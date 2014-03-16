@@ -2,6 +2,7 @@
 
 namespace Dso\PlannerBundle\Controller;
 
+use Dso\PlannerBundle\Form\PredefinedFilters;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Dso\PlannerBundle\Services\FilterResults;
@@ -18,37 +19,72 @@ class HomeController extends Controller
             'datetime' => $formattedDateTime,
             'timezone' => 'GMT +2:00'
         );
-        return $this->render('DsoPlannerBundle:Home:index.html.twig', array('settings' => $settings));
+        $formPredefinedFilters = $this->createForm(new PredefinedFilters());
+        return $this->render('DsoPlannerBundle:Home:index.html.twig', array(
+            'settings' => $settings,
+            'formPredefinedFilters' => $formPredefinedFilters->createView()
+        ));
+
     }
 
-    public function filterAction()
+    public function filterPredefinedAction(Request $request)
     {
         /** @var FilterResults $filterService */
         $filterService = $this->get('dso_planner.filter_results');
 
-        $request = Request::createFromGlobals();
-        $filterType = $request->request->get('filter_type');
+        if ($request->getMethod() == 'POST') {
+            $form = $this->createForm(new PredefinedFilters());
+            $form->handleRequest($request);
 
-        if($filterType == 'predefined') {
-            $selection = $request->request->get('predefined_selection');
-            $filterService->setConfigurationDetails($filterType, $selection);
+            if ($form->isValid()) {
+                $filterType = $form->get('filter_type')->getData();
+
+                if($filterType == 'predefined') {
+                    if ($form->get('naked_eye')->isClicked() === true)
+                        $selection = 'naked_eye';
+                    if ($form->get('binoculars')->isClicked() === true)
+                        $selection = 'binoculars';
+                    if ($form->get('small_telescope')->isClicked() === true)
+                        $selection = 'small_telescope';
+
+                    $filterService->setConfigurationDetails($filterType, $selection);
+                }
+                $results = $filterService->retrieveFilteredData();
+                echo 'ceva';
+            }
         }
+    }
 
-        if($filterType == 'custom') {
-            $const = $request->request->get('constellation');
-            $magMin = $request->request->get('magMin');
-            $magMax = $request->request->get('magMax');
-            $objType = $request->request->get('objectType');
-            $selection = array(
-                'constellation' => $const,
-                'magMin' => $magMin,
-                'magMax' => $magMax,
-                'objType' => $objType
-            );
-            $filterService->setConfigurationDetails($filterType, $selection);
+    //TODO: completeaza si metoda asta si creeaza formularul asociat:
+    public function filterCustomAction(Request $request)
+    {
+        /** @var FilterResults $filterService */
+        $filterService = $this->get('dso_planner.filter_results');
+
+        if ($request->getMethod() == 'POST') {
+            $form = $this->createForm(new CustomFilters());
+            $form->handleRequest($request);
+
+            if ($form->isValid()) {
+                $filterType = $form->get('filter_type')->getData();
+
+                if($filterType == 'custom') {
+                    $const = $form->get('constellation');
+                    $magMin = $form->get('magMin');
+                    $magMax = $form->get('magMax');
+                    $objType = $form->get('objectType');
+                    $selection = array(
+                        'constellation' => $const,
+                        'magMin' => $magMin,
+                        'magMax' => $magMax,
+                        'objType' => $objType
+                    );
+                    $filterService->setConfigurationDetails($filterType, $selection);
+                }
+
+                $results = $filterService->retrieveFilteredData();
+                echo 'ceva';
+            }
         }
-
-        $results = $filterService->retrieveFilteredData();
-        echo 'ceva';
     }
 }
