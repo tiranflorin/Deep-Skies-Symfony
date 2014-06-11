@@ -1,3 +1,7 @@
+dso_home:
+    resource: "@DsoHomeBundle/Resources/config/routing.yml"
+    prefix:   /
+
 dso_planner:
     resource: "@DsoPlannerBundle/Resources/config/routing.yml"
     prefix:   /

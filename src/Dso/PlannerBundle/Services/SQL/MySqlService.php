@@ -13,7 +13,7 @@ use Dso\PlannerBundle\Exception\QueryExecutionFailureException;
  *
  * @package Dso\PlannerBundle\Services\SQL
  */
-class MysqlService
+class MySqlService
 {
     /** @var Connection */
     protected $conn;

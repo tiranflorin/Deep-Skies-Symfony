@@ -10,3 +10,5 @@
 /bin/
 /composer.phar
 /.idea/*
+/ngcPhotos/
+/web/

@@ -1,0 +1,3 @@
+dso_home_homepage:
+    pattern:  /home/
+    defaults: { _controller: DsoHomeBundle:Home:index }
