@@ -1,9 +1,9 @@
 dso_planner_homepage:
-    pattern:  /
+    pattern:  /planner/
     defaults: { _controller: DsoPlannerBundle:Home:index }
 
 dso_planner_predefined_filter:
-    pattern:  /filter/
+    pattern:  /planner/filter/
     defaults: { _controller: DsoPlannerBundle:Home:filterPredefined }
 dso_planner_feedback:
     pattern:  /feedback/
@@ -11,7 +11,3 @@ dso_planner_feedback:
 dso_planner_feedback_sent:
     pattern:  /feedback-sent/
     defaults: { _controller: DsoPlannerBundle:Feedback:feedbacksent }
-
-dso_planner_test:
-    pattern:  /hello/{name}
-    defaults: { _controller: DsoPlannerBundle:Default:index }
