@@ -1,14 +1,26 @@
-/web/bundles/
+# Symfony2 specific
+###############################
+/web/bundles/*
 /app/bootstrap.php.cache
 /app/cache/*
 /app/config/parameters.yml
 /app/logs/*
 !app/cache/.gitkeep
 !app/logs/.gitkeep
-/build/
-/vendor/
-/bin/
-/composer.phar
-/.idea/*
+/build/*
+/vendor/*
+/bin/*
+
+# Git specific
+###############################
+/composer.lock
+
+# Application specific
+###############################
 /ngcPhotos/
-/web/
+/web/css/*
+/web/js/*
+
+# PHPStorm specific
+###############################
+/.idea/*
