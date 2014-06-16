@@ -1,37 +1,28 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Deep-Skies</title>
-</head>
-
-<body>
+{% extends 'DsoHomeBundle:Home:base.html.twig' %}
+{% block jumbotronBlock %} {% endblock %}
+{% block mainContent %}
     <div>
+        <h3>Current location settings area:</h3>
         {% for key, setting in settings %}
             <p>{{ key }}: {{ setting | e }}</p>
         {% endfor %}
-
+        <hr>
     </div>
     <div>
-        <!--
-        <form action="/projects/Deep-Skies-Symfony/web/app_dev.php/filter/" method="post">
-            Filter Type: <input type="text" name="filter_type"><br/>
-            Selection: <input type="text" name="predefined_selection"><br/><br/>
-            <input type="submit" value="Submit">
-        </form>
-        -->
+        <h3>Predefined filters area:</h3>
         <form action="{{ path('dso_planner_predefined_filter') }}" method="post" {{ form_enctype(formPredefinedFilters) }}>
             {{ form_widget(formPredefinedFilters) }}
         </form>
-        <hr/>
+        <hr>
+
+        <h3>Custom filters area:</h3>
         <form action="/projects/Deep-Skies-Symfony/web/app_dev.php/filter/" method="post">
             Filter Type: <input type="text" name="filter_type"><br/>
             Const: <input type="text" name="constellation"><br/>
             Min mag: <input type="text" name="magMin"><br/>
             Max mag: <input type="text" name="magMax"><br/>
             Obj Type: <input type="text" name="objectType"><br/><br/>
-            <input type="submit" value="Submit">
+            <input type="submit" class="btn-default" value="Submit">
         </form>
     </div>
-</body>
-
-</html>
+{% endblock %} {# <!-- end mainContent block --> #}

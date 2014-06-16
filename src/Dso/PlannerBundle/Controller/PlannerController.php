@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Dso\PlannerBundle\Services\FilterResults;
 
-class HomeController extends Controller
+class PlannerController extends Controller
 {
     public function indexAction()
     {
@@ -20,7 +20,7 @@ class HomeController extends Controller
             'timezone' => 'GMT +2:00'
         );
         $formPredefinedFilters = $this->createForm(new PredefinedFilters());
-        return $this->render('DsoPlannerBundle:Home:index.html.twig', array(
+        return $this->render('DsoPlannerBundle:Planner:index.html.twig', array(
             'settings' => $settings,
             'formPredefinedFilters' => $formPredefinedFilters->createView()
         ));

@@ -1,0 +1,13 @@
+body{
+	background-color: #333;
+	color: #fff;
+  	text-align: center;
+  	text-shadow: 0 1px 3px rgba(0,0,0,.5);
+  	box-shadow: inset 0 0 100px rgba(0,0,0,.5);
+}
+
+.jumbotron {
+	background-color: #6559FF;
+    margin-top: 50px;
+    padding: 0;
+}
