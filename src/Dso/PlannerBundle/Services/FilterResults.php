@@ -28,7 +28,7 @@ class FilterResults
 
         //for now test only with this table:
         $this->baseTable = 'object';
-        $this->tempTable = 'temp__custom_46.76_23.58_20140601120100';
+        $this->tempTable = 'temp__custom_46.767_23.583_20140801225000';
         $this->imagePathsTable = 'image_paths';
     }
 
