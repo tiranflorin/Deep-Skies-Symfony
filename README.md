@@ -6,16 +6,20 @@ Implementation based on Symfony2.4
 Install notes:
 
 1) Install vendors and configure mysql connection:
+
     $ composer install
 
 2) Ensure the cache and logs directories are writable by the webserver:
+
     $ sudo chmod -R 777 app/cache
     $ sudo chmod -R 777 app/logs
 
 3) Create the database:
+
     $ app/console doctrine:database:create
 
 4) Create the tables needed:
+
     $ app/console doctrine:schema:update --force
 
 5) Import the object and image_paths tables from (proj-root-dir/other-resources/
