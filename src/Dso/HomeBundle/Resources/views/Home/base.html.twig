@@ -36,7 +36,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Deep-Skies</a>
+            <a class="navbar-brand" href="{{ path('dso_home_homepage') }}">Deep-Skies</a>
         </div>
         <div class="navbar-collapse collapse">
             <form class="navbar-form navbar-left" role="form">
@@ -50,50 +50,33 @@
                 <li><a href="{{ path('dso_planner_homepage') }}">Planner</a></li>
                 <li><a href="#contact">Observations Log</a></li>
                 <li><a href="#contact">Vision</a></li>
-                <li><a href="#contact">Feedback</a></li>
+                <li><a href="{{ path('dso_planner_feedback') }}">Feedback</a></li>
             </ul>
         </div><!--/.navbar-collapse -->
     </div>
 </div>
 
-<div class="jumbotron">
-    <div class="container">
-        {% block jumbotronBlock %}
-            <h1>Welcome to Deep-Skies.com</h1>
-            <p class="lead">
-                A community of amateur astronomers passionate about deep sky objects.
-            </p>
-            <p class="lead">Available tools:</p>
-            <ul>
-                <li>
-                    <strong>Planner</strong> - a quick and easy to use tool for planning your observing sessions.
-                </li>
-                <li>
-                    <strong>Observations Log</strong> - Save all your observations in one place, view log entries,
-                    manage equipment, export data and more.
-                </li>
-            </ul>
-        {% endblock %} {# end jumbotronBlock #}
+<div class="page-header">
+    <div class="login">
+        {% if is_granted('ROLE_USER') %}
+            <p>Hi {{ app.user.username }}!</p>
+            <a href="{{ path('fos_user_security_logout') }}">Logout</a>
+        {% else %}
+            <a href="{{ path('fos_user_security_login') }}">Login</a>
+        {% endif %}
     </div>
 </div>
 
+{% block jumbotronBlock %} {% endblock %}
+
 <div class="container">
-    {% block mainContent %}
-    <!--
-    <div class="row">
-        <div class="col-md-4">
-            <h2>Heading</h2>
-            <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-            <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-        </div>
-    </div>
-    -->
-    {% endblock %} {# end mainBlock #}
+
+    {% block mainContent %}{% endblock %} {# end mainBlock #}
 
     <hr>
 
     <footer>
-        <p>&copy; Deep-Skies.com 2014 - Powered by <a href="http://getbootstrap.com">Bootstrap</a>.</p>
+        <p>Copyright &copy;{{ 'now'|date('Y') }} Deep-Skies. All rights reserved.</p>
     </footer>
 
 </div> <!-- /container -->

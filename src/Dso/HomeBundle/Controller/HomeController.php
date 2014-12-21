@@ -8,6 +8,6 @@ class HomeController extends Controller
 {
     public function indexAction()
     {
-        return $this->render('DsoHomeBundle:Home:base.html.twig');
+        return $this->render('DsoHomeBundle:Home:index.html.twig');
     }
 }

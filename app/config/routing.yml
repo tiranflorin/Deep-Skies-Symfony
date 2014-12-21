@@ -1,3 +1,7 @@
+dso_user:
+    resource: "@DsoUserBundle/Resources/config/routing.yml"
+    prefix:   /
+
 dso_home:
     resource: "@DsoHomeBundle/Resources/config/routing.yml"
     prefix:   /
@@ -6,3 +10,6 @@ dso_planner:
     resource: "@DsoPlannerBundle/Resources/config/routing.yml"
     prefix:   /
 
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+    prefix:   /auth

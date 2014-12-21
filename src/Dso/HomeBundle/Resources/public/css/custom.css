@@ -11,3 +11,13 @@ body{
     margin-top: 50px;
     padding: 0;
 }
+
+.login {
+    text-align: right;
+    padding-right: 20px;
+    padding-top: 20px;
+}
+
+.page-header {
+    border-bottom: none;
+}

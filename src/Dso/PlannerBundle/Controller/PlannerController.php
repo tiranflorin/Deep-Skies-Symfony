@@ -12,17 +12,11 @@ class PlannerController extends Controller
     public function indexAction()
     {
         //TODO complex logic here, (e.g. check if the user has custom settings)
-        $dateTime = new \DateTime();
-        $formattedDateTime = $dateTime->format('Y-m-d H:i:s');
-        $settings = array(
-            'location' => 'Cluj Napoca, Romania, (23.45 E, 45.23 N)',
-            'datetime' => $formattedDateTime,
-            'timezone' => 'GMT +2:00'
-        );
-        $formPredefinedFilters = $this->createForm(new PredefinedFilters());
+        $templateRequired = $this->getRequiredPageData();
+
         return $this->render('DsoPlannerBundle:Planner:index.html.twig', array(
-            'settings' => $settings,
-            'formPredefinedFilters' => $formPredefinedFilters->createView()
+            'settings' => $templateRequired['settings'],
+            'formPredefinedFilters' => $templateRequired['formPredefinedFilters']->createView()
         ));
 
     }
@@ -50,7 +44,13 @@ class PlannerController extends Controller
                     $filterService->setConfigurationDetails($filterType, $selection);
                 }
                 $results = $filterService->retrieveFilteredData();
-                echo 'ceva';
+                $templateRequired = $this->getRequiredPageData();
+
+                return $this->render('DsoPlannerBundle:Planner:index.html.twig', array(
+                    'settings' => $templateRequired['settings'],
+                    'formPredefinedFilters' => $templateRequired['formPredefinedFilters']->createView(),
+                    'dsosList' => $results
+                ));
             }
         }
     }
@@ -86,5 +86,22 @@ class PlannerController extends Controller
                 echo 'ceva';
             }
         }
+    }
+
+    public function getRequiredPageData()
+    {
+        $dateTime = new \DateTime();
+        $formattedDateTime = $dateTime->format('Y-m-d H:i:s');
+        $settings = array(
+            'location' => 'Cluj Napoca, Romania, (23.45 E, 45.23 N)',
+            'datetime' => $formattedDateTime,
+            'timezone' => 'GMT +2:00'
+        );
+        $formPredefinedFilters = $this->createForm(new PredefinedFilters());
+
+        return array(
+            'settings' => $settings,
+            'formPredefinedFilters' => $formPredefinedFilters
+        );
     }
 }

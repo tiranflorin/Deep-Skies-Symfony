@@ -28,7 +28,7 @@ class FilterResults
 
         //for now test only with this table:
         $this->baseTable = 'object';
-        $this->tempTable = 'temp__custom_46.767_23.583_20140801225000';
+        $this->tempTable = 'temp__custom_46.767_23.584_20141122213205';
         $this->imagePathsTable = 'image_paths';
     }
 
@@ -111,6 +111,7 @@ class FilterResults
             $results = $this->mysqlService->executeSelectQuery($sSql);
         } catch (QueryExecutionFailureException $e) {
             echo 'Caught exception: ',  $e->getMessage(), ' File: ', $e->getFile(), "\n";
+            die;
         }
 
         return $results;

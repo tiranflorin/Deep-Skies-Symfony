@@ -1,0 +1,3 @@
+dso_user_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: DsoUserBundle:Default:index }
