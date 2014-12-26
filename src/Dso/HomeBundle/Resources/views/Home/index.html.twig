@@ -7,15 +7,21 @@
                     A community of amateur astronomers passionate about deep sky objects.
                 </p>
                 <p class="lead">Available tools:</p>
-                <ul>
-                    <li>
-                        <strong>Planner</strong> - a quick and easy to use tool for planning your observing sessions.
-                    </li>
-                    <li>
-                        <strong>Observations Log</strong> - Save all your observations in one place, view log entries,
-                        manage equipment, export data and more.
-                    </li>
-                </ul>
+                <div class="list-group">
+                    <a href="{{ path('dso_planner_homepage') }}" class="list-group-item">
+                        <p class="list-group-item-text">
+                            <span class="label label-default"><strong>Planner</strong></span>
+                            A quick and easy to use tool for planning your observing sessions.
+                        </p>
+                    </a>
+                    <a href="#" class="list-group-item">
+                        <p class="list-group-item-text">
+                            <span class="label label-default"><strong>Observations Log</strong></span>
+                            Save all your observations in one place, view log entries,
+                            manage equipment, export data and more.
+                        </p>
+                    </a>
+                </div>
         </div>
     </div>
 {% endblock %}

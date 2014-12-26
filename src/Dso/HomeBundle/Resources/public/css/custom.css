@@ -20,9 +20,47 @@ body{
 
 .page-header {
     border-bottom: none;
+    margin-bottom: 0;
 }
-/* Sticky footer styles
--------------------------------------------------- */
+
+.jumbotron .list-group-item{
+    background-color: #6559FF;
+    padding-top: 15px;
+    padding-bottom: 5px;
+}
+
+.profile {
+    margin-top: 30px;
+}
+
+#predefined-filters button{
+    margin-top: 10px;
+}
+
+#custom-filters div{
+    float: left;
+    width: 100%;
+    margin-top: 5px;
+}
+
+#custom-filters label{
+    width:40%;
+    float: left;
+    padding-top: 8px;
+}
+
+#custom-filters input{
+    width:55%;
+    float: left;
+}
+
+
+footer p {
+    padding-top: 15px;
+}
+
+
+/* Start sticky footer styles */
 html {
     position: relative;
     min-height: 100%;
@@ -39,12 +77,10 @@ footer {
     height: 50px;
     background-color: #2F2F2F;
 }
+/* End sticky footer styles */
 
-footer p {
-    padding-top: 15px;
-}
 
-/** Start sign in area styles */
+/* Start sign in area styles */
 #signin {
     margin-top: 40px;
 }
@@ -83,5 +119,5 @@ footer p {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
-/** End sign in area styles */
+/* End sign in area styles */
 

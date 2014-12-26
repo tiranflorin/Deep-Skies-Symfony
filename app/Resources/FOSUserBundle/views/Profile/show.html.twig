@@ -1,11 +1,12 @@
-{#{% extends "FOSUserBundle::layout.html.twig" %}#}
+{% extends 'DsoHomeBundle:Home:base.html.twig' %}
+{% block mainContent %}
 
-{#{% block fos_user_content %}#}
-    {#Updated profile#}
-    {#{% include "FOSUserBundle:Profile:show_content.html.twig" %}#}
-{#{% endblock fos_user_content %}#}
+<div class="container">
+    <div class="profile">
+        <p>Username: {{ user.username }}</p>
+        <p>Email: {{ user.email }}</p>
+        <p>Change your password: <a href="{{ path('fos_user_change_password') }}">Change</a></p>
+    </div>
+</div>
 
-{% block fos_user_content %}
-    Updated profile
-{% endblock fos_user_content %}
-
+{% endblock %} {# <!-- end mainContent block --> #}

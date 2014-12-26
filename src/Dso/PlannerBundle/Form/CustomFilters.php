@@ -14,7 +14,7 @@ class CustomFilters extends AbstractType
         $builder->add('min_mag', 'text', array('attr' => array('class' => 'form-control')));
         $builder->add('max_mag', 'text', array('attr' => array('class' => 'form-control')));
         $builder->add('obj_type', 'text', array('attr' => array('class' => 'form-control')));
-        $builder->add('filter', 'submit', array('attr' => array('class' => 'btn btn-success')));
+        $builder->add('filter', 'submit', array('attr' => array('class' => 'btn btn-primary')));
     }
 
     public function getName()

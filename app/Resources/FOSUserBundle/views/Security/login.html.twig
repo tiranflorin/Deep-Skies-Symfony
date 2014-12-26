@@ -6,31 +6,6 @@
     {% trans_default_domain 'FOSUserBundle' %}
 
     {% block fos_user_content %}
-        {#<div id="signin" class="container w-xxl w-auto-xs" >#}
-            {#<form action="{{ path("fos_user_security_check") }}" method="post" name="form" class="form-validation">#}
-                {#<input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />#}
-                {#{% if error %}#}
-                    {#<div class="text-danger wrapper text-center">#}
-                        {#{{ error.messageKey|trans(error.messageData, 'security') }}#}
-                    {#</div>#}
-                {#{% endif %}#}
-                {#<div class="wrapper text-center">#}
-                    {#<h2>Welcome to Deep-Skies</h2>#}
-                {#</div>#}
-                {#<div class="list-group list-group-sm">#}
-                    {#<div class="list-group-item">#}
-                        {#<label for="_username">Username: </label>#}
-                        {#<input type="text" name="_username" id="_username" placeholder="Username" class="form-control no-border" required>#}
-                    {#</div>#}
-                    {#<div class="list-group-item">#}
-                        {#<label for="_password">Password: </label>#}
-                        {#<input type="password" name="_password" id="password" placeholder="Password" class="form-control no-border" required>#}
-                    {#</div>#}
-                {#</div>#}
-                {#<button type="submit" name="_submit" class="btn btn-lg btn-primary btn-block">Log in</button>#}
-            {#</form>#}
-        {#</div>#}
-
         <div id="signin" class="container" >
             <form action="{{ path("fos_user_security_check") }}" method="post" name="form" class="form-signin form-validation">
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
