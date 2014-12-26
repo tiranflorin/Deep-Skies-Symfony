@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="author" content="Florin Tiran">
     <link rel="shortcut icon" href="{{ asset('bundles/dsohome/images/ico/favicon.ico') }}">
 
     <title>Deep-Skies Home</title>
@@ -56,35 +56,36 @@
     </div>
 </div>
 
+{% block pageHeader %}
 <div class="page-header">
     <div class="login">
         {% if is_granted('ROLE_USER') %}
-            <p>Hi {{ app.user.username }}!</p>
+            <p>Hi <a href="{{ path('fos_user_profile_show') }}">{{ app.user.username }}!</a></p>
             <a href="{{ path('fos_user_security_logout') }}">Logout</a>
         {% else %}
             <a href="{{ path('fos_user_security_login') }}">Login</a>
         {% endif %}
     </div>
 </div>
+{% endblock pageHeader %}
 
 {% block jumbotronBlock %} {% endblock %}
 
 <div class="container">
-
     {% block mainContent %}{% endblock %} {# end mainBlock #}
+</div>
 
-    <hr>
-
-    <footer>
-        <p>Copyright &copy;{{ 'now'|date('Y') }} Deep-Skies. All rights reserved.</p>
-    </footer>
-
-</div> <!-- /container -->
+<footer>
+    <div class="container">
+        <p class="text-muted">Copyright &copy;{{ 'now'|date('Y') }} Deep-Skies. All rights reserved.</p>
+    </div>
+</footer>
 
 <!-- Placed at the end of the document so the pages load faster -->
 {% block footer_javascripts %}
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    {#<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>#}
     {% javascripts
+    '@DsoHomeBundle/Resources/public/js/jquery-2.1.0.min.js'
     '@DsoHomeBundle/Resources/public/js/bootstrap-core/*'
     '@DsoHomeBundle/Resources/public/js/*'
     %}

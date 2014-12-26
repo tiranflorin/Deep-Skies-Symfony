@@ -28,7 +28,7 @@ class CreateVisibleObjectsTable
     protected $creation;
 
     /** @var  string the name of the table we will use */
-    protected $tableName;
+    protected $visibleObjectsTable;
 
     /** @var  string the name of the intermediary table */
     protected $intermediaryTableName;
@@ -60,33 +60,33 @@ class CreateVisibleObjectsTable
         $this->populateIntermediaryTable();
 
         //create visible objects table:
-        $this->createTable();
+        $this->createVisibleObjectsTable();
 
         //calculate objects visible:
-        $this->populateTable();
+        $this->populateVisibleObjectsTable();
 
         //delete intermediary table
         $this->deleteIntermediaryTable();
 
         $result = array(
             'status' => 'Execution completed successfully',
-            'table_name' => $this->tableName
+            'table_name' => $this->visibleObjectsTable
         );
 
         return $result;
     }
 
     /**
+     * @param string $username
      * @param string $lat
      * @param string $long
      * @param string $creation
      */
-    public function setConfigurationDetails($lat, $long, $creation)
+    public function setConfigurationDetails($username, $lat, $long, $creation)
     {
         $this->lat = $lat;
         $this->long = $long;
         $this->creation = $creation;
-
         $tmp = new \DateTime($creation);
         $creationDateTime = $tmp->format('YmdHis');
 
@@ -95,9 +95,9 @@ class CreateVisibleObjectsTable
 
         //if we are in the case to build the default table
         if ($this->lat == '45.230' && $this->long == '23.450') {
-            $this->tableName = 'temp__default_45230_23450_' . $creationDateTime;
+            $this->visibleObjectsTable = 'temp__default_45230_23450_' . $creationDateTime;
         } else {
-            $this->tableName = 'temp__custom_' . $this->lat . '_' . $this->long . '_' . $creationDateTime;
+            $this->visibleObjectsTable = 'temp__custom__'. strtolower($username) .'_' . $this->lat . '_' . $this->long . '_' . $creationDateTime;
         }
     }
 
@@ -126,7 +126,7 @@ class CreateVisibleObjectsTable
     /**
      * Insert data into the main table with visible objects and alt-azimuthal coordinates
      */
-    protected function populateTable()
+    protected function populateVisibleObjectsTable()
     {
         /*
         TODO
@@ -167,7 +167,7 @@ class CreateVisibleObjectsTable
             //for the second pass,  objects can rise(if enough time has passed), altitude increases and are saved.
             if ($objAltitude > 5) {
                 $sSql = "
-                INSERT IGNORE INTO `{$this->tableName}`(
+                INSERT IGNORE INTO `{$this->visibleObjectsTable}`(
                 `object_id`,
                 `lat`,
                 `long`,
@@ -196,10 +196,10 @@ class CreateVisibleObjectsTable
     /**
      * Create temporary table for visible objects
      */
-    protected function createTable()
+    protected function createVisibleObjectsTable()
     {
         $sSql = "
-            CREATE TABLE IF NOT EXISTS `{$this->tableName}`(
+            CREATE TABLE IF NOT EXISTS `{$this->visibleObjectsTable}`(
             `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
             `object_id` int(10) unsigned NOT NULL DEFAULT 0,
             `lat` varchar(255) NOT NULL DEFAULT '',
@@ -326,5 +326,25 @@ class CreateVisibleObjectsTable
         $aObjectName['altitude'] = $alt;
 
         return $aObjectName;
+    }
+
+    /**
+     * @param string $visibleObjectsTable
+     *
+     * @return CreateVisibleObjectsTable
+     */
+    public function setVisibleObjectsTable($visibleObjectsTable)
+    {
+        $this->visibleObjectsTable = $visibleObjectsTable;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVisibleObjectsTable()
+    {
+        return $this->visibleObjectsTable;
     }
 }

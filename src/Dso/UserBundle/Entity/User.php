@@ -25,10 +25,110 @@ class User extends BaseUser
     protected $id;
 
     /**
+     * @ORM\Column(type="string", nullable=TRUE)
+     */
+    protected $latitude;
+
+    /**
+     * @ORM\Column(type="string", nullable=TRUE)
+     */
+    protected $longitude;
+
+    /**
+     * @ORM\Column(type="string", nullable=TRUE)
+     */
+    protected $timeZone;
+
+    /**
+     * @ORM\Column(type="string", nullable=TRUE)
+     */
+    protected $dateTime;
+
+    /**
      * Class constructor
      */
     public function __construct()
     {
         parent::__construct();
+    }
+
+    /**
+     * @param mixed $latitude
+     *
+     * @return User
+     */
+    public function setLatitude($latitude)
+    {
+        $this->latitude = $latitude;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLatitude()
+    {
+        return $this->latitude;
+    }
+
+    /**
+     * @param mixed $longitude
+     *
+     * @return User
+     */
+    public function setLongitude($longitude)
+    {
+        $this->longitude = $longitude;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLongitude()
+    {
+        return $this->longitude;
+    }
+
+    /**
+     * @param mixed $timeZone
+     *
+     * @return User
+     */
+    public function setTimeZone($timeZone)
+    {
+        $this->timeZone = $timeZone;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTimeZone()
+    {
+        return $this->timeZone;
+    }
+
+    /**
+     * @param mixed $dateTime
+     *
+     * @return User
+     */
+    public function setDateTime($dateTime)
+    {
+        $this->dateTime = $dateTime;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDateTime()
+    {
+        return $this->dateTime;
     }
 }

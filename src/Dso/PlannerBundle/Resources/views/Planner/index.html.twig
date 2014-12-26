@@ -2,27 +2,31 @@
 {% block jumbotronBlock %} {% endblock %}
 {% block mainContent %}
     <div>
-        <h3>Current location settings area:</h3>
-        {% for key, setting in settings %}
-            <p>{{ key }}: {{ setting | e }}</p>
-        {% endfor %}
+        {{ render(controller('DsoPlannerBundle:Planner:locationSettings')) }}
         <hr>
     </div>
     <div>
+        <div id="predefined-filters">
         <h3>Predefined filters area:</h3>
         <form action="{{ path('dso_planner_predefined_filter') }}" method="post" {{ form_enctype(formPredefinedFilters) }}>
             {{ form_widget(formPredefinedFilters) }}
         </form>
+        </div>
         <hr>
 
+        <div id="custom-filters">
         <h3>Custom filters area:</h3>
-        <form action="/projects/Deep-Skies-Symfony/web/app_dev.php/filter/" method="post">
-            Filter Type: <input type="text" name="filter_type"><br/>
-            Const: <input type="text" name="constellation"><br/>
-            Min mag: <input type="text" name="magMin"><br/>
-            Max mag: <input type="text" name="magMax"><br/>
-            Obj Type: <input type="text" name="objectType"><br/><br/>
-            <input type="submit" class="btn-default" value="Submit">
-        </form>
+            <form action="{{ path('dso_planner_custom_filter') }}" method="post" {{ form_enctype(formCustomFilters) }}>
+                {{ form_widget(formCustomFilters) }}
+            </form>
+        </div>
+    </div>
+
+    <div class="object-list">
+        {% if dsosList is defined %}
+            {% for object in dsosList %}
+                <li>{{ object.Name1 }}</li>
+            {% endfor %}
+        {% endif %}
     </div>
 {% endblock %} {# <!-- end mainContent block --> #}

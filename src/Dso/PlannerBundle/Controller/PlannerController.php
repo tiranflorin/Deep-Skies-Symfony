@@ -2,21 +2,25 @@
 
 namespace Dso\PlannerBundle\Controller;
 
+use Doctrine\ORM\EntityManager;
+use Dso\PlannerBundle\Form\CustomFilters;
 use Dso\PlannerBundle\Form\PredefinedFilters;
+use Dso\PlannerBundle\Services\CreateVisibleObjectsTable;
+use Dso\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Dso\PlannerBundle\Services\FilterResults;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\SecurityContext;
 
 class PlannerController extends Controller
 {
     public function indexAction()
     {
-        //TODO complex logic here, (e.g. check if the user has custom settings)
-        $templateRequired = $this->getRequiredPageData();
-
         return $this->render('DsoPlannerBundle:Planner:index.html.twig', array(
-            'settings' => $templateRequired['settings'],
-            'formPredefinedFilters' => $templateRequired['formPredefinedFilters']->createView()
+            'formPredefinedFilters' => $this->createForm(new PredefinedFilters())->createView(),
+            'formCustomFilters' => $this->createForm(new CustomFilters())->createView()
         ));
 
     }
@@ -41,21 +45,24 @@ class PlannerController extends Controller
                     if ($form->get('small_telescope')->isClicked() === true)
                         $selection = 'small_telescope';
 
-                    $filterService->setConfigurationDetails($filterType, $selection);
+                    $user = $this->get('security.context')->getToken()->getUser();
+
+                    $filterService->setConfigurationDetails(
+                        $this->getVisibleObjectsTableName($user),
+                        $filterType,
+                        $selection
+                    );
                 }
                 $results = $filterService->retrieveFilteredData();
-                $templateRequired = $this->getRequiredPageData();
-
-                return $this->render('DsoPlannerBundle:Planner:index.html.twig', array(
-                    'settings' => $templateRequired['settings'],
-                    'formPredefinedFilters' => $templateRequired['formPredefinedFilters']->createView(),
-                    'dsosList' => $results
-                ));
             }
         }
+        return $this->render('DsoPlannerBundle:Planner:index.html.twig', array(
+            'formPredefinedFilters' => $this->createForm(new PredefinedFilters())->createView(),
+            'formCustomFilters' => $this->createForm(new CustomFilters())->createView(),
+            'dsosList' => $results
+        ));
     }
 
-    //TODO: completeaza si metoda asta si creeaza formularul asociat:
     public function filterCustomAction(Request $request)
     {
         /** @var FilterResults $filterService */
@@ -79,7 +86,13 @@ class PlannerController extends Controller
                         'magMax' => $magMax,
                         'objType' => $objType
                     );
-                    $filterService->setConfigurationDetails($filterType, $selection);
+                    $user = $this->get('security.context')->getToken()->getUser();
+
+                    $filterService->setConfigurationDetails(
+                        $this->getVisibleObjectsTableName($user),
+                        $filterType,
+                        $selection
+                    );
                 }
 
                 $results = $filterService->retrieveFilteredData();
@@ -103,5 +116,73 @@ class PlannerController extends Controller
             'settings' => $settings,
             'formPredefinedFilters' => $formPredefinedFilters
         );
+    }
+
+    /**
+     * Save/update location settings for a user
+     */
+    public function updateLocationSettingsAction(Request $request)
+    {
+        /** @var SecurityContext $securityContext */
+        $securityContext = $this->get('security.context');
+        if (false === $securityContext->isGranted(
+                'IS_AUTHENTICATED_FULLY'
+            )) {
+            throw new AccessDeniedException();
+        }
+
+        $defaultTime = new \DateTime('now', new \DateTimeZone('UTC'));
+        /** @var User $user */
+        $user = $securityContext->getToken()->getUser();
+        $user->setLatitude($request->request->get('latitude', '43.234'))
+            ->setLongitude($request->request->get('longitude', '22.234'))
+            ->setTimeZone($request->request->get('timezone', 'Europe/Bucharest'))
+            ->setDatetime($request->request->get('datetime', $defaultTime->format('Y-m-dH:i:s')));
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($user);
+        $em->flush();
+
+        /** @var  CreateVisibleObjectsTable $visibleObjectsService */
+        $visibleObjectsService = $this->get('dso_planner.visible_objects');
+        $visibleObjectsService->setConfigurationDetails($user->getUsername(), $user->getLatitude(), $user->getLongitude(), $user->getDateTime());
+        try {
+            $result = $visibleObjectsService->executeFlow();
+        } catch (\Exception $e) {
+            return new Response($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        return new Response();
+    }
+
+    /**
+     * Expose location settings
+     */
+    public function locationSettingsAction()
+    {
+        /** @var SecurityContext $securityContext */
+        $securityContext = $this->get('security.context');
+
+        if (false === $securityContext->isGranted(
+                'IS_AUTHENTICATED_FULLY'
+            )) {
+            throw new AccessDeniedException();
+        }
+
+        $user = $securityContext->getToken()->getUser();
+        if (!$user) {
+            throw new \LogicException('No user found.');
+        }
+
+        return $this->render('DsoPlannerBundle:Planner:location_settings.html.twig', array(
+            'user' => $user)
+        );
+    }
+
+    public function getVisibleObjectsTableName(User $user)
+    {
+        $tmp = new \DateTime($user->getDateTime(), new \DateTimeZone($user->getTimeZone()));
+        return 'temp__custom__'. strtolower($user->getUsername()) .'_' . $user->getLatitude() . '_' . $user->getLongitude() . '_' . $tmp->format('YmdHis');;
     }
 }

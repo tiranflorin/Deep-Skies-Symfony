@@ -10,7 +10,7 @@ class FilterResults
     /** @var MysqlService */
     protected $mysqlService;
     protected $baseTable;
-    protected $tempTable;
+    protected $visibleObjectsTable;
     protected $imagePathsTable;
 
     public $filterType;
@@ -24,16 +24,13 @@ class FilterResults
     public function __construct($mysqlService)
     {
         $this->mysqlService = $mysqlService;
-        //TODO: need a way to find the table name to use
-
-        //for now test only with this table:
         $this->baseTable = 'object';
-        $this->tempTable = 'temp__custom_46.767_23.584_20141122213205';
         $this->imagePathsTable = 'image_paths';
     }
 
-    public function setConfigurationDetails($filterType, $specificFilters)
+    public function setConfigurationDetails($visibleObjectsTable, $filterType, $specificFilters)
     {
+        $this->visibleObjectsTable = $visibleObjectsTable;
         $this->filterType = $filterType;
         if($this->filterType == 'predefined') {
             $this->predefinedFilter = $specificFilters;
@@ -94,7 +91,7 @@ class FilterResults
             IFNULL(img.thumb, \'default_thumbnail\') as `thumb`,
             IFNULL(img.full_size, \'default_full_size\') as `full_size`
         FROM `' . $this->baseTable . '`  as source
-        LEFT JOIN `' . $this->tempTable . '` as altaz_coord
+        LEFT JOIN `' . $this->visibleObjectsTable . '` as altaz_coord
             ON altaz_coord.object_id = source.id
         LEFT JOIN `' . $this->imagePathsTable . '` as img
             ON img.object_id = source.id
