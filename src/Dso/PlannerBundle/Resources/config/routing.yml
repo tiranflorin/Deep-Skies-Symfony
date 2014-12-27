@@ -18,9 +18,14 @@ dso_planner_feedback_sent:
     pattern:  /feedback-sent/
     defaults: { _controller: DsoPlannerBundle:Feedback:feedbacksent }
 
-dso_planner_location_settings:
+dso_planner_current_location_settings:
     pattern:  /planner/location_settings
     defaults: { _controller: DsoPlannerBundle:Planner:locationSettings }
+    methods:  [GET]
+
+dso_planner_display_location_settings_form:
+    pattern:  /planner/location_settings_form
+    defaults: { _controller: DsoPlannerBundle:Planner:editlocationSettings }
     methods:  [GET]
 
 dso_planner_update_location_settings:

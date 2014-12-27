@@ -54,6 +54,21 @@ body{
     float: left;
 }
 
+#location-edit {
+    max-width: 430px;
+    padding: 15px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+#location-edit input, #location-edit button {
+    margin-top: 10px;
+}
+
+#location-edit small {
+    float: left;
+    margin-top: 18px;
+}
 
 footer p {
     padding-top: 15px;

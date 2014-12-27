@@ -119,6 +119,17 @@ class PlannerController extends Controller
     }
 
     /**
+     * Displays the edit location settings form
+     */
+    public function editLocationSettingsAction()
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        return $this->render('DsoPlannerBundle:Planner:location_form.html.twig', array(
+            'user' => $user
+        ));
+    }
+
+    /**
      * Save/update location settings for a user
      */
     public function updateLocationSettingsAction(Request $request)
@@ -153,11 +164,16 @@ class PlannerController extends Controller
             return new Response($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return new Response();
+        $request->getSession()->getFlashBag()->add(
+            'notice',
+            'Your new location settings were saved!'
+        );
+
+        return $this->redirect($this->generateUrl('fos_user_profile_show'));
     }
 
     /**
-     * Expose location settings
+     * Expose current location settings
      */
     public function locationSettingsAction()
     {
