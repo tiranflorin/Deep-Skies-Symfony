@@ -1,0 +1,3 @@
+dso_observations_log_homepage:
+    path:     /observations-log
+    defaults: { _controller: DsoObservationsLogBundle:Dashboard:index }

@@ -20,6 +20,7 @@ class AppKernel extends Kernel
             new Dso\PlannerBundle\DsoPlannerBundle(),
             new Dso\HomeBundle\DsoHomeBundle(),
             new Dso\UserBundle\DsoUserBundle(),
+            new Dso\ObservationsLogBundle\DsoObservationsLogBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

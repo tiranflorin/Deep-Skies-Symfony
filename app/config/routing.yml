@@ -1,3 +1,7 @@
+dso_observations_log:
+    resource: "@DsoObservationsLogBundle/Resources/config/routing.yml"
+    prefix:   /
+
 dso_user:
     resource: "@DsoUserBundle/Resources/config/routing.yml"
     prefix:   /

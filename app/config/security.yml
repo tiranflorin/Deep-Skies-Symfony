@@ -30,5 +30,5 @@ security:
         - { path: ^/auth/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/auth/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/planner/, role: ROLE_USER }
-        - { path: ^/observations-log/, role: ROLE_USER }
+        - { path: ^/observations-log, role: ROLE_USER }
         - { path: ^/user-admin/, role: ROLE_ADMIN } #for the future user management
