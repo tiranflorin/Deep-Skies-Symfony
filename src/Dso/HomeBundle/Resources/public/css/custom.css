@@ -79,6 +79,23 @@ footer p {
     padding-top: 15px;
 }
 
+#import-form {
+    margin-left: 210px;
+    text-align: left;
+}
+
+#import-form form {
+    margin-top: 40px;
+}
+
+#import-form label {
+    width: 100px;
+    float: left;
+}
+
+#import-form input {
+    padding-bottom: 5px;
+}
 
 /* Start sticky footer styles */
 html {

@@ -1,0 +1,17 @@
+{% extends 'DsoHomeBundle:Home:base.html.twig' %}
+{% block mainContent %}
+    <div class="row">
+        {% include 'DsoObservationsLogBundle:Dashboard:menu.html.twig' %}
+        <div id="import-form">
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+                <div class="alert alert-success">
+                    <strong>Success.</strong> {{ flashMessage }}
+                </div>
+            {% endfor %}
+            <h2>Import SkySafary 4 Plus observation lists</h2>
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

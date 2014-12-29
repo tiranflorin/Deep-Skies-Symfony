@@ -1,5 +1,4 @@
 {% extends 'DsoHomeBundle:Home:base.html.twig' %}
-{% block jumbotronBlock %} {% endblock %}
 {% block mainContent %}
     <form action="{{ path('dso_planner_feedback') }}" method="post" {{ form_enctype(form) }}>
         {{ form_widget(form) }}
