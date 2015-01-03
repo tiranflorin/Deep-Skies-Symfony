@@ -11,9 +11,9 @@
             <div class="col-lg-6 col-md-6">
                 <div id="predefined-filters">
                 <h3>Predefined filters:</h3>
-                <form action="{{ path('dso_planner_predefined_filter') }}" method="post" {{ form_enctype(formPredefinedFilters) }}>
-                    {{ form_widget(formPredefinedFilters) }}
-                </form>
+                <div class="row"><a href="{{ path('dso_planner_predefined_filter', {'filter_type':'predefined', 'selection':'naked_eye'}) }}" class="btn btn-primary">Naked Eye</a></div>
+                <div class="row"><a href="{{ path('dso_planner_predefined_filter', {'filter_type':'predefined', 'selection':'binoculars'}) }}" class="btn btn-primary">Binoculars</a></div>
+                <div class="row"><a href="{{ path('dso_planner_predefined_filter', {'filter_type':'predefined', 'selection':'small_telescope'}) }}" class="btn btn-primary">Small Telescope</a></div>
                 </div>
             </div>
             <div class="col-lg-6 col-md-6">
@@ -27,18 +27,35 @@
         </div>
     </div>
 
-    {% if dsosList is defined %}
+    {% if pagination is defined %}
         <div class="object-list">
             <h3>Objects found:</h3>
-            <div class="row">
-                <div class="list-group">
-                    {% for object in dsosList %}
-                    <a href="#" class="list-group-item">
-                        <h4 class="list-group-item-heading">{{ object.Name1 }} ({{ object.Name2 }})</h4>
-                        <p class="list-group-item-text">{{ object.Constellation  }}</p>
-                    </a>
-                    {% endfor %}
-                </div>
+            {# total items count #}
+            <div class="count">
+                {{ pagination.getTotalItemCount }}
+            </div>
+            <div class="navigation">
+                {{ knp_pagination_render(pagination) }}
+            </div>
+            <table>
+                <tr>
+                    {# sorting of properties based on query components #}
+                    <th>{{ knp_pagination_sortable(pagination, 'Id', 'a.id') }}</th>
+                    <th{% if pagination.isSorted('a.Title') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Title', 'a.title') }}</th>
+                </tr>
+
+                {# table body #}
+                {% for object in pagination %}
+                    <tr {% if loop.index is odd %}class="color"{% endif %}>
+                        <td>{{ object.Name1 }}</td>
+                        <td>{{ object.Name2 }}</td>
+                        <td>{{ object.Constellation }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            {# display navigation #}
+            <div class="navigation">
+                {{ knp_pagination_render(pagination) }}
             </div>
         </div>
 

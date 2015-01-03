@@ -3,6 +3,7 @@
 namespace Dso\ObservationsLogBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -23,7 +24,12 @@ class EntriesController extends Controller
 
         $form->handleRequest($request);
         if ($form->isValid()) {
-            //TODO: actual processing
+            /** @var UploadedFile $uploadedFile */
+            $uploadedFile = $form->getData('skylist_file');
+            //TODO: validate the file (extension .skylist)
+            $uploadedFile = reset($uploadedFile);
+            $content = file_get_contents($uploadedFile->getPath() . '/' . $uploadedFile->getFilename());
+
             $request->getSession()->getFlashBag()->add(
                 'notice',
                 'Your file has been uploaded and processed!'

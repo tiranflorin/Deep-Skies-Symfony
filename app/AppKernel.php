@@ -21,6 +21,8 @@ class AppKernel extends Kernel
             new Dso\HomeBundle\DsoHomeBundle(),
             new Dso\UserBundle\DsoUserBundle(),
             new Dso\ObservationsLogBundle\DsoObservationsLogBundle(),
+            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
+            new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

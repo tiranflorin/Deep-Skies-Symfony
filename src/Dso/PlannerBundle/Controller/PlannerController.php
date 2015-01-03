@@ -3,8 +3,8 @@
 namespace Dso\PlannerBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
+use Dso\PlannerBundle\Exception\HijackException;
 use Dso\PlannerBundle\Form\CustomFilters;
-use Dso\PlannerBundle\Form\PredefinedFilters;
 use Dso\PlannerBundle\Services\CreateVisibleObjectsTable;
 use Dso\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -19,7 +19,6 @@ class PlannerController extends Controller
     public function indexAction()
     {
         return $this->render('DsoPlannerBundle:Planner:index.html.twig', array(
-            'formPredefinedFilters' => $this->createForm(new PredefinedFilters())->createView(),
             'formCustomFilters' => $this->createForm(new CustomFilters())->createView()
         ));
 
@@ -29,37 +28,42 @@ class PlannerController extends Controller
     {
         /** @var FilterResults $filterService */
         $filterService = $this->get('dso_planner.filter_results');
+        $filterType = $request->get('filter_type');
 
-        if ($request->getMethod() == 'POST') {
-            $form = $this->createForm(new PredefinedFilters());
-            $form->handleRequest($request);
-
-            if ($form->isValid()) {
-                $filterType = $form->get('filter_type')->getData();
-
-                if($filterType == 'predefined') {
-                    if ($form->get('naked_eye')->isClicked() === true)
-                        $selection = 'naked_eye';
-                    if ($form->get('binoculars')->isClicked() === true)
-                        $selection = 'binoculars';
-                    if ($form->get('small_telescope')->isClicked() === true)
-                        $selection = 'small_telescope';
-
-                    $user = $this->get('security.context')->getToken()->getUser();
-
-                    $filterService->setConfigurationDetails(
-                        $this->getVisibleObjectsTableName($user),
-                        $filterType,
-                        $selection
-                    );
-                }
-                $results = $filterService->retrieveFilteredData();
-            }
+        if($filterType != 'predefined') {
+            throw new HijackException('Hijack attempt. Bye!', Response::HTTP_CONFLICT);
         }
+
+        switch ($request->get('selection')) {
+            case 'naked_eye':
+                $selection = 'naked_eye';
+                break;
+            case 'binoculars':
+                $selection = 'binoculars';
+                break;
+            case 'small_telescope':
+                $selection = 'small_telescope';
+                break;
+            default:
+                $selection = 'naked_eye';
+        }
+
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        $filterService->setConfigurationDetails(
+            $this->getVisibleObjectsTableName($user),
+            $filterType,
+            $selection
+        );
+
+        $paginatedResults = $filterService->retrieveFilteredData($request->get('page', 1));
+        $paginatedResults->setParam('filter_type', 'predefined');
+        $paginatedResults->setParam('selection', $selection);
+
+
         return $this->render('DsoPlannerBundle:Planner:index.html.twig', array(
-            'formPredefinedFilters' => $this->createForm(new PredefinedFilters())->createView(),
             'formCustomFilters' => $this->createForm(new CustomFilters())->createView(),
-            'dsosList' => $results
+            'pagination' => $paginatedResults
         ));
     }
 
@@ -110,11 +114,9 @@ class PlannerController extends Controller
             'datetime' => $formattedDateTime,
             'timezone' => 'GMT +2:00'
         );
-        $formPredefinedFilters = $this->createForm(new PredefinedFilters());
 
         return array(
             'settings' => $settings,
-            'formPredefinedFilters' => $formPredefinedFilters
         );
     }
 

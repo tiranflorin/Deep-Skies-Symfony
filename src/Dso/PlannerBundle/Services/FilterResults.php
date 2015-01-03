@@ -2,13 +2,18 @@
 
 namespace Dso\PlannerBundle\Services;
 
-use Dso\PlannerBundle\Exception\QueryExecutionFailureException;
 use Dso\PlannerBundle\Services\SQL\MysqlService;
+use Knp\Component\Pager\Paginator;
 
 class FilterResults
 {
     /** @var MysqlService */
     protected $mysqlService;
+    /** @var  Paginator */
+    public $paginator;
+    public $resultsPerPage;
+    public $pageLimit;
+
     protected $baseTable;
     protected $visibleObjectsTable;
     protected $imagePathsTable;
@@ -21,9 +26,11 @@ class FilterResults
     public $magnitudeMin;
     public $magnitudeMax;
 
-    public function __construct($mysqlService)
+    public function __construct($mysqlService, $paginator)
     {
         $this->mysqlService = $mysqlService;
+        $this->paginator = $paginator;
+        $this->resultsPerPage = 10; //TODO: make this configurable
         $this->baseTable = 'object';
         $this->imagePathsTable = 'image_paths';
     }
@@ -44,8 +51,9 @@ class FilterResults
         }
     }
 
-    public function retrieveFilteredData()
+    public function retrieveFilteredData($page = 1)
     {
+        $this->pageLimit = $page;
         if($this->filterType == 'predefined') {
             switch ($this->predefinedFilter) {
                 case 'naked_eye':
@@ -71,9 +79,6 @@ class FilterResults
 
     public function retrieveResultsBase($whereCondition1, $whereCondition2, $whereCondition3)
     {
-        $pageLimit  = 0;
-        $resultsPerPage = 100;
-
         $sSql = '
         SELECT
             altaz_coord.object_id as `Object_id`,
@@ -101,16 +106,14 @@ class FilterResults
             . $whereCondition2 . ' '
             . $whereCondition3 . '
         ORDER BY
-            `ObjMagnitude`
-        LIMIT ' . $pageLimit . ',' . $resultsPerPage;
+            `ObjMagnitude`';
 
-        try {
-            $results = $this->mysqlService->executeSelectQuery($sSql);
-        } catch (QueryExecutionFailureException $e) {
-            echo 'Caught exception: ',  $e->getMessage(), ' File: ', $e->getFile(), "\n";
-            die;
-        }
+        $paginatedResults = $this->paginator->paginate(
+            $sSql,
+            $this->pageLimit,
+            $this->resultsPerPage
+        );
 
-        return $results;
+        return $paginatedResults;
     }
 }
