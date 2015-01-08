@@ -2,7 +2,5 @@
 {% block mainContent %}
     <form action="{{ path('dso_planner_feedback') }}" method="post" {{ form_enctype(form) }}>
         {{ form_widget(form) }}
-
-        <input type="submit" />
     </form>
-{% endblock %} {# <!-- end mainContent block --> #}
+{% endblock %}

@@ -97,6 +97,30 @@ footer p {
     padding-bottom: 5px;
 }
 
+#feedback {
+    max-width: 350px;
+    margin:auto;
+}
+
+#feedback input, #feedback textarea {
+    color:#333333;
+    margin-bottom: 15px;
+}
+
+#feedback ul li {
+    list-style-type: none;
+    color: red;
+}
+
+.object-list {
+    margin-top: 10px;
+    color:#333333;
+}
+
+.object-list table thead th {
+    text-align: center;
+}
+
 /* Start sticky footer styles */
 html {
     position: relative;

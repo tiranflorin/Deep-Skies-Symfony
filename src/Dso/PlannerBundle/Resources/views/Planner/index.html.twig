@@ -29,33 +29,48 @@
 
     {% if pagination is defined %}
         <div class="object-list">
-            <h3>Objects found:</h3>
-            {# total items count #}
-            <div class="count">
-                {{ pagination.getTotalItemCount }}
-            </div>
-            <div class="navigation">
-                {{ knp_pagination_render(pagination) }}
-            </div>
-            <table>
-                <tr>
-                    {# sorting of properties based on query components #}
-                    <th>{{ knp_pagination_sortable(pagination, 'Id', 'a.id') }}</th>
-                    <th{% if pagination.isSorted('a.Title') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Title', 'a.title') }}</th>
-                </tr>
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading">Objects found: {{ pagination.getTotalItemCount }}</div>
+                <div class="panel-body">
+                    <div class="navigation">
+                        {{ knp_pagination_render(pagination) }}
+                    </div>
+                </div>
 
-                {# table body #}
-                {% for object in pagination %}
-                    <tr {% if loop.index is odd %}class="color"{% endif %}>
-                        <td>{{ object.Name1 }}</td>
-                        <td>{{ object.Name2 }}</td>
-                        <td>{{ object.Constellation }}</td>
-                    </tr>
-                {% endfor %}
-            </table>
-            {# display navigation #}
-            <div class="navigation">
-                {{ knp_pagination_render(pagination) }}
+                <!-- Table -->
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Mag</th>
+                            <th>Constellation</th>
+                            <th>Obj Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for object in pagination %}
+                        <tr {% if loop.index is odd %}class="color"{% endif %}>
+                            <td>
+                                {{ object.Name1 }}
+                                {% if object.Name2 is defined  %}
+                                    ({{ object.Name2 }})
+                                {% endif %}
+                            </td>
+                            <td>{{ object.ObjMagnitude }}</td>
+                            <td>{{ object.Constellation }}</td>
+                            <td>{{ object.ObjType }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <div class="panel-body">
+                    {# display navigation #}
+                    <div class="navigation">
+                        {{ knp_pagination_render(pagination) }}
+                    </div>
+                </div>
             </div>
         </div>
 

@@ -1,5 +1,5 @@
 dso_observations_log_homepage:
-    path:     /observations-log
+    path:     /observations-log/
     defaults: { _controller: DsoObservationsLogBundle:Dashboard:index }
 
 dso_observations_log_entries_import_external:
