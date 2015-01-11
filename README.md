@@ -34,7 +34,7 @@ Install notes:
     mysql> source /path/to/file/other-resources/object.sql;
     mysql> source /path/to/file/other-resources/image_paths.sql;
 
-6) Create an visible objects table for your location:
+6) Create a visible objects table for your location:
 ------------------------
     $ app/console dso:planner:createVisibleObjectsTable --latitude=46.767 --longitude=23.583 --dateTime=2014-08-01*22:50:00
 
