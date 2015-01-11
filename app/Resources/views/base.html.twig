@@ -8,7 +8,9 @@
     <meta name="author" content="Florin Tiran">
     <link rel="shortcut icon" href="{{ asset('bundles/dsohome/images/ico/favicon.ico') }}">
 
-    <title>Deep-Skies Home</title>
+    <title>
+        {% block pageTitle %}Deep-Skies Home{% endblock %}
+    </title>
 
     <!-- @see http://symfony.com/doc/current/cookbook/assetic/asset_management.html#including-css-stylesheets -->
     {% stylesheets
@@ -57,17 +59,17 @@
 </div>
 
 {% block pageHeader %}
-<div class="page-header">
-    <div class="login">
-        {% if is_granted('ROLE_USER') %}
-            <p>Hi <a href="{{ path('fos_user_profile_show') }}">{{ app.user.username }}!</a></p>
-            <a href="{{ path('fos_user_security_logout') }}">Logout</a>
-        {% else %}
-            <a href="{{ path('fos_user_security_login') }}">Sign in</a> or
-            <a href="{{ path('fos_user_registration_register') }}">Register</a>
-        {% endif %}
+    <div class="page-header">
+        <div class="login">
+            {% if app.user and is_granted('ROLE_USER') %}
+                <p>Hi <a href="{{ path('fos_user_profile_show') }}">{{ app.user.username }}!</a></p>
+                <a href="{{ path('fos_user_security_logout') }}">Logout</a>
+            {% else %}
+                <a href="{{ path('fos_user_security_login') }}">Sign in</a> or
+                <a href="{{ path('fos_user_registration_register') }}">Register</a>
+            {% endif %}
+        </div>
     </div>
-</div>
 {% endblock pageHeader %}
 
 {% block jumbotronBlock %} {% endblock %}

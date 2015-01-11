@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+{% block pageTitle %}An Error Occurred: {{ status_text }}   {% endblock %}
+{% block mainContent %}
+    {% image '@DsoHomeBundle/Resources/public/images/supernova-explosion-SN2010jl.jpg' %}
+    <img src="{{ asset_url }}" alt="Supernova explosion" />
+    {% endimage %}
+    <h1>Oops! Something bad happened!</h1>
+    <h2>Probably a supernova exploded on these servers!</h2>
+    <h3>Don't worry, we have been notified and we'll fix it ASAP.</h3>
+{% endblock %}

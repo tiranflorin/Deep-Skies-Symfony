@@ -33,7 +33,7 @@ twig:
 assetic:
     debug: "%kernel.debug%"
     use_controller: false
-    bundles: [ DsoHomeBundle, FOSUserBundle ]
+    bundles: [ DsoHomeBundle, FOSUserBundle, TwigBundle ]
     filters:
         cssrewrite: ~
 
