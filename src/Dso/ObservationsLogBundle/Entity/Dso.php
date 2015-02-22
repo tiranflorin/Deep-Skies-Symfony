@@ -14,7 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author  Florin Tiran  <tiran.florin@gmail.com>
  */
-class Dso {
+class Dso
+{
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")

@@ -1,6 +1,7 @@
 <?php
 
 namespace Dso\ObservationsLogBundle\Services;
+use Dso\ObservationsLogBundle\Entity\SkylistObject;
 
 /**
  * Processes a SkySafari observing list entry
@@ -37,9 +38,88 @@ namespace Dso\ObservationsLogBundle\Services;
  */
 class SkylistEntry {
 
-    public function removeHeaderInfo($skylistFormattedString)
+    /** @var  string $content */
+    protected $content;
+
+    /**
+     * Processes the .skylist content
+     *
+     * @param string $content
+     *
+     * @return array<Dso\ObservationsLogBundle\Entity\SkylistObject>
+     */
+    public function parseContent($content)
     {
-        $processed = $skylistFormattedString;
-        return $processed;
+        $this->content = $content;
+        $this->removeHeaderInfo();
+        $pieces = $this->splitIntoObservedObjects();
+        $skylistObjects = $this->createFromArray($pieces);
+
+        return $skylistObjects;
     }
-} 
+
+    /**
+     * Removes additional details like:
+     *  "SkySafariObservingListVersion=3.0
+     *   SortedBy=Constellation"
+     */
+    public function removeHeaderInfo()
+    {
+        $this->content = strstr($this->content, 'SkyObject=BeginObject');
+    }
+
+    /**
+     * Splits the content string using a delimiter.
+     *
+     * @return array
+     */
+    public function splitIntoObservedObjects()
+    {
+        $pieces = explode('SkyObject=BeginObject', $this->content);
+
+        return array_filter($pieces);
+    }
+
+    /**
+     * Creates a list of observed objects.
+     *
+     * @param array $skylistContent
+     *
+     * @return array
+     */
+    public function createFromArray($skylistContent)
+    {
+        $observedObjectsList = array();
+        foreach ($skylistContent as $item) {
+            $skylistObject = new SkylistObject();
+            $content = strstr($item, 'EndObject=SkyObject', true);
+            $pieces = array_filter(explode("\n\t", $content));
+            foreach ($pieces as $itemProperty) {
+                if (strpos($itemProperty, 'CommonName=') !== false) {
+                    trim($itemProperty);
+                    $skylistObject->setCommonName(substr($itemProperty, strlen('CommonName=')));
+                }
+                if (strpos($itemProperty, 'CatalogNumber=NGC') !== false) {
+                    trim($itemProperty);
+                    $skylistObject->setCatalogNumberNgc(substr($itemProperty, strlen('CatalogNumber=')));
+                }
+                if (strpos($itemProperty, 'CatalogNumber=M ') !== false) {
+                    trim($itemProperty);
+                    $skylistObject->setCatalogNumberMessier(substr($itemProperty, strlen('CatalogNumber=')));
+                }
+                if (strpos($itemProperty, 'CatalogNumber=IC') !== false) {
+                    trim($itemProperty);
+                    $skylistObject->setCatalogNumberIc(substr($itemProperty, strlen('CatalogNumber=')));
+                }
+                if (strpos($itemProperty, 'DateObserved=') !== false) {
+                    trim($itemProperty);
+                    //TODO: Change the string value(2.456892419165283e+06) to DateTime
+                    $skylistObject->setDateObserved(substr($itemProperty, strlen('DateObserved=')));
+                }
+            }
+            $observedObjectsList[] = $skylistObject;
+        }
+
+        return $observedObjectsList;
+    }
+}
