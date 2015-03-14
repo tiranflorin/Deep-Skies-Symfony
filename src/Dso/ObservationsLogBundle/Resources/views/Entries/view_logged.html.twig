@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+{% block mainContent %}
+    <div class="row">
+        {% include 'DsoObservationsLogBundle:Dashboard:menu.html.twig' %}
+        <div id="import-form">
+            <p>Latest logged data:</p>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Ngc</th>
+                        <th>Messier</th>
+                        <th>Common Name</th>
+                        <th>Index Catalogue</th>
+                        <th>Comment</th>
+                        <th>Observing session</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for dso in dsos %}
+                        <tr {% if loop.index is odd %}class="color"{% endif %}>
+                            <td>{{ dso.catalogNumberNgc }}</td>
+                            <td>{{ dso.catalogNumberMessier }}</td>
+                            <td>{{ dso.commonName }}</td>
+                            <td>{{ dso.catalogNumberIc }}</td>
+                            <td>{{ dso.comment }}</td>
+                            <td>{{ dso.observingSessionName }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+        </div>
+    </div>
+{% endblock %}

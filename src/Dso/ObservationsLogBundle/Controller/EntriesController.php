@@ -2,6 +2,7 @@
 
 namespace Dso\ObservationsLogBundle\Controller;
 
+use Doctrine\ORM\EntityRepository;
 use Dso\ObservationsLogBundle\Entity\SkylistObject;
 use Dso\ObservationsLogBundle\Services\SkylistEntry;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -19,6 +20,7 @@ class EntriesController extends Controller
 {
     public function importExternalAction(Request $request)
     {
+        // TODO: don't allow the import of an existing file.
         $form = $this->createFormBuilder()
             ->add('skylist_file', 'file', array('label' => 'Choose file: '))
             ->add('save', 'submit', array('label' => 'Import', 'attr' => array('class'=>'btn btn-primary')))
@@ -41,7 +43,8 @@ class EntriesController extends Controller
             $batchSize = 20;
             foreach ($observedObjects as $observedObject) {
                 /** @var SkylistObject $observedObject */
-                $observedObject->setUserName($this->getUser());
+                $observedObject->setObservingSessionName($uploadedFile->getClientOriginalName());
+                $observedObject->setUserName($this->getUser()->getUsername());
                 $em->persist($observedObject);
                 if (($i % $batchSize) === 0) {
                     $em->flush();
@@ -60,6 +63,18 @@ class EntriesController extends Controller
 
         return $this->render('DsoObservationsLogBundle:Entries:import_external.html.twig', array(
             'form' => $form->createView(),
+        ));
+    }
+
+    public function viewLoggedAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        /** @var EntityRepository $repository */
+        $repository = $em->getRepository('DsoObservationsLogBundle:SkylistObject');
+        $dsos = $repository->findBy(array('userName' => $this->getUser()->getUsername()), array('observingSessionName' => 'ASC'));
+        // TODO: add group by observing session name
+        return $this->render('DsoObservationsLogBundle:Entries:view_logged.html.twig', array(
+            'dsos' => $dsos,
         ));
     }
 }

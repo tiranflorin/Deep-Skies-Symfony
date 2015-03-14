@@ -39,7 +39,13 @@ class SkylistObject
     public $dateObserved;
 
     /** @ORM\Column(type="string", nullable=TRUE) */
+    public $comment;
+
+    /** @ORM\Column(type="string", nullable=TRUE) */
     public $userName;
+
+    /** @ORM\Column(type="string", nullable=TRUE) */
+    public $observingSessionName;
 
     /**
      * @param mixed $catalogNumberIc
@@ -155,5 +161,45 @@ class SkylistObject
     public function getUserName()
     {
         return $this->userName;
+    }
+
+    /**
+     * @param mixed $comment
+     *
+     * @return SkylistObject
+     */
+    public function setComment($comment)
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getComment()
+    {
+        return $this->comment;
+    }
+
+    /**
+     * @param mixed $observingSessionName
+     *
+     * @return SkylistObject
+     */
+    public function setObservingSessionName($observingSessionName)
+    {
+        $this->observingSessionName = $observingSessionName;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getObservingSessionName()
+    {
+        return $this->observingSessionName;
     }
 }

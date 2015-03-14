@@ -3,5 +3,9 @@ dso_observations_log_homepage:
     defaults: { _controller: DsoObservationsLogBundle:Dashboard:index }
 
 dso_observations_log_entries_import_external:
-    path:     /observations-log/import
+    path:     /observations-log/import/
     defaults: { _controller: DsoObservationsLogBundle:Entries:importExternal }
+
+dso_observations_log_entries_view_logged:
+    path:     /observations-log/view-logged/
+    defaults: { _controller: DsoObservationsLogBundle:Entries:viewLogged }

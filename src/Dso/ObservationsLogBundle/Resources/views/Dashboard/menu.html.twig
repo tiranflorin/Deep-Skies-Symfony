@@ -10,7 +10,7 @@
     <ul class="nav nav-sidebar">
         <li><span class="obslog-title-section">ENTRIES</span></li>
         <li><a href="#">Log</a></li>
-        <li><a href="#">View Logged</a></li>
+        <li><a href="{{ path('dso_observations_log_entries_view_logged') }}">View Logged</a></li>
         <li><a href="{{ path('dso_observations_log_entries_import_external') }}">Import external</a></li> {# TODO: implement imports from skysafary, excel, word files #}
         <li><a href="#">Export</a></li>
     </ul>
