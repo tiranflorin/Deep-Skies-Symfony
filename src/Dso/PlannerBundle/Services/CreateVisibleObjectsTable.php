@@ -290,8 +290,6 @@ class CreateVisibleObjectsTable
         $iJ2000Date = mktime(12, 0, 0, 1, 1, 2000);
         $dayOffset = $iDate - $iJ2000Date;
         $dayOffset = (double) $dayOffset / (60 * 60 * 24);
-        //var_dump(date('Y-m-d h:i:s',$iJ2000Date));
-        //var_dump($dayOffset);
 
         //calculate LST (Local Sideral Time):
         $LST = (double) (100.46 + (0.985647 * $dayOffset) + $long + (15 * (date("H", $iDate) + (date("i", $iDate) / 60))));
@@ -301,11 +299,9 @@ class CreateVisibleObjectsTable
         } elseif ($LST > 360) {
             $LST = $LST - 360;
         }
-        //var_dump($LST);
 
         // Calculate HA (Hour Angle)
         $HA = ($LST - $rightAscension + 360) % 360;
-        //var_dump($HA);
 
         // HA, DEC, Lat to Alt, AZ
         $x = cos($HA * (pi() / 180)) * cos($declination * (pi() / 180));
@@ -318,9 +314,6 @@ class CreateVisibleObjectsTable
 
         $az = atan2($yhor, $xhor) * (180 / pi()) + 180;
         $alt = asin($zhor) * (180 / pi());
-
-        //var_dump($az);
-        //var_dump($alt);
 
         $aObjectName['azimuth'] = $az;
         $aObjectName['altitude'] = $alt;

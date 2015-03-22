@@ -15,4 +15,4 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 class QueryExecutionFailureException extends Exception
 {
 
-} 
+}

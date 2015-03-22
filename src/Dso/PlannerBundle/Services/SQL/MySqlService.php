@@ -90,5 +90,4 @@ class MySqlService
         $this->conn->close();
         return $results;
     }
-
 }
