@@ -2,7 +2,6 @@
 
 namespace Dso\PlannerBundle\Subscriber;
 
-use Dso\PlannerBundle\Services\SQL\MySqlService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Knp\Component\Pager\Event\ItemsEvent;
 
@@ -15,20 +14,11 @@ use Knp\Component\Pager\Event\ItemsEvent;
  */
 class PaginateDsosSubscriber implements EventSubscriberInterface
 {
-    /** @var  MySqlService */
-    private $persistence;
-
-    public function __construct($persistence)
-    {
-        $this->persistence = $persistence;
-    }
-
     public function items(ItemsEvent $event)
     {
-        $results = $this->persistence->executeSelectQuery($event->target);
-        $event->count = count($results);
+        $event->count = count($event->target);
         $event->items = array_slice(
-            $results,
+            $event->target,
             $event->getOffset(),
             $event->getLimit()
         );

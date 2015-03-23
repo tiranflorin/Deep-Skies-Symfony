@@ -57,29 +57,44 @@ class FilterResults
         if($this->filterType == 'predefined') {
             switch ($this->predefinedFilter) {
                 case 'naked_eye':
-                    return $this->retrieveResultsBase(' AND `source`.`mag` BETWEEN 0 AND 6.9 ', ' AND 1 ', ' AND 1 ');
+//                    return $this->retrieveResultsBase(' AND `source`.`mag` BETWEEN 0 AND 6.9 ', ' AND 1 ', ' AND 1 ');
+                    return $this->retrieveResultsBase(0, 6.9);
                     break;
                 case 'binoculars':
-                    return $this->retrieveResultsBase(' AND `source`.`mag` BETWEEN 4 AND 8.5 ', ' AND 1 ', ' AND 1 ');
+                    return $this->retrieveResultsBase(4, 8.5);
                     break;
                 case 'small_telescope':
-                    return $this->retrieveResultsBase(' AND `source`.`mag` BETWEEN 8.6 AND 11 ', ' AND 1 ', ' AND 1 ');
+                    return $this->retrieveResultsBase(8.6, 12);
                     break;
             }
         }
 
         if($this->filterType == 'custom') {
-            $cond1 = ' AND `source`.`mag` BETWEEN ' . $this->magnitudeMin . ' AND ' . $this->magnitudeMax;
-            $cond2 = ' AND `source`.`constellation` = \'' . $this->constellation . '\'';
-            $cond3 = ' AND `source`.`type` = \'' . $this->objectType . '\'';
+//            $cond1 = ' AND `source`.`mag` BETWEEN ' . $this->magnitudeMin . ' AND ' . $this->magnitudeMax;
+//            $cond2 = ' AND `source`.`constellation` = \'' . $this->constellation . '\'';
+//            $cond3 = ' AND `source`.`type` = \'' . $this->objectType . '\'';
 
-            return $this->retrieveResultsBase($cond1, $cond2, $cond3);
+            return $this->retrieveResultsBase($this->magnitudeMin, $this->magnitudeMax, $this->constellation, $this->objectType);
         }
     }
 
-    public function retrieveResultsBase($whereCondition1, $whereCondition2, $whereCondition3)
+    /**
+     * Retrieve the paginated visible objects for current settings.
+     *
+     * Using 0 as a default value for constellation and type seems odd,
+     * but it allows query execution to work even if the constellation
+     * and type filters are not explicitly provided.
+     *
+     * @param string|int $minMag
+     * @param string|int $maxMag
+     * @param string|int $constellation
+     * @param string|int $type
+     *
+     * @return \Knp\Component\Pager\Pagination\PaginationInterface
+     */
+    public function retrieveResultsBase($minMag, $maxMag, $constellation = 0, $type = 0)
     {
-        $sSql = '
+        $sql = '
         SELECT
             altaz_coord.object_id as `Object_id`,
             source.name as `Name1`,
@@ -101,15 +116,27 @@ class FilterResults
         LEFT JOIN `' . $this->imagePathsTable . '` as img
             ON img.object_id = source.id
         WHERE 1
-            AND `altitude` > 10 '
-            . $whereCondition1 . ' '
-            . $whereCondition2 . ' '
-            . $whereCondition3 . '
+            AND `altitude` > 10
+            AND `source`.`mag` >= ?
+            AND `source`.`mag` <= ?
+            AND `source`.`constellation` IN (?)
+            AND `source`.`type` IN (?)
         ORDER BY
             `ObjMagnitude`';
+        $stmt = $this->mysqlService->getConn()->prepare($sql);
+        $stmt->bindValue(1, $minMag);
+        $stmt->bindValue(2, $maxMag);
+
+        // Support both integer and string search values for constellation and type.
+        $bindConstellation = is_int($constellation) ? \PDO::PARAM_INT : \PDO::PARAM_STR;
+        $bindType = is_int($type) ? \PDO::PARAM_INT : \PDO::PARAM_STR;
+        $stmt->bindValue(3, $constellation, $bindConstellation);
+        $stmt->bindValue(4, $type, $bindType);
+
+        $stmt->execute();
 
         $paginatedResults = $this->paginator->paginate(
-            $sSql,
+            $stmt->fetchAll(),
             $this->pageLimit,
             $this->resultsPerPage
         );

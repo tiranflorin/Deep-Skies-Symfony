@@ -15,6 +15,5 @@ services:
         arguments: [@dso_planner.mysql_service, @knp_paginator]
     dso_planner.paginate_subscriber:
         class: Dso\PlannerBundle\Subscriber\PaginateDsosSubscriber
-        arguments: [@dso_planner.mysql_service]
         tags:
         - { name: knp_paginator.subscriber }

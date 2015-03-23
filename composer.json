@@ -3,6 +3,14 @@
     "license": "MIT",
     "type": "project",
     "description": "The \"Symfony Standard Edition\" distribution",
+    "authors": [
+        {
+            "name": "Florin Tiran",
+            "email": "tiran.florin@gmail.com",
+            "homepage": "http://deep-skies.com",
+            "role": "Developer"
+        }
+    ],
     "autoload": {
         "psr-0": { "": "src/" }
     },
@@ -12,7 +20,7 @@
         "doctrine/orm": "~2.2,>=2.2.3",
         "doctrine/doctrine-bundle": "~1.2",
         "twig/extensions": "~1.0",
-        "symfony/assetic-bundle": "dev-master",
+        "symfony/assetic-bundle": "2.6.*",
         "symfony/swiftmailer-bundle": "~2.3",
         "symfony/monolog-bundle": "~2.4",
         "sensio/distribution-bundle": "~2.3",
@@ -20,7 +28,7 @@
         "sensio/generator-bundle": "~2.3",
         "incenteev/composer-parameter-handler": "~2.0",
         "friendsofsymfony/user-bundle": "~2.0@dev",
-        "knplabs/knp-paginator-bundle": "dev-master",
+        "knplabs/knp-paginator-bundle": "2.4.1",
         "friendsofsymfony/jsrouting-bundle": "1.5.2"
     },
     "scripts": {
