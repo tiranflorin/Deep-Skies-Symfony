@@ -1,6 +1,8 @@
 <?php
 
 namespace Dso\ObservationsLogBundle\Services;
+
+use Doctrine\ORM\EntityManager;
 use Dso\ObservationsLogBundle\Entity\SkylistObject;
 
 /**
@@ -40,6 +42,9 @@ class SkylistEntry {
 
     /** @var  string $content */
     protected $content;
+
+    /** @var  EntityManager */
+    protected $em;
 
     /**
      * Processes the .skylist content
@@ -125,5 +130,40 @@ class SkylistEntry {
         }
 
         return $observedObjectsList;
+    }
+
+    /**
+     * @param array<SkylistObject> $observedObjects
+     * @param string               $obsSesionName
+     * @param string               $username
+     */
+    public function persistDsos($observedObjects, $obsSesionName, $username)
+    {
+        $i = 0;
+        $batchSize = 20;
+        foreach ($observedObjects as $observedObject) {
+            /** @var SkylistObject $observedObject */
+            $observedObject->setObservingSessionName($obsSesionName);
+            $observedObject->setUserName($username);
+            $this->em->persist($observedObject);
+            if (($i % $batchSize) === 0) {
+                $this->em->flush($observedObject);
+            }
+            $i++;
+        }
+        $this->em->flush(); //Persist objects that did not make up an entire batch
+        $this->em->clear();
+    }
+
+    /**
+     * @param \Doctrine\ORM\EntityManager $em
+     *
+     * @return SkylistEntry
+     */
+    public function setEm($em)
+    {
+        $this->em = $em;
+
+        return $this;
     }
 }

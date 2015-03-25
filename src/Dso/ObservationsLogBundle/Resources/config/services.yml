@@ -1,3 +1,5 @@
 services:
     dso_observations_log.skylist_entry:
         class: Dso\ObservationsLogBundle\Services\SkylistEntry
+        calls:
+            - [setEm, ["@doctrine.orm.entity_manager"]]

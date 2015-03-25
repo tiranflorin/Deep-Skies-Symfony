@@ -4,6 +4,7 @@ namespace Dso\PlannerBundle\Services;
 
 use Dso\PlannerBundle\Exception\QueryExecutionFailureException;
 use Dso\PlannerBundle\Services\SQL\MysqlService;
+use Dso\UserBundle\Entity\User;
 
 /**
  * Service class that handles the details of visible objects for an observer
@@ -339,5 +340,18 @@ class CreateVisibleObjectsTable
     public function getVisibleObjectsTable()
     {
         return $this->visibleObjectsTable;
+    }
+
+    /**
+     * TODO: check why this is needed? the above "getVisibleObjectsTable" should suffice.
+     *
+     * @param User $user
+     *
+     * @return string
+     */
+    public function getVisibleObjectsTableName(User $user)
+    {
+        $tmp = new \DateTime($user->getDateTime(), new \DateTimeZone($user->getTimeZone()));
+        return 'temp__custom__'. strtolower($user->getUsername()) .'_' . $user->getLatitude() . '_' . $user->getLongitude() . '_' . $tmp->format('YmdHis');;
     }
 }

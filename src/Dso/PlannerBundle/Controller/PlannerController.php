@@ -34,24 +34,11 @@ class PlannerController extends Controller
             throw new HijackException('Hijack attempt. Bye!', Response::HTTP_CONFLICT);
         }
 
-        switch ($request->get('selection')) {
-            case 'naked_eye':
-                $selection = 'naked_eye';
-                break;
-            case 'binoculars':
-                $selection = 'binoculars';
-                break;
-            case 'small_telescope':
-                $selection = 'small_telescope';
-                break;
-            default:
-                $selection = 'naked_eye';
-        }
-
+        $selection = $filterService->getSelectedFilter($request->get('selection'));
         $user = $this->get('security.context')->getToken()->getUser();
 
         $filterService->setConfigurationDetails(
-            $this->getVisibleObjectsTableName($user),
+            $this->get('dso_planner.visible_objects')->getVisibleObjectsTableName($user),
             $filterType,
             $selection
         );
@@ -59,7 +46,6 @@ class PlannerController extends Controller
         $paginatedResults = $filterService->retrieveFilteredData($request->get('page', 1));
         $paginatedResults->setParam('filter_type', 'predefined');
         $paginatedResults->setParam('selection', $selection);
-
 
         return $this->render('DsoPlannerBundle:Planner:index.html.twig', array(
             'formCustomFilters' => $this->createForm(new CustomFilters())->createView(),
@@ -93,7 +79,7 @@ class PlannerController extends Controller
                     $user = $this->get('security.context')->getToken()->getUser();
 
                     $filterService->setConfigurationDetails(
-                        $this->getVisibleObjectsTableName($user),
+                        $this->get('dso_planner.visible_objects')->getVisibleObjectsTableName($user),
                         $filterType,
                         $selection
                     );
@@ -103,21 +89,6 @@ class PlannerController extends Controller
                 echo 'ceva';
             }
         }
-    }
-
-    public function getRequiredPageData()
-    {
-        $dateTime = new \DateTime();
-        $formattedDateTime = $dateTime->format('Y-m-d H:i:s');
-        $settings = array(
-            'location' => 'Cluj Napoca, Romania, (23.45 E, 45.23 N)',
-            'datetime' => $formattedDateTime,
-            'timezone' => 'GMT +2:00'
-        );
-
-        return array(
-            'settings' => $settings,
-        );
     }
 
     /**
@@ -196,11 +167,5 @@ class PlannerController extends Controller
         return $this->render('DsoPlannerBundle:Planner:location_settings.html.twig', array(
             'user' => $user)
         );
-    }
-
-    public function getVisibleObjectsTableName(User $user)
-    {
-        $tmp = new \DateTime($user->getDateTime(), new \DateTimeZone($user->getTimeZone()));
-        return 'temp__custom__'. strtolower($user->getUsername()) .'_' . $user->getLatitude() . '_' . $user->getLongitude() . '_' . $tmp->format('YmdHis');;
     }
 }

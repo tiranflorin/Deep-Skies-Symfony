@@ -117,21 +117,21 @@ class FilterResults
             ON img.object_id = source.id
         WHERE 1
             AND `altitude` > 10
-            AND `source`.`mag` >= ?
-            AND `source`.`mag` <= ?
-            AND `source`.`constellation` IN (?)
-            AND `source`.`type` IN (?)
+            AND `source`.`mag` >= :minMag
+            AND `source`.`mag` <= :maxMag
+            AND `source`.`constellation` IN (:constellation)
+            AND `source`.`type` IN (:objType)
         ORDER BY
             `ObjMagnitude`';
         $stmt = $this->mysqlService->getConn()->prepare($sql);
-        $stmt->bindValue(1, $minMag);
-        $stmt->bindValue(2, $maxMag);
+        $stmt->bindValue('minMag', $minMag);
+        $stmt->bindValue('maxMag', $maxMag);
 
         // Support both integer and string search values for constellation and type.
         $bindConstellation = is_int($constellation) ? \PDO::PARAM_INT : \PDO::PARAM_STR;
         $bindType = is_int($type) ? \PDO::PARAM_INT : \PDO::PARAM_STR;
-        $stmt->bindValue(3, $constellation, $bindConstellation);
-        $stmt->bindValue(4, $type, $bindType);
+        $stmt->bindValue('constellation', $constellation, $bindConstellation);
+        $stmt->bindValue('objType', $type, $bindType);
 
         $stmt->execute();
 
@@ -142,5 +142,24 @@ class FilterResults
         );
 
         return $paginatedResults;
+    }
+
+    public function getSelectedFilter($selection)
+    {
+        switch ($selection) {
+            case 'naked_eye':
+                $selected = 'naked_eye';
+                break;
+            case 'binoculars':
+                $selected = 'binoculars';
+                break;
+            case 'small_telescope':
+                $selected = 'small_telescope';
+                break;
+            default:
+                $selected = 'naked_eye';
+        }
+
+        return $selected;
     }
 }
