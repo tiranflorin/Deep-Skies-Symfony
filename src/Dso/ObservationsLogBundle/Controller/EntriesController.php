@@ -3,7 +3,6 @@
 namespace Dso\ObservationsLogBundle\Controller;
 
 use Doctrine\ORM\EntityRepository;
-use Dso\ObservationsLogBundle\Entity\SkylistObject;
 use Dso\ObservationsLogBundle\Services\SkylistEntry;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\File\UploadedFile;

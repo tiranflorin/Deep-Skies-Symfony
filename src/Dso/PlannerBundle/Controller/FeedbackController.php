@@ -3,7 +3,7 @@
 namespace Dso\PlannerBundle\Controller;
 
 use Dso\PlannerBundle\Entity\Feedback;
-use Dso\PlannerBundle\Form\FeedbackForm;
+use Dso\PlannerBundle\Form\Type\FeedbackForm;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 

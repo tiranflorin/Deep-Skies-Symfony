@@ -21,16 +21,16 @@ class Dso
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    public $id;
+    protected $id;
 
     /** @ORM\Column(type="string", nullable=TRUE) */
-    public $commonName;
+    protected $commonName;
 
     /** @ORM\Column(type="string", nullable=TRUE) */
-    public $catalogName;
+    protected $catalogName;
 
     /** @ORM\Column(type="string", nullable=TRUE) */
-    public $catalogNameExtra;
+    protected $catalogNameExtra;
 
     /**
      * @param mixed $catalogName

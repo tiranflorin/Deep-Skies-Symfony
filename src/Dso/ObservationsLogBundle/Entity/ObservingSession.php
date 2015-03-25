@@ -21,19 +21,19 @@ class ObservingSession
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    public $id;
+    protected $id;
 
     /** @ORM\Column(type="string", nullable=TRUE) */
-    public $period;
+    protected $period;
 
     //TODO: Think more for this one
-    public $objects;
+    protected $objects;
 
     /** @ORM\Column(type="string", nullable=TRUE) */
-    public $equipment;
+    protected $equipment;
 
     /** @ORM\Column(type="string", nullable=TRUE) */
-    public $location;
+    protected $location;
 
     /**
      * @param mixed $equipment

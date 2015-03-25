@@ -4,7 +4,7 @@ namespace Dso\PlannerBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
 use Dso\PlannerBundle\Exception\HijackException;
-use Dso\PlannerBundle\Form\CustomFilters;
+use Dso\PlannerBundle\Form\Type\CustomFilters;
 use Dso\PlannerBundle\Services\CreateVisibleObjectsTable;
 use Dso\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;

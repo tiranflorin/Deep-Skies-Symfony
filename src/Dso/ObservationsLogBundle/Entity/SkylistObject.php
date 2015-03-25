@@ -21,31 +21,31 @@ class SkylistObject
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    public $id;
+    protected $id;
 
     /** @ORM\Column(type="string", nullable=TRUE) */
-    public $catalogNumberNgc;
+    protected $catalogNumberNgc;
 
     /** @ORM\Column(type="string", nullable=TRUE) */
-    public $catalogNumberMessier;
+    protected $catalogNumberMessier;
 
     /** @ORM\Column(type="string", nullable=TRUE) */
-    public $catalogNumberIc;
+    protected $catalogNumberIc;
 
     /** @ORM\Column(type="string", nullable=TRUE) */
-    public $commonName;
+    protected $commonName;
 
     /** @ORM\Column(type="string", nullable=TRUE) */
-    public $dateObserved;
+    protected $dateObserved;
 
     /** @ORM\Column(type="string", nullable=TRUE) */
-    public $comment;
+    protected $comment;
 
     /** @ORM\Column(type="string", nullable=TRUE) */
-    public $userName;
+    protected $userName;
 
     /** @ORM\Column(type="string", nullable=TRUE) */
-    public $observingSessionName;
+    protected $observingSessionName;
 
     /**
      * @param mixed $catalogNumberIc
