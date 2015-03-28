@@ -57,7 +57,6 @@ class FilterResults
         if($this->filterType == 'predefined') {
             switch ($this->predefinedFilter) {
                 case 'naked_eye':
-//                    return $this->retrieveResultsBase(' AND `source`.`mag` BETWEEN 0 AND 6.9 ', ' AND 1 ', ' AND 1 ');
                     return $this->retrieveResultsBase(0, 6.9);
                     break;
                 case 'binoculars':
@@ -70,10 +69,6 @@ class FilterResults
         }
 
         if($this->filterType == 'custom') {
-//            $cond1 = ' AND `source`.`mag` BETWEEN ' . $this->magnitudeMin . ' AND ' . $this->magnitudeMax;
-//            $cond2 = ' AND `source`.`constellation` = \'' . $this->constellation . '\'';
-//            $cond3 = ' AND `source`.`type` = \'' . $this->objectType . '\'';
-
             return $this->retrieveResultsBase($this->magnitudeMin, $this->magnitudeMax, $this->constellation, $this->objectType);
         }
     }

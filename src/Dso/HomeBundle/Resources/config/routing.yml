@@ -1,3 +1,4 @@
 dso_home_homepage:
     pattern:  /
     defaults: { _controller: DsoHomeBundle:Home:index }
+    methods:  [GET]

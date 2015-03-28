@@ -1,11 +1,14 @@
 dso_observations_log_homepage:
     path:     /observations-log/
     defaults: { _controller: DsoObservationsLogBundle:Dashboard:index }
+    methods:  [GET]
 
 dso_observations_log_entries_import_external:
     path:     /observations-log/import/
     defaults: { _controller: DsoObservationsLogBundle:Entries:importExternal }
+    methods:  [GET, POST]
 
 dso_observations_log_entries_view_logged:
     path:     /observations-log/view-logged/
     defaults: { _controller: DsoObservationsLogBundle:Entries:viewLogged }
+    methods:  [GET]

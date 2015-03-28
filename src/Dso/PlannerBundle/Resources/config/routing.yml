@@ -1,22 +1,27 @@
 dso_planner_homepage:
     pattern:  /planner/
     defaults: { _controller: DsoPlannerBundle:Planner:index }
+    methods:  [GET]
 
 dso_planner_predefined_filter:
     pattern:  /planner/filter-predefined/
     defaults: { _controller: DsoPlannerBundle:Planner:filterPredefined }
+    methods:  [GET]
 
 dso_planner_custom_filter:
     pattern:  /planner/filter-custom/
     defaults: { _controller: DsoPlannerBundle:Planner:filterCustom }
+    methods:  [GET]
 
 dso_planner_feedback:
     pattern:  /feedback/
     defaults: { _controller: DsoPlannerBundle:Feedback:feedback }
+    methods:  [GET, POST]
 
 dso_planner_feedback_sent:
     pattern:  /feedback-sent/
     defaults: { _controller: DsoPlannerBundle:Feedback:feedbacksent }
+    methods:  [GET, POST]
 
 dso_planner_current_location_settings:
     pattern:  /planner/location_settings
