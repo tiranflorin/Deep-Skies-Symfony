@@ -21,7 +21,7 @@ dso_planner_feedback:
 dso_planner_feedback_sent:
     pattern:  /feedback-sent/
     defaults: { _controller: DsoPlannerBundle:Feedback:feedbacksent }
-    methods:  [GET, POST]
+    methods:  [GET]
 
 dso_planner_current_location_settings:
     pattern:  /planner/location_settings

@@ -85,8 +85,8 @@ class PlannerController extends Controller
                     );
                 }
 
+                // TODO: display the objects found in the UI.
                 $results = $filterService->retrieveFilteredData();
-                echo 'ceva';
             }
         }
     }
