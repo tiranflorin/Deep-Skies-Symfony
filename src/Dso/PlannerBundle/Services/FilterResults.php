@@ -89,7 +89,7 @@ class FilterResults
      */
     public function retrieveResultsBase($minMag, $maxMag, $constellation = 0, $type = 0)
     {
-        $sql = '
+        $sql = "
         SELECT
             altaz_coord.object_id as `Object_id`,
             source.name as `Name1`,
@@ -103,12 +103,12 @@ class FilterResults
             source.notes as `Other_notes`,
             altaz_coord.altitude as `obj_altitude`,
             altaz_coord.azimuth as `obj_azimuth`,
-            IFNULL(img.thumb, \'default_thumbnail\') as `thumb`,
-            IFNULL(img.full_size, \'default_full_size\') as `full_size`
-        FROM `' . $this->baseTable . '`  as source
-        LEFT JOIN `' . $this->visibleObjectsTable . '` as altaz_coord
+            IFNULL(img.thumb, 'default_thumbnail') as `thumb`,
+            IFNULL(img.full_size, 'default_full_size') as `full_size`
+        FROM `{$this->baseTable}`  as source
+        LEFT JOIN `{$this->visibleObjectsTable}` as altaz_coord
             ON altaz_coord.object_id = source.id
-        LEFT JOIN `' . $this->imagePathsTable . '` as img
+        LEFT JOIN `{$this->imagePathsTable}` as img
             ON img.object_id = source.id
         WHERE 1
             AND `altitude` > 10
@@ -117,7 +117,7 @@ class FilterResults
             AND `source`.`constellation` IN (:constellation)
             AND `source`.`type` IN (:objType)
         ORDER BY
-            `ObjMagnitude`';
+            `ObjMagnitude`";
         $stmt = $this->mysqlService->getConn()->prepare($sql);
         $stmt->bindValue('minMag', $minMag);
         $stmt->bindValue('maxMag', $maxMag);
