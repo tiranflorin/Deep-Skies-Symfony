@@ -5,6 +5,7 @@ namespace Dso\PlannerBundle\Controller;
 use Dso\PlannerBundle\Exception\HijackException;
 use Dso\PlannerBundle\Form\Type\CustomFilters;
 use Dso\PlannerBundle\Services\CreateVisibleObjectsTable;
+use Dso\PlannerBundle\Services\SettingsManager;
 use Dso\UserBundle\Entity\LocationDetails;
 use Dso\UserBundle\Entity\User;
 use Dso\UserBundle\Event\UpdateLocationSettingsEvent;
@@ -117,30 +118,12 @@ class PlannerController extends Controller
             throw new AccessDeniedException();
         }
 
-        /** @var User $user */
-        $user = $securityContext->getToken()->getUser();
-        /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
-        $dispatcher = $this->get('event_dispatcher');
-        $defaultTime = new \DateTime('now', new \DateTimeZone('UTC'));
-        $locationDetails = new LocationDetails();
-
-        $locationDetails
-            ->setEmail($user->getEmail())
-            ->setLatitude($request->request->get('latitude', '43.234'))
-            ->setLongitude($request->request->get('longitude', '22.234'))
-            ->setTimeZone($request->request->get('timezone', 'UTC'))
-            ->setDatetime($request->request->get('datetime', $defaultTime->format('Y-m-dH:i:s')));
-
-        $dispatcher->dispatch(UpdateLocationSettingsEvent::UPDATE_LOCATION, new UpdateLocationSettingsEvent($locationDetails));
-        $dispatcher->dispatch(UpdateLocationSettingsEvent::UPDATE_TIME, new UpdateLocationSettingsEvent($locationDetails));
-
-        /** @var  CreateVisibleObjectsTable $visibleObjectsService */
-        $visibleObjectsService = $this->get('dso_planner.visible_objects');
-        $visibleObjectsService->setConfigurationDetails($user->getUsername(), $user->getLatitude(), $user->getLongitude(), $user->getDateTime());
+        /** @var SettingsManager $settingsManager */
+        $settingsManager = $this->get('dso_planner.settings_manager');
         try {
-            $result = $visibleObjectsService->executeFlow();
+            $settingsManager->updateUserLocation($request, $securityContext->getToken()->getUser());
         } catch (\Exception $e) {
-            return new Response($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         $request->getSession()->getFlashBag()->add(
@@ -188,22 +171,13 @@ class PlannerController extends Controller
             return new Response('Hijack attempt!', Response::HTTP_BAD_REQUEST );
         }
 
-        /** @var User $user */
-        $user = $this->get('security.context')->getToken()->getUser();
-        /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
-        $dispatcher = $this->get('event_dispatcher');
-        $defaultTime = new \DateTime('now', new \DateTimeZone('UTC'));
-        $locationDetails = new LocationDetails();
-
-        $locationDetails
-            ->setEmail($user->getEmail())
-            ->setLatitude($request->request->get('latitude', '43.234'))
-            ->setLongitude($request->request->get('longitude', '22.234'))
-            ->setTimeZone('UTC')
-            ->setDatetime($defaultTime->format('Y-m-dH:i:s'));
-
-        $dispatcher->dispatch(UpdateLocationSettingsEvent::UPDATE_LOCATION, new UpdateLocationSettingsEvent($locationDetails));
-        $dispatcher->dispatch(UpdateLocationSettingsEvent::UPDATE_TIME, new UpdateLocationSettingsEvent($locationDetails));
+        /** @var SettingsManager $settingsManager */
+        $settingsManager = $this->get('dso_planner.settings_manager');
+        try {
+            $settingsManager->updateUserLocation($request, $this->get('security.context')->getToken()->getUser());
+        } catch (\Exception $e) {
+            return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
 
         return new JsonResponse('ok', Response::HTTP_OK);
     }

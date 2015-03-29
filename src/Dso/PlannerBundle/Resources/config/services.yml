@@ -2,6 +2,7 @@ parameters:
     dso_planner.mysql_service.class: Dso\PlannerBundle\Services\SQL\MySqlService
     dso_planner.visible_objects.class: Dso\PlannerBundle\Services\CreateVisibleObjectsTable
     dso_planner.filter_results.class: Dso\PlannerBundle\Services\FilterResults
+    dso_planner.settings_manager.class: Dso\PlannerBundle\Services\SettingsManager
 
 services:
     dso_planner.mysql_service:
@@ -17,3 +18,8 @@ services:
         class: Dso\PlannerBundle\Subscriber\PaginateDsosSubscriber
         tags:
         - { name: knp_paginator.subscriber }
+    dso_planner.settings_manager:
+            class: %dso_planner.settings_manager.class%
+            calls:
+                 - [setVisibleObjectsService, ["@dso_planner.visible_objects"]]
+                 - [setDispatcher, ["@event_dispatcher"]]
