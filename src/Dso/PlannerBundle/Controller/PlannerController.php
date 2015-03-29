@@ -2,12 +2,14 @@
 
 namespace Dso\PlannerBundle\Controller;
 
-use Doctrine\ORM\EntityManager;
 use Dso\PlannerBundle\Exception\HijackException;
 use Dso\PlannerBundle\Form\Type\CustomFilters;
 use Dso\PlannerBundle\Services\CreateVisibleObjectsTable;
+use Dso\UserBundle\Entity\LocationDetails;
 use Dso\UserBundle\Entity\User;
+use Dso\UserBundle\Event\UpdateLocationSettingsEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Dso\PlannerBundle\Services\FilterResults;
 use Symfony\Component\HttpFoundation\Response;
@@ -103,7 +105,7 @@ class PlannerController extends Controller
     }
 
     /**
-     * Save/update location settings for a user
+     * Save/update location and time settings for a user
      */
     public function updateLocationSettingsAction(Request $request)
     {
@@ -115,18 +117,22 @@ class PlannerController extends Controller
             throw new AccessDeniedException();
         }
 
-        $defaultTime = new \DateTime('now', new \DateTimeZone('UTC'));
         /** @var User $user */
         $user = $securityContext->getToken()->getUser();
-        $user->setLatitude($request->request->get('latitude', '43.234'))
+        /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
+        $dispatcher = $this->get('event_dispatcher');
+        $defaultTime = new \DateTime('now', new \DateTimeZone('UTC'));
+        $locationDetails = new LocationDetails();
+
+        $locationDetails
+            ->setEmail($user->getEmail())
+            ->setLatitude($request->request->get('latitude', '43.234'))
             ->setLongitude($request->request->get('longitude', '22.234'))
-            ->setTimeZone($request->request->get('timezone', 'Europe/Bucharest'))
+            ->setTimeZone($request->request->get('timezone', 'UTC'))
             ->setDatetime($request->request->get('datetime', $defaultTime->format('Y-m-dH:i:s')));
 
-        /** @var EntityManager $em */
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($user);
-        $em->flush();
+        $dispatcher->dispatch(UpdateLocationSettingsEvent::UPDATE_LOCATION, new UpdateLocationSettingsEvent($locationDetails));
+        $dispatcher->dispatch(UpdateLocationSettingsEvent::UPDATE_TIME, new UpdateLocationSettingsEvent($locationDetails));
 
         /** @var  CreateVisibleObjectsTable $visibleObjectsService */
         $visibleObjectsService = $this->get('dso_planner.visible_objects');
@@ -167,5 +173,38 @@ class PlannerController extends Controller
         return $this->render('DsoPlannerBundle:Planner:location_settings.html.twig', array(
             'user' => $user)
         );
+    }
+
+    /**
+     * An AJAX call is sent after registration with the latitude and longitude of the user.
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse|Response
+     */
+    public function asynchronousUpdateSettingsAction(Request $request)
+    {
+        if (!$request->isXMLHttpRequest()) {
+            return new Response('Hijack attempt!', Response::HTTP_BAD_REQUEST );
+        }
+
+        /** @var User $user */
+        $user = $this->get('security.context')->getToken()->getUser();
+        /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
+        $dispatcher = $this->get('event_dispatcher');
+        $defaultTime = new \DateTime('now', new \DateTimeZone('UTC'));
+        $locationDetails = new LocationDetails();
+
+        $locationDetails
+            ->setEmail($user->getEmail())
+            ->setLatitude($request->request->get('latitude', '43.234'))
+            ->setLongitude($request->request->get('longitude', '22.234'))
+            ->setTimeZone('UTC')
+            ->setDatetime($defaultTime->format('Y-m-dH:i:s'));
+
+        $dispatcher->dispatch(UpdateLocationSettingsEvent::UPDATE_LOCATION, new UpdateLocationSettingsEvent($locationDetails));
+        $dispatcher->dispatch(UpdateLocationSettingsEvent::UPDATE_TIME, new UpdateLocationSettingsEvent($locationDetails));
+
+        return new JsonResponse('ok', Response::HTTP_OK);
     }
 }

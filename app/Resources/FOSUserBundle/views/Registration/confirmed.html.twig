@@ -3,14 +3,30 @@
 
     <div class="container">
         <div class="profile">
-            <p>{{ 'registration.confirmed'|trans({'%username%': user.username}) }}</p>
+            <p>Thank you for creating an account on Deep-skies.com!</p>
             {% if app.session is not empty %}
                 {% set targetUrl = app.session.get('_security.' ~ app.security.token.providerKey ~ '.target_path') %}
                 {% if targetUrl is not empty %}
                     <p><a href="{{ targetUrl }}">{{ 'registration.back'|trans }}</a></p>
                 {% endif %}
             {% endif %}
+            <br>
+            <p>Note: We are using geo location in order to automatically set your location preferences.</p>
+            <p>You can easily customize them by going to your profile area.</p>
+            <br>
+            <button type="button" class="btn btn-default">
+                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> <a href="{{ path('dso_planner_display_location_settings_form') }}"> Change location settings
+            </a></button>
         </div>
     </div>
 
 {% endblock %} {# <!-- end mainContent block --> #}
+
+{% block footer_javascripts %}
+    {{ parent() }}
+    {% javascripts
+    '@DsoHomeBundle/Resources/public/js/geolocation.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

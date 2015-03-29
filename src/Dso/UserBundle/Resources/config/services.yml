@@ -1,4 +1,7 @@
 services:
-#    dso_user.example:
-#        class: Dso\UserBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+    dso_user.update_location_listener:
+        class: Dso\UserBundle\EventListener\UpdateLocationSettingsSubscriber
+        calls:
+            - [setUserManager, ["@fos_user.user_manager"]]
+        tags:
+            - { name: kernel.event_subscriber }

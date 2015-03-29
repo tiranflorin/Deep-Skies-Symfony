@@ -37,3 +37,8 @@ dso_planner_update_location_settings:
     pattern:  /planner/location_settings
     defaults: { _controller: DsoPlannerBundle:Planner:updateLocationSettings }
     methods:  [POST]
+
+dso_planner_asynchronous_update_settings:
+    pattern:  /planner/async/update_settings
+    defaults: { _controller: DsoPlannerBundle:Planner:asynchronousUpdateSettings }
+    methods:  [POST]

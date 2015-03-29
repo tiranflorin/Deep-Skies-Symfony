@@ -92,7 +92,7 @@ class CreateVisibleObjectsTable
         $creationDateTime = $tmp->format('YmdHis');
 
         //TODO: validate the $lat, $long, $creation
-        //TODO: expected format: $lat, long = float with three decimals
+        // Expected format: $lat, long = float with three decimals.
 
         //if we are in the case to build the default table
         if ($this->lat == '45.230' && $this->long == '23.450') {

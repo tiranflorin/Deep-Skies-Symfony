@@ -2,60 +2,91 @@
 
 namespace Dso\UserBundle\Entity;
 
-use FOS\UserBundle\Model\User as BaseUser;
-use Doctrine\ORM\Mapping as ORM;
-
 /**
- * Class User
- *
- * @ORM\Entity
- * @ORM\Table(name="fos_user")
+ * Class LocationDetails
  *
  * @package Dso\UserBundle\Entity
  *
  * @author  Florin Tiran  <tiran.florin@gmail.com>
  */
-class User extends BaseUser
+class LocationDetails
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
     protected $id;
 
-    /**
-     * @ORM\Column(type="string", nullable=TRUE)
-     */
+    protected $email;
+
     protected $latitude;
 
-    /**
-     * @ORM\Column(type="string", nullable=TRUE)
-     */
     protected $longitude;
 
-    /**
-     * @ORM\Column(type="string", nullable=TRUE)
-     */
     protected $timeZone;
 
-    /**
-     * @ORM\Column(type="string", nullable=TRUE)
-     */
     protected $dateTime;
 
     /**
-     * Class constructor
+     * @param mixed $dateTime
+     *
+     * @return LocationDetails
      */
-    public function __construct()
+    public function setDateTime($dateTime)
     {
-        parent::__construct();
+        $this->dateTime = $dateTime;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDateTime()
+    {
+        return $this->dateTime;
+    }
+
+    /**
+     * @param mixed $email
+     *
+     * @return LocationDetails
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param mixed $id
+     *
+     * @return LocationDetails
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**
      * @param mixed $latitude
      *
-     * @return User
+     * @return LocationDetails
      */
     public function setLatitude($latitude)
     {
@@ -75,7 +106,7 @@ class User extends BaseUser
     /**
      * @param mixed $longitude
      *
-     * @return User
+     * @return LocationDetails
      */
     public function setLongitude($longitude)
     {
@@ -95,7 +126,7 @@ class User extends BaseUser
     /**
      * @param mixed $timeZone
      *
-     * @return User
+     * @return LocationDetails
      */
     public function setTimeZone($timeZone)
     {
@@ -110,25 +141,5 @@ class User extends BaseUser
     public function getTimeZone()
     {
         return $this->timeZone;
-    }
-
-    /**
-     * @param mixed $dateTime
-     *
-     * @return User
-     */
-    public function setDateTime($dateTime)
-    {
-        $this->dateTime = $dateTime;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDateTime()
-    {
-        return $this->dateTime;
     }
 }

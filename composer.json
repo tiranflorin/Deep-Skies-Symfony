@@ -29,7 +29,7 @@
         "incenteev/composer-parameter-handler": "~2.0",
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "knplabs/knp-paginator-bundle": "2.4.1",
-        "friendsofsymfony/jsrouting-bundle": "1.5.2"
+        "friendsofsymfony/jsrouting-bundle": "1.5.4"
     },
     "scripts": {
         "post-install-cmd": [
