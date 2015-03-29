@@ -2,26 +2,32 @@
 {% block jumbotronBlock %}
     <div class="jumbotron">
         <div class="container">
-                <h1>Welcome to Deep-Skies.com</h1>
-                <p class="lead">
-                    A community of amateur astronomers passionate about deep sky objects.
-                </p>
-                <p class="lead">Available tools:</p>
-                <div class="list-group">
-                    <a href="{{ path('dso_planner_homepage') }}" class="list-group-item">
-                        <p class="list-group-item-text">
-                            <span class="label label-default"><strong>Planner</strong></span>
-                            A quick and easy to use tool for planning your observing sessions.
-                        </p>
-                    </a>
-                    <a href="{{ path('dso_observations_log_homepage') }}" class="list-group-item">
-                        <p class="list-group-item-text">
-                            <span class="label label-default"><strong>Observations Log</strong></span>
-                            Save all your observations in one place, view log entries,
-                            manage equipment, export data and more.
-                        </p>
-                    </a>
+            {% for flashMessage in app.session.flashbag.get('warning') %}
+                <div class="alert alert-warning alert-dismissable" style="margin-top: 15px;">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <strong>Warning.</strong> {{ flashMessage }}
                 </div>
+            {% endfor %}
+            <h1>Welcome to Deep-Skies.com</h1>
+            <p class="lead">
+                A community of amateur astronomers passionate about deep sky objects.
+            </p>
+            <p class="lead">Available tools:</p>
+            <div class="list-group">
+                <a href="{{ path('dso_planner_homepage') }}" class="list-group-item">
+                    <p class="list-group-item-text">
+                        <span class="label label-default"><strong>Planner</strong></span>
+                        A quick and easy to use tool for planning your observing sessions.
+                    </p>
+                </a>
+                <a href="{{ path('dso_observations_log_homepage') }}" class="list-group-item">
+                    <p class="list-group-item-text">
+                        <span class="label label-default"><strong>Observations Log</strong></span>
+                        Save all your observations in one place, view log entries,
+                        manage equipment, export data and more.
+                    </p>
+                </a>
+            </div>
         </div>
     </div>
 {% endblock %}

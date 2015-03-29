@@ -19,7 +19,7 @@ services:
         tags:
         - { name: knp_paginator.subscriber }
     dso_planner.settings_manager:
-            class: %dso_planner.settings_manager.class%
-            calls:
-                 - [setVisibleObjectsService, ["@dso_planner.visible_objects"]]
-                 - [setDispatcher, ["@event_dispatcher"]]
+        class: %dso_planner.settings_manager.class%
+        calls:
+             - [setVisibleObjectsService, ["@dso_planner.visible_objects"]]
+             - [setDispatcher, ["@event_dispatcher"]]

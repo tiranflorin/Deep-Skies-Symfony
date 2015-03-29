@@ -6,6 +6,7 @@ use Dso\UserBundle\Entity\LocationDetails;
 use Dso\UserBundle\Event\UpdateLocationSettingsEvent;
 use FOS\UserBundle\Model\UserInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class SettingsManager
@@ -22,7 +23,7 @@ class SettingsManager
     /** @var  CreateVisibleObjectsTable */
     protected $visibleObjectsService;
 
-    public function updateUserLocation($request, UserInterface $user)
+    public function updateUserLocation(Request $request, UserInterface $user)
     {
         $defaultTime = new \DateTime('now', new \DateTimeZone('UTC'));
         $locationDetails = new LocationDetails();

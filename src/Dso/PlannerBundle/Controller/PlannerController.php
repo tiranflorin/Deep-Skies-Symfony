@@ -4,11 +4,7 @@ namespace Dso\PlannerBundle\Controller;
 
 use Dso\PlannerBundle\Exception\HijackException;
 use Dso\PlannerBundle\Form\Type\CustomFilters;
-use Dso\PlannerBundle\Services\CreateVisibleObjectsTable;
 use Dso\PlannerBundle\Services\SettingsManager;
-use Dso\UserBundle\Entity\LocationDetails;
-use Dso\UserBundle\Entity\User;
-use Dso\UserBundle\Event\UpdateLocationSettingsEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

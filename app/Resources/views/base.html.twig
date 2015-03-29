@@ -41,9 +41,9 @@
             <a class="navbar-brand" href="{{ path('dso_home_homepage') }}">Deep-Skies</a>
         </div>
         <div class="navbar-collapse collapse">
-            <form class="navbar-form navbar-left" role="form">
+            <form class="navbar-form navbar-left" role="form" action="{{ path('dso_search_term') }}">
                 <div class="form-group">
-                    <input type="text" placeholder="quick dso search" class="form-control">
+                    <input type="text" name="searchTerm" placeholder="quick dso search" class="form-control">
                 </div>
                 <button type="submit" class="btn btn-primary">Go</button>
             </form>

@@ -1,0 +1,4 @@
+dso_search_term:
+    path:     /search/
+    defaults: { _controller: DsoSearchBundle:Search:index }
+    methods:  [GET]

@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+{% block pageTitle %}Search results for {{ term }} | Deep-Skies   {% endblock %}
+{% block mainContent %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <p>Your search for <span class='highlight'><strong><em>{{ term }}</em></strong></span> returned {{ resultsFound | length }} results.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class='col-lg-12 searchResults'>
+                {% for object in resultsFound %}
+                <div class='panel panel-info'>
+                    <div class='panel-heading'>
+                        <h3 class='panel-title'>{{ object.name }}</h3>
+                    </div>
+                    <div class='panel-body'>
+                        <div class='row'>
+                            <div class='col-xs-12 col-sm-6 col-md-6 col-lg-6'>
+                                <ul class='list-group' style='margin-bottom: 0;'>
+                                    <li class='list-group-item'>Other name: {{ object.other_name }}</li>
+                                    <li class='list-group-item'>Constellation: {{ object.constellation }}</li>
+                                    <li class='list-group-item'>Type: {{ object.type }}</li>
+                                    <li class='list-group-item'>Magnitude: {{ object.mag }}</li>
+                                    <li class='list-group-item'>Right Ascension: {{ object.ra }}</li>
+                                    <li class='list-group-item'>Declination: {{ object.dec }}</li>
+                                </ul>
+                            </div>
+                            <div class='col-xs-12 col-sm-6 col-md-6 col-lg-6'>
+                                <ul class='list-group' style='margin-bottom: 0;'>
+                                    <li class='list-group-item'>Minimal size: {{ object.size_min }}</li>
+                                    <li class='list-group-item'>Maximum size: {{ object.size_max }}</li>
+                                    <li class='list-group-item'>Class: {{ object.class }}</li>
+                                    <li class='list-group-item'>Nsts: {{ object.nsts }}</li>
+                                    <li class='list-group-item'>NGC Description: {{ object.ngc_description }}</li>
+                                    <li class='list-group-item'>Other notes: {{ object.notes }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        </div>
+    </div>
+    <!-- /container -->
+{% endblock %}

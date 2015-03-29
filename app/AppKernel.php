@@ -23,6 +23,7 @@ class AppKernel extends Kernel
             new Dso\ObservationsLogBundle\DsoObservationsLogBundle(),
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
+            new Dso\SearchBundle\DsoSearchBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
