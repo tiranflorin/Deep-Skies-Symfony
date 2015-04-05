@@ -42,8 +42,7 @@ class DsoExceptionListener
                     'DsoHomeBundle:Home:email_exception.html.twig',
                     array(
                         'code' => $exception->getCode(),
-                        'message' => $exception->getMessage(),
-                        'stackTrace' => $exception->getTrace()
+                        'message' => $exception->getMessage()
                     )
                 ),
                 'text/html'

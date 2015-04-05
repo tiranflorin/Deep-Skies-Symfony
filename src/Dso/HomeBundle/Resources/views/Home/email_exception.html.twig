@@ -2,8 +2,4 @@
 {% block mainContent %}
     <p><strong><em>HTTP status code</em></strong>:{{ code }}</p>
     <p><strong><em>Exception message</em></strong>:{{ message }}</p>
-    <p><strong><em>Exception stack trace</em></strong>:</p>
-    <pre>
-        {{ dump(stackTrace) }}
-    </pre>
 {% endblock %}
