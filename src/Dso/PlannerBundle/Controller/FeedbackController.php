@@ -18,10 +18,29 @@ class FeedbackController extends Controller
             $form->handleRequest($request);
 
             if ($form->isValid()) {
+                $mailer = $this->get('mailer');
+                $message = $mailer->createMessage()
+                    ->setSubject('[Deep-Skies.com] Feedback')
+                    ->setFrom($feedbackEntity->getEmail())
+                    ->setTo($this->container->getParameter('administrator_email'))
+                    ->setBody(
+                        $this->renderView(
+                            'DsoPlannerBundle:Feedback:email_template.html.twig',
+                            array(
+                                'name' => $feedbackEntity->getName(),
+                                'message' => $feedbackEntity->getMessage()
+                            )
+                        ),
+                        'text/html'
+                    )
+                ;
+                $mailer->send($message);
+
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($feedbackEntity);
                 $em->flush();
-                return $this->redirect($this->generateUrl('dso_planner_feedback_sent'));
+
+                return $this->redirectToRoute('dso_planner_feedback_sent');
             }
         }
 

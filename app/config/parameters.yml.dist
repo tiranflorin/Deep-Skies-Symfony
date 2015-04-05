@@ -11,3 +11,4 @@ parameters:
     mailer_password: null
     locale: en
     secret: ISh0uldPr0bablyChangeTh1s
+    administrator_email: tiran.florin@gmail.com

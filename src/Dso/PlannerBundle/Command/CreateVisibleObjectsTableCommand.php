@@ -66,7 +66,8 @@ Notice the "*" separator from the dateTime option.
 
         /** @var  CreateVisibleObjectsTable $visibleObjectsService */
         $visibleObjectsService = $this->getContainer()->get('dso_planner.visible_objects');
-        $visibleObjectsService->setConfigurationDetails($latitude, $longitude, $dateTime);
+        $creation = new \DateTime('now', new \DateTimeZone('UTC'));
+        $visibleObjectsService->setConfigurationDetails($latitude, $longitude, $dateTime, $creation->format('Y-m-dH:i:s'));
         try {
             $result = $visibleObjectsService->executeFlow();
             $this->output->writeln('SUCCESS: ' . json_encode($result));
