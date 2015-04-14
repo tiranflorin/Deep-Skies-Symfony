@@ -2,6 +2,7 @@
 
 namespace Dso\PlannerBundle\Services;
 
+use Doctrine\DBAL\Connection;
 use Dso\PlannerBundle\Services\SQL\MysqlService;
 use Knp\Component\Pager\Paginator;
 
@@ -30,7 +31,6 @@ class FilterResults
     {
         $this->mysqlService = $mysqlService;
         $this->paginator = $paginator;
-        $this->resultsPerPage = 10; //TODO: make this configurable
         $this->baseTable = 'object';
         $this->imagePathsTable = 'image_paths';
     }
@@ -76,18 +76,18 @@ class FilterResults
     /**
      * Retrieve the paginated visible objects for current settings.
      *
-     * Using 0 as a default value for constellation and type seems odd,
-     * but it allows query execution to work even if the constellation
-     * and type filters are not explicitly provided.
+     * Using an array with a single 0 element as a default value for constellation
+     * and type seems odd, but it allows query execution to work even if the
+     * constellation and type filters are not explicitly provided.
      *
      * @param string|int $minMag
      * @param string|int $maxMag
-     * @param string|int $constellation
-     * @param string|int $type
+     * @param array      $constellation
+     * @param array      $type
      *
      * @return \Knp\Component\Pager\Pagination\PaginationInterface
      */
-    public function retrieveResultsBase($minMag, $maxMag, $constellation = 0, $type = 0)
+    public function retrieveResultsBase($minMag, $maxMag, $constellation = array(0), $type = array(0))
     {
         $sql = "
         SELECT
@@ -112,23 +112,39 @@ class FilterResults
             ON img.object_id = source.id
         WHERE 1
             AND `altitude` > 10
-            AND `source`.`mag` >= :minMag
-            AND `source`.`mag` <= :maxMag
-            AND `source`.`constellation` IN (:constellation)
-            AND `source`.`type` IN (:objType)
+            AND `source`.`mag` >= ?
+            AND `source`.`mag` <= ?
+            AND `source`.`constellation` IN (?)
+            AND `source`.`type` IN (?)
         ORDER BY
             `ObjMagnitude`";
-        $stmt = $this->mysqlService->getConn()->prepare($sql);
-        $stmt->bindValue('minMag', $minMag);
-        $stmt->bindValue('maxMag', $maxMag);
 
-        // Support both integer and string search values for constellation and type.
-        $bindConstellation = is_int($constellation) ? \PDO::PARAM_INT : \PDO::PARAM_STR;
-        $bindType = is_int($type) ? \PDO::PARAM_INT : \PDO::PARAM_STR;
-        $stmt->bindValue('constellation', $constellation, $bindConstellation);
-        $stmt->bindValue('objType', $type, $bindType);
+        // Determine the proper query type for the two parameters. Find a prettier way to decide.
+        $typeConst = ($constellation[0] === 0 && count($constellation) === 1) ? Connection::PARAM_INT_ARRAY : Connection::PARAM_STR_ARRAY;
+        $typeDsoObjects = ($type[0] === 0 && count($type) === 1) ? Connection::PARAM_INT_ARRAY : Connection::PARAM_STR_ARRAY;
 
-        $stmt->execute();
+        // Tweak the query parameters for the special case of the custom filter with all visible constellations selected.
+        if (count($constellation) === 1 && $constellation[0] == 'allvisible') {
+            $typeConst = Connection::PARAM_INT_ARRAY;
+            $constellation[0] = 0;
+        }
+
+
+        $stmt = $this->mysqlService->getConn()->executeQuery(
+            $sql,
+            array(
+                (int) $minMag,
+                (int) $maxMag,
+                $constellation,
+                $type,
+            ),
+            array(
+                \PDO::PARAM_INT,
+                \PDO::PARAM_INT,
+                $typeConst,
+                $typeDsoObjects
+            )
+        );
 
         $paginatedResults = $this->paginator->paginate(
             $stmt->fetchAll(),
@@ -156,5 +172,17 @@ class FilterResults
         }
 
         return $selected;
+    }
+
+    /**
+     * @param $results
+     *
+     * @return FilterResults
+     */
+    public function setResultsPerPage($results)
+    {
+        $this->resultsPerPage = $results;
+
+        return $this;
     }
 }

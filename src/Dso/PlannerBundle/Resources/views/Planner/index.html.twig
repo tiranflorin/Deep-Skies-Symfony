@@ -4,25 +4,18 @@
     <div>
         <h3>Current location settings:</h3>
         {{ render(controller('DsoPlannerBundle:Planner:locationSettings')) }}
-        <hr>
     </div>
     <div class="container">
+        <hr>
         <div class="row">
-            <div class="col-lg-6 col-md-6">
-                <div id="predefined-filters">
-                <h3>Predefined filters:</h3>
-                <div class="row"><a href="{{ path('dso_planner_predefined_filter', {'filter_type':'predefined', 'selection':'naked_eye'}) }}" class="btn btn-primary">Naked Eye</a></div>
-                <div class="row"><a href="{{ path('dso_planner_predefined_filter', {'filter_type':'predefined', 'selection':'binoculars'}) }}" class="btn btn-primary">Binoculars</a></div>
-                <div class="row"><a href="{{ path('dso_planner_predefined_filter', {'filter_type':'predefined', 'selection':'small_telescope'}) }}" class="btn btn-primary">Small Telescope</a></div>
-                </div>
+            <div class="col-sm-6 col-md-12 col-lg-12">
+                {{ include('DsoPlannerBundle:Planner:predefined_filters.html.twig') }}
             </div>
-            <div class="col-lg-6 col-md-6">
-                <div id="custom-filters">
-                <h3>Custom filters:</h3>
-                    <form action="{{ path('dso_planner_custom_filter') }}" method="post" {{ form_enctype(formCustomFilters) }}>
-                        {{ form_widget(formCustomFilters) }}
-                    </form>
-                </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-6 col-md-12 col-lg-12">
+                {{ include('DsoPlannerBundle:Planner:custom_filters.html.twig') }}
             </div>
         </div>
     </div>

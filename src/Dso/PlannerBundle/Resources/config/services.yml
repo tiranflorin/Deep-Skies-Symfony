@@ -14,6 +14,8 @@ services:
     dso_planner.filter_results:
         class: %dso_planner.filter_results.class%
         arguments: [@dso_planner.mysql_service, @knp_paginator]
+        calls:
+            - [setResultsPerPage, [%planner_results_per_page%]]
     dso_planner.paginate_subscriber:
         class: Dso\PlannerBundle\Subscriber\PaginateDsosSubscriber
         tags:

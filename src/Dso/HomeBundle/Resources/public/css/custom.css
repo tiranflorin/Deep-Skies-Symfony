@@ -43,20 +43,10 @@ body{
 }
 
 #custom-filters div{
-    float: left;
-    width: 100%;
-    margin-top: 5px;
+    color: #101010;
 }
-
-#custom-filters label{
-    width:40%;
-    float: left;
-    padding-top: 8px;
-}
-
-#custom-filters input{
-    width:55%;
-    float: left;
+#custom-filters div label{
+    color: #FFFFFF;
 }
 
 #location-edit {

@@ -1,0 +1,113 @@
+{% set constellations = [
+'AND', 'ANT', 'APS', 'AQL', 'AQR', 'ARA', 'ARI', 'AUR', 'BOO', 'CAE', 'CAM', 'CAP', 'CAR', 'CAS',
+'CEN', 'CEP', 'CET', 'CHA', 'CIR', 'CMA', 'CMI', 'CNC', 'COL', 'COM', 'CRA', 'CRB', 'CRT', 'CRU',
+'CRV', 'CVN', 'CYG', 'DEL', 'DOR', 'DRA', 'EQU', 'ERI', 'FOR', 'GEM', 'GRU', 'HER', 'HOR', 'HYA',
+'HYI', 'IND', 'LAC', 'LEO', 'LEP', 'LIB', 'LMI', 'LUP', 'LYN', 'LYR', 'MEN', 'MIC', 'MON', 'MUS',
+'NOR', 'OCT', 'OPH', 'ORI', 'PAV', 'PEG', 'PER', 'PHE', 'PIC', 'PSA', 'PSC', 'PUP', 'PYX', 'RET',
+'SCL', 'SCO', 'SCT', 'SER', 'SEX', 'SGE', 'SGR', 'TAU', 'TEL', 'TRA', 'TRI', 'TUC', 'UMA', 'UMI',
+'VEL', 'VIR', 'VOL', 'VUL'] %}
+
+<div id="custom-filters">
+    <h3>Custom filters:</h3>
+
+    <div class="row">
+        <form class="form-horizontal" action="{{ path('dso_planner_custom_filter') }}" method="get">
+            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                <label>Constellation</label>
+                <select multiple="multiple" id="customfilters_constellation"
+                        name="constellation[]"
+                        required="required" style="height:100px;">
+                    <option value="allvisible" selected="selected">All Visible</option>
+                    {% for constellation in constellations %}
+                        <option value="{{ constellation }}">{{ constellation }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                <label>Object type</label>
+                <select id="customfilters_obj_type" name="obj_type[]"
+                        multiple="multiple" style="height:100px;">
+                    <option value="galxy" selected="selected">Galaxy</option>
+                    <option value="plnnb">Planetary Nebula</option>
+                    <option value="glocl">Globular Cluster</option>
+                    <option value="opncl">Open Cluster</option>
+                    <option value="other">Nebulae</option>
+                </select>
+            </div>
+
+            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-lg-12">
+                        <label>Min Magnitude</label>
+
+                        <div id="slider-range"></div>
+                        <select id="customfilters_obj_type" name="min_mag" required="required">
+                            <option value="0" selected="selected">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="100">Undefined</option>
+                        </select>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-lg-12">
+                        <label>Max Magnitude</label>
+
+                        <div id="slider-range"></div>
+                        <select id="customfilters_obj_type" name="max_mag" required="required">
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="100" selected="selected">Undefined</option>
+                        </select>
+                    </div>
+                </div>
+                <input type="hidden" id="customfilters_filter_type" name="filter_type" value="custom"/>
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-lg-12">
+                        <button type="submit" id="customfilters_filter" class="btn btn-primary">Filter</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    {% for flashMessage in app.session.flashbag.get('warning') %}
+        <div class="alert alert-warning">
+            <strong>Warning.</strong> {{ flashMessage }}
+        </div>
+    {% endfor %}
+</div>

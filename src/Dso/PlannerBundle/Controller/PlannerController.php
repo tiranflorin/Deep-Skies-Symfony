@@ -3,7 +3,6 @@
 namespace Dso\PlannerBundle\Controller;
 
 use Dso\PlannerBundle\Exception\HijackException;
-use Dso\PlannerBundle\Form\Type\CustomFilters;
 use Dso\PlannerBundle\Services\SettingsManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,12 +16,18 @@ class PlannerController extends Controller
 {
     public function indexAction()
     {
-        return $this->render('DsoPlannerBundle:Planner:index.html.twig', array(
-            'formCustomFilters' => $this->createForm(new CustomFilters())->createView()
-        ));
-
+        return $this->render('DsoPlannerBundle:Planner:index.html.twig');
     }
 
+    /**
+     * Handles the predefined search of visible deep-sky objects with
+     * valid options such as "naked_eye", "binoculars" or "small_telescope".
+     *
+     * @param Request $request
+     * @throws \Dso\PlannerBundle\Exception\HijackException
+     *
+     * @return Response
+     */
     public function filterPredefinedAction(Request $request)
     {
         /** @var FilterResults $filterService */
@@ -47,47 +52,62 @@ class PlannerController extends Controller
         $paginatedResults->setParam('selection', $selection);
 
         return $this->render('DsoPlannerBundle:Planner:index.html.twig', array(
-            'formCustomFilters' => $this->createForm(new CustomFilters())->createView(),
             'pagination' => $paginatedResults
         ));
     }
 
+    /**
+     * Handles the custom search of visible deep-sky objects with
+     * filters applied for constellation, object type and magnitude.
+     *
+     * @param Request $request
+     * @throws \Dso\PlannerBundle\Exception\HijackException
+     *
+     * @return Response
+     */
     public function filterCustomAction(Request $request)
     {
         /** @var FilterResults $filterService */
         $filterService = $this->get('dso_planner.filter_results');
+        $filterType = $request->get('filter_type');
 
-        if ($request->getMethod() == 'POST') {
-            $form = $this->createForm(new CustomFilters());
-            $form->handleRequest($request);
-
-            if ($form->isValid()) {
-                $filterType = $form->get('filter_type')->getData();
-
-                if($filterType == 'custom') {
-                    $const = $form->get('constellation');
-                    $magMin = $form->get('magMin');
-                    $magMax = $form->get('magMax');
-                    $objType = $form->get('objectType');
-                    $selection = array(
-                        'constellation' => $const,
-                        'magMin' => $magMin,
-                        'magMax' => $magMax,
-                        'objType' => $objType
-                    );
-                    $user = $this->get('security.context')->getToken()->getUser();
-
-                    $filterService->setConfigurationDetails(
-                        $this->get('dso_planner.visible_objects')->getVisibleObjectsTableName($user),
-                        $filterType,
-                        $selection
-                    );
-                }
-
-                // TODO: display the objects found in the UI.
-                $results = $filterService->retrieveFilteredData();
-            }
+        if($filterType != 'custom') {
+            throw new HijackException('Hijack attempt. Bye!', Response::HTTP_CONFLICT);
         }
+
+        $constellations = $request->get('constellation');
+        $objTypes = $request->get('obj_type');
+        if (empty($constellations) || empty($objTypes)) {
+            $request->getSession()->getFlashBag()->add(
+                'warning',
+                'Invalid search performed! Please select at least one constellation and object type.'
+            );
+
+            return $this->redirect($this->generateUrl('dso_planner_homepage'));
+        }
+
+        $selection = array(
+            'objType' => $objTypes,
+            'constellation' => $constellations,
+            'magMin' => $request->get('min_mag', 0),
+            'magMax' => $request->get('max_mag', 100), // Using 100 as default because of the "99.9" magnitude used in
+                                                       // the main 'object' table for objects with undefined magnitude.
+        );
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        $filterService->setConfigurationDetails(
+            $this->get('dso_planner.visible_objects')->getVisibleObjectsTableName($user),
+            $filterType,
+            $selection
+        );
+
+        $paginatedResults = $filterService->retrieveFilteredData($request->get('page', 1));
+        $paginatedResults->setParam('filter_type', 'custom');
+        $paginatedResults->setParam('selection', $selection);
+
+        return $this->render('DsoPlannerBundle:Planner:index.html.twig', array(
+            'pagination' => $paginatedResults
+        ));
     }
 
     /**
