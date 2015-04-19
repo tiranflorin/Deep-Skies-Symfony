@@ -3,6 +3,8 @@ parameters:
     dso_planner.visible_objects.class: Dso\PlannerBundle\Services\CreateVisibleObjectsTable
     dso_planner.filter_results.class: Dso\PlannerBundle\Services\FilterResults
     dso_planner.settings_manager.class: Dso\PlannerBundle\Services\SettingsManager
+    dso_planner.paginate_subscriber.class: Dso\PlannerBundle\Subscriber\PaginateDsosSubscriber
+    dso_planner.drop_table_subscriber.class: Dso\PlannerBundle\Subscriber\DropTableSubscriber
 
 services:
     dso_planner.mysql_service:
@@ -17,11 +19,17 @@ services:
         calls:
             - [setResultsPerPage, [%planner_results_per_page%]]
     dso_planner.paginate_subscriber:
-        class: Dso\PlannerBundle\Subscriber\PaginateDsosSubscriber
+        class: %dso_planner.paginate_subscriber.class%
         tags:
-        - { name: knp_paginator.subscriber }
+            - { name: knp_paginator.subscriber }
+    dso_planner.drop_table_subscriber:
+        class: %dso_planner.drop_table_subscriber.class%
+        calls:
+            - [setDbConnection, ["@doctrine.dbal.default_connection"]]
+        tags:
+            - { name: kernel.event_subscriber }
     dso_planner.settings_manager:
         class: %dso_planner.settings_manager.class%
         calls:
-             - [setVisibleObjectsService, ["@dso_planner.visible_objects"]]
-             - [setDispatcher, ["@event_dispatcher"]]
+            - [setVisibleObjectsService, ["@dso_planner.visible_objects"]]
+            - [setDispatcher, ["@event_dispatcher"]]

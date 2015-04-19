@@ -2,6 +2,7 @@
 
 namespace Dso\PlannerBundle\Services;
 
+use Dso\PlannerBundle\Event\DropTableEvent;
 use Dso\UserBundle\Entity\LocationDetails;
 use Dso\UserBundle\Event\UpdateLocationSettingsEvent;
 use FOS\UserBundle\Model\UserInterface;
@@ -33,13 +34,18 @@ class SettingsManager
             ->setLatitude($request->request->get('latitude', '43.234'))
             ->setLongitude($request->request->get('longitude', '22.234'))
             ->setTimeZone('UTC')
-            ->setDatetime($defaultTime->format('Y-m-dH:i:s'));
+            ->setDatetime($request->request->get('datetime', $defaultTime->format('Y-m-dH:i:s')));
 
         $this->dispatcher->dispatch(UpdateLocationSettingsEvent::UPDATE_LOCATION, new UpdateLocationSettingsEvent($locationDetails));
         $this->dispatcher->dispatch(UpdateLocationSettingsEvent::UPDATE_TIME, new UpdateLocationSettingsEvent($locationDetails));
 
+        $username = $user->getUsername();
+        $mySqlService = $this->visibleObjectsService->getMysqlService();
+        $oldTableNames = $mySqlService->getConn()->fetchAll("SHOW TABLES LIKE '%temp__custom__$username%'");
         $this->visibleObjectsService->setConfigurationDetails($user->getUsername(), $locationDetails->getLatitude(), $locationDetails->getLongitude(), $locationDetails->getDateTime());
         $this->visibleObjectsService->executeFlow();
+
+        $this->dispatcher->dispatch(DropTableEvent::DROP_TABLE, new DropTableEvent($oldTableNames));
     }
 
     /**

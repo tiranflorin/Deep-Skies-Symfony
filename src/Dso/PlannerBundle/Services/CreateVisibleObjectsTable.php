@@ -354,4 +354,12 @@ class CreateVisibleObjectsTable
         $tmp = new \DateTime($user->getDateTime(), new \DateTimeZone($user->getTimeZone()));
         return 'temp__custom__'. strtolower($user->getUsername()) .'_' . $user->getLatitude() . '_' . $user->getLongitude() . '_' . $tmp->format('YmdHis');;
     }
+
+    /**
+     * @return \Dso\PlannerBundle\Services\SQL\MysqlService
+     */
+    public function getMysqlService()
+    {
+        return $this->mysqlService;
+    }
 }
