@@ -12,3 +12,13 @@ dso_observations_log_entries_view_logged:
     path:     /observations-log/view-logged/
     defaults: { _controller: DsoObservationsLogBundle:Entries:viewLogged }
     methods:  [GET]
+
+obs_lists:
+    resource: "@DsoObservationsLogBundle/Controller/ObsListController.php"
+    prefix:   /observations-log
+    type:     annotation
+
+logged_objects:
+    resource: "@DsoObservationsLogBundle/Controller/LoggedObjectController.php"
+    prefix:   /observations-log
+    type:     annotation

@@ -19,7 +19,7 @@
         "symfony/symfony": "2.6.*",
         "doctrine/orm": "~2.2,>=2.2.3,<2.5",
         "doctrine/dbal": "<2.5",
-        "doctrine/doctrine-bundle": "~1.2",
+        "doctrine/doctrine-bundle": "1.5.0",
         "twig/extensions": "~1.0",
         "symfony/assetic-bundle": "~2.3",
         "symfony/swiftmailer-bundle": "~2.3",
@@ -29,7 +29,8 @@
         "incenteev/composer-parameter-handler": "~2.0",
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "knplabs/knp-paginator-bundle": "2.4.1",
-        "friendsofsymfony/jsrouting-bundle": "1.5.4"
+        "friendsofsymfony/jsrouting-bundle": "1.5.4",
+        "jordillonch/crud-generator": "2.3.x-dev"
     },
     "scripts": {
         "post-install-cmd": [
