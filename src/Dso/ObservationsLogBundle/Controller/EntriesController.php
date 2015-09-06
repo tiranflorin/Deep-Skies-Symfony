@@ -35,10 +35,15 @@ class EntriesController extends Controller
 
             /** @var SkylistEntry $skylistService */
             $skylistService = $this->get('dso_observations_log.skylist_entry');
+            $listId = $skylistService->createObservingList(array(
+                    'name' => $uploadedFile->getClientOriginalName(),
+                    'userId' => $this->getUser()->getId()
+                )
+            );
             $skylistService->persistDsos(
                 $skylistService->parseContent($content),
-                $uploadedFile->getClientOriginalName(),
-                $this->getUser()->getUsername()
+                $this->getUser()->getId(),
+                $listId
             );
             $request->getSession()->getFlashBag()->add(
                 'notice',

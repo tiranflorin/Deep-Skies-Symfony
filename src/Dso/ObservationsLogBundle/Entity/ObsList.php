@@ -23,6 +23,9 @@ class ObsList
      */
     protected $id;
 
+    /** @ORM\Column(type="integer", name="user_id") */
+    protected $user_id;
+
     /** @ORM\Column(type="string", nullable=FALSE) */
     protected $name;
 
@@ -113,6 +116,26 @@ class ObsList
     public function setConditions($conditions)
     {
         $this->conditions = $conditions;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserId()
+    {
+        return $this->user_id;
+    }
+
+    /**
+     * @param mixed $user_id
+     *
+     * @return ObsList
+     */
+    public function setUserId($user_id)
+    {
+        $this->user_id = $user_id;
+
+        return $this;
     }
 
     public function __toString()

@@ -37,6 +37,9 @@ class LoggedObject
     protected $comment;
 
     /** @ORM\Column(type="datetime") */
+    protected $observedAt;
+
+    /** @ORM\Column(type="datetime") */
     protected $createdAt;
 
     /**
@@ -201,5 +204,28 @@ class LoggedObject
     public function getObsList()
     {
         return $this->obsList;
+    }
+
+    /**
+     * Get observedAt
+     *
+     * @return \DateTime
+     */
+    public function getObservedAt()
+    {
+        return $this->observedAt;
+    }
+
+    /**
+     * Set observedAt
+     *
+     * @param mixed $observedAt
+     * @return LoggedObject
+     */
+    public function setObservedAt($observedAt)
+    {
+        $this->observedAt = $observedAt;
+
+        return $this;
     }
 }

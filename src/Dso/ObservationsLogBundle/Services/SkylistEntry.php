@@ -3,6 +3,8 @@
 namespace Dso\ObservationsLogBundle\Services;
 
 use Doctrine\ORM\EntityManager;
+use Dso\ObservationsLogBundle\Entity\LoggedObject;
+use Dso\ObservationsLogBundle\Entity\ObsList;
 use Dso\ObservationsLogBundle\Entity\SkylistObject;
 
 /**
@@ -40,6 +42,8 @@ use Dso\ObservationsLogBundle\Entity\SkylistObject;
  */
 class SkylistEntry {
 
+    const DSO_NOT_FOUND = 'Dso Not Found';
+
     /** @var  string $content */
     protected $content;
 
@@ -58,9 +62,9 @@ class SkylistEntry {
         $this->content = $content;
         $this->removeHeaderInfo();
         $pieces = $this->splitIntoObservedObjects();
-        $skylistObjects = $this->createFromArray($pieces);
+        $loggedObjects = $this->createLoggedObjectsFromArray($pieces);
 
-        return $skylistObjects;
+        return $loggedObjects;
     }
 
     /**
@@ -100,26 +104,41 @@ class SkylistEntry {
             $content = strstr($item, 'EndObject=SkyObject', true);
             $pieces = array_filter(explode("\n\t", $content));
             foreach ($pieces as $itemProperty) {
-                if (strpos($itemProperty, 'CommonName=') !== false) {
-                    trim($itemProperty);
-                    $skylistObject->setCommonName(substr($itemProperty, strlen('CommonName=')));
-                }
-                if (strpos($itemProperty, 'CatalogNumber=NGC') !== false) {
-                    trim($itemProperty);
-                    $skylistObject->setCatalogNumberNgc(substr($itemProperty, strlen('CatalogNumber=')));
-                }
-                if (strpos($itemProperty, 'CatalogNumber=M ') !== false) {
-                    trim($itemProperty);
-                    $skylistObject->setCatalogNumberMessier(substr($itemProperty, strlen('CatalogNumber=')));
-                }
-                if (strpos($itemProperty, 'CatalogNumber=IC') !== false) {
-                    trim($itemProperty);
-                    $skylistObject->setCatalogNumberIc(substr($itemProperty, strlen('CatalogNumber=')));
-                }
+                $this->extractDetailsFromSkylistItem($skylistObject, $itemProperty);
+            }
+            $observedObjectsList[] = $skylistObject;
+        }
+
+        return $observedObjectsList;
+    }
+
+    /**
+     * Creates a list of observed objects.
+     *
+     * @param array $skylistContent
+     *
+     * @return array
+     */
+    public function createLoggedObjectsFromArray($skylistContent)
+    {
+        $observedObjectsList = array();
+        foreach ($skylistContent as $item) {
+            $skylistObject = new LoggedObject();
+            $dso_id = $this->retrieveDsoId($item);
+
+            // Create a new entry in the system if the object hasn't been found.
+            if ($dso_id === SkylistEntry::DSO_NOT_FOUND) {
+                $dso_id = $this->insertNewDso($item);
+            }
+            $skylistObject->setObjId($dso_id);
+            $content = strstr($item, 'EndObject=SkyObject', true);
+            $pieces = array_filter(explode("\n\t", $content));
+            foreach ($pieces as $itemProperty) {
                 if (strpos($itemProperty, 'DateObserved=') !== false) {
                     trim($itemProperty);
                     //TODO: Change the string value(2.456892419165283e+06) to DateTime
-                    $skylistObject->setDateObserved(substr($itemProperty, strlen('DateObserved=')));
+//                    $skylistObject->setObservedAt(substr($itemProperty, strlen('DateObserved=')));
+                    $skylistObject->setObservedAt(new \DateTime('now'));
                 }
                 if (strpos($itemProperty, 'Comment=') !== false) {
                     trim($itemProperty);
@@ -133,25 +152,56 @@ class SkylistEntry {
     }
 
     /**
-     * @param array<SkylistObject> $observedObjects
-     * @param string               $obsSesionName
-     * @param string               $username
+     * Adds a new observing list entry.
+     *
+     * @param $details
+     *
+     * @return mixed
      */
-    public function persistDsos($observedObjects, $obsSesionName, $username)
+    public function createObservingList($details)
+    {
+        $defaults = array(
+            'userId' => 0,
+            'name' => '',
+            'period' => '',
+            'equipment' => '',
+            'conditions' => '',
+        );
+        $merged = array_merge($defaults, $details);
+
+        $obsList = new ObsList();
+        $obsList->setName($merged['name']);
+        $obsList->setPeriod($merged['period']);
+        $obsList->setEquipment($merged['equipment']);
+        $obsList->setConditions($merged['conditions']);
+        $obsList->setUserId($merged['userId']);
+
+        $this->em->persist($obsList);
+        $this->em->flush();
+
+        return $obsList->getId();
+    }
+
+    /**
+     * @param array<LoggedObject>  $observedObjects
+     * @param integer              $userId
+     * @param integer              $listId
+     */
+    public function persistDsos($observedObjects, $userId, $listId)
     {
         $i = 0;
         $batchSize = 20;
         foreach ($observedObjects as $observedObject) {
-            /** @var SkylistObject $observedObject */
-            $observedObject->setObservingSessionName($obsSesionName);
-            $observedObject->setUserName($username);
+            /** @var LoggedObject $observedObject */
+            $observedObject->setUserId($userId);
+            $observedObject->setListId($listId);
             $this->em->persist($observedObject);
             if (($i % $batchSize) === 0) {
                 $this->em->flush($observedObject);
             }
             $i++;
         }
-        $this->em->flush(); //Persist objects that did not make up an entire batch
+        $this->em->flush(); // Persist objects that did not make up an entire batch.
         $this->em->clear();
     }
 
@@ -165,5 +215,199 @@ class SkylistEntry {
         $this->em = $em;
 
         return $this;
+    }
+
+    /**
+     * Retrieve a dso_id from the system (object table for now).
+     *
+     * @param array $item
+     *
+     * @return mixed
+     */
+    public function retrieveDsoId($item) {
+        $commonName = '';
+        $otherName = '';
+        $content = strstr($item, 'EndObject=SkyObject', true);
+        $pieces = array_filter(explode("\n\t", $content));
+
+        foreach ($pieces as $itemProperty) {
+            if (strpos($itemProperty, 'CommonName=') !== false) {
+                trim($itemProperty);
+                $commonName = substr($itemProperty, strlen('CommonName='));
+            }
+            if (strpos($itemProperty, 'CatalogNumber=NGC') !== false) {
+                trim($itemProperty);
+                $commonName = substr($itemProperty, strlen('CatalogNumber='));
+                $otherName = substr($itemProperty, strlen('CatalogNumber='));
+            }
+            if (strpos($itemProperty, 'CatalogNumber=M ') !== false) {
+                trim($itemProperty);
+                $otherName = substr($itemProperty, strlen('CatalogNumber='));
+            }
+            if (strpos($itemProperty, 'CatalogNumber=IC') !== false) {
+                trim($itemProperty);
+                $otherName = substr($itemProperty, strlen('CatalogNumber='));
+            }
+        }
+
+        if ($commonName != '') {
+            return $this->findDsoByCommonName($commonName);
+        }
+
+        if ($otherName != '') {
+            return $this->findDsoByOtherName($otherName);
+        }
+
+        return SkylistEntry::DSO_NOT_FOUND;
+    }
+
+    /**
+     * Saves a new DSO in our system, with SkySafari item details available.
+     *
+     * @param $item
+     * @return int
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function insertNewDso($item) {
+        $content = strstr($item, 'EndObject=SkyObject', true);
+        $pieces = array_filter(explode("\n\t", $content));
+        $skylistObject = new SkylistObject();
+
+        foreach ($pieces as $itemProperty) {
+            $this->extractDetailsFromSkylistItem($skylistObject, $itemProperty);
+        }
+        $conn = $this->em->getConnection();
+        $sql = "INSERT INTO object (name, other_name) VALUES (:common_name, :other_name)";
+        $stmt = $conn->prepare($sql);
+
+        if ($skylistObject->getCommonName() != ''
+            || $skylistObject->getCatalogNumberIc() != ''
+            || $skylistObject->getCatalogNumberNgc() != ''
+            || $skylistObject->getCatalogNumberMessier() != '') {
+
+            $otherName = '';
+            if ($skylistObject->getCatalogNumberIc() != '') {
+                $otherName = $skylistObject->getCatalogNumberIc();
+            }
+            if ($skylistObject->getCatalogNumberNgc() != '') {
+                $otherName = $skylistObject->getCatalogNumberNgc();
+            }
+            if ($skylistObject->getCatalogNumberMessier() != '') {
+                $otherName = $skylistObject->getCatalogNumberMessier();
+            }
+
+            $commonName = '';
+            if ($skylistObject->getCommonName() !== NULL) {
+                $commonName = $skylistObject->getCommonName();
+            }
+            $stmt->bindValue('common_name', str_replace(' ', '', $commonName));
+            $stmt->bindValue('other_name', str_replace(' ', '', $otherName));
+            $stmt->execute();
+
+            // TODO: find a faster way (without an extra query) to get the "inserted_id";
+            if ($commonName != '') {
+                return $this->findDsoByCommonName($commonName);
+            }
+
+            if ($otherName != '') {
+                return $this->findDsoByOtherName($otherName);
+            }
+        }
+
+        return -1;
+    }
+
+    /**
+     * @param SkylistObject $skylistObject
+     * @param string        $item
+     */
+    public function extractDetailsFromSkylistItem(SkylistObject $skylistObject, $item) {
+        if (strpos($item, 'CommonName=') !== false) {
+            trim($item);
+            $skylistObject->setCommonName(substr($item, strlen('CommonName=')));
+        }
+        if (strpos($item, 'CatalogNumber=NGC') !== false) {
+            trim($item);
+            $skylistObject->setCatalogNumberNgc(substr($item, strlen('CatalogNumber=')));
+        }
+        if (strpos($item, 'CatalogNumber=M ') !== false) {
+            trim($item);
+            $skylistObject->setCatalogNumberMessier(substr($item, strlen('CatalogNumber=')));
+        }
+        if (strpos($item, 'CatalogNumber=IC') !== false) {
+            trim($item);
+            $skylistObject->setCatalogNumberIc(substr($item, strlen('CatalogNumber=')));
+        }
+        if (strpos($item, 'DateObserved=') !== false) {
+            trim($item);
+            //TODO: Change the string value(2.456892419165283e+06) to DateTime
+            $skylistObject->setDateObserved(substr($item, strlen('DateObserved=')));
+        }
+        if (strpos($item, 'Comment=') !== false) {
+            trim($item);
+            $skylistObject->setComment(substr($item, strlen('Comment=')));
+        }
+    }
+
+    /**
+     * @param string $commonName
+     *
+     * @return int
+     *
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function findDsoByCommonName($commonName) {
+        $conn = $this->em->getConnection();
+        $sql = "
+            SELECT
+                *
+            FROM object
+            WHERE 1
+            AND (name LIKE :common_name)
+            ";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue('common_name', str_replace(' ', '', "%$commonName%"));
+        $stmt->execute();
+        $resultsFound = $stmt->fetchAll();
+        if (!empty($resultsFound)) {
+            $objDetails = reset($resultsFound);
+            $id = (int) $objDetails['id'];
+
+            return $id; // Happy flow scenario.
+        }
+
+        return SkylistEntry::DSO_NOT_FOUND;
+    }
+
+    /**
+     * @param $otherName
+     *
+     * @return int|string
+     *
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function findDsoByOtherName($otherName) {
+        $conn = $this->em->getConnection();
+        $sql = "
+            SELECT
+                *
+            FROM object
+            WHERE 1
+            AND (other_name LIKE :other_name)
+            ";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue('other_name', str_replace(' ', '', "%$otherName%"));
+        $stmt->execute();
+        $resultsFound = $stmt->fetchAll();
+        if (!empty($resultsFound)) {
+            $objDetails = reset($resultsFound);
+            $id = (int) $objDetails['id'];
+
+            return $id; // Happy flow scenario.
+        }
+
+        return SkylistEntry::DSO_NOT_FOUND;
     }
 }

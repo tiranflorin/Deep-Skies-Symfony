@@ -85,7 +85,9 @@
     </div>
 
     <div class="span4">
-    {{ pagerHtml|raw }}
+        {% autoescape %}
+            {{ pagerHtml|raw }} {# var won't be escaped #}
+        {% endautoescape %}
     </div>
 
         <div class="span8">
