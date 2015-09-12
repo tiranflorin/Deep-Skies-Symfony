@@ -3,6 +3,8 @@ Deep-Skies Project
 
 Implementation based on Symfony2
 
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/e8d23d1d-a68e-4b12-aa25-717b4ab713cb/big.png)](https://insight.sensiolabs.com/projects/e8d23d1d-a68e-4b12-aa25-717b4ab713cb)
+
 Install notes:
 
 1) Install vendors and configure mysql connection:
