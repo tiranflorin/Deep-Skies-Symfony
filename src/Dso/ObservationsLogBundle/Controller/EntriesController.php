@@ -4,6 +4,7 @@ namespace Dso\ObservationsLogBundle\Controller;
 
 use Doctrine\ORM\EntityRepository;
 use Dso\ObservationsLogBundle\Services\SkylistEntry;
+use Dso\PlannerBundle\Services\SQL\MySqlService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -57,15 +58,43 @@ class EntriesController extends Controller
         ));
     }
 
-    public function viewLoggedAction()
+    public function viewLoggedAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        /** @var EntityRepository $repository */
-        $repository = $em->getRepository('DsoObservationsLogBundle:SkylistObject');
-        $dsos = $repository->findBy(array('userName' => $this->getUser()->getUsername()), array('observingSessionName' => 'ASC'));
-        // TODO: add group by observing session name
-        return $this->render('DsoObservationsLogBundle:Entries:view_logged.html.twig', array(
-            'dsos' => $dsos,
-        ));
+        /** @var MySqlService $mysql_service */
+        $mysqlService = $this->get('dso_planner.mysql_service');
+        $paginator  = $this->get('knp_paginator');
+
+        $sql = "
+        SELECT
+            `obj`.`name`,
+            `obj`.`other_name` AS 'otherName',
+            `obj`.`type`,
+            `obj`.`constellation`,
+            `obj`.`name`,
+            `logged`.`comment`,
+            `logged`.`observedAt`,
+            `obs_lists`.`name` AS 'obsList'
+        FROM `deep-skies-sym`.logged_objects AS `logged`
+        LEFT JOIN `object` AS `obj`
+            ON `logged`.`obj_id` = `obj`.`id`
+        LEFT JOIN `obs_lists`
+            ON `logged`.`list_id` = `obs_lists`.`id`
+        WHERE `logged`.`user_id` = (?)
+        ORDER BY `logged`.`id` DESC
+        ";
+
+        $stmt = $mysqlService->getConn()->executeQuery(
+            $sql,
+            array($this->getUser()->getId()),
+            array(\PDO::PARAM_INT)
+        );
+
+        $pagination = $paginator->paginate(
+            $stmt->fetchAll(),
+            $request->query->getInt('page', 1),
+            20
+        );
+
+        return $this->render('DsoObservationsLogBundle:Entries:view_logged.html.twig', array('pagination' => $pagination));
     }
 }

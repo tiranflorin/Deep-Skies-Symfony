@@ -275,3 +275,8 @@ footer {
 .searchResults {
     color:#101010;
 }
+
+#import-form .pagination {
+    margin-bottom: 40px;
+    margin-top: 5px;
+}

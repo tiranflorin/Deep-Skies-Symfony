@@ -55,7 +55,15 @@ class LoggedObject
      */
     public function setCreatedAtValue()
     {
-        $this->createdAt = new \DateTime();
+        $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setObservedAtValue()
+    {
+        $this->observedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
     /**

@@ -81,13 +81,13 @@
 </table>
     </div>
 
-    <div class="span4">
+    <div class="span6">
         {% autoescape %}
             {{ pagerHtml|raw }} {# var won't be escaped #}
         {% endautoescape %}
     </div>
 
-        <div class="span8">
+        <div class="span6">
     <a class="btn btn-primary likepaginator" href="{{ path('obs-lists_new') }}">
             {{ 'views.index.createnew'|trans({}, 'JordiLlonchCrudGeneratorBundle') }} ObsList
         </a>
