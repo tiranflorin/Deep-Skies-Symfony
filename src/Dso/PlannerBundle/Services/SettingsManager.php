@@ -33,7 +33,7 @@ class SettingsManager
             ->setEmail($user->getEmail())
             ->setLatitude($request->request->get('latitude', '43.234'))
             ->setLongitude($request->request->get('longitude', '22.234'))
-            ->setTimeZone('UTC')
+            ->setTimeZone($request->request->get('timezone', 'UTC'))
             ->setDatetime($request->request->get('datetime', $defaultTime->format('Y-m-dH:i:s')));
 
         $this->dispatcher->dispatch(UpdateLocationSettingsEvent::UPDATE_LOCATION, new UpdateLocationSettingsEvent($locationDetails));
@@ -45,7 +45,9 @@ class SettingsManager
         $this->visibleObjectsService->setConfigurationDetails($user->getUsername(), $locationDetails->getLatitude(), $locationDetails->getLongitude(), $locationDetails->getDateTime());
         $this->visibleObjectsService->executeFlow();
 
-        $this->dispatcher->dispatch(DropTableEvent::DROP_TABLE, new DropTableEvent($oldTableNames));
+        if (!empty($oldTableNames)) {
+            $this->dispatcher->dispatch(DropTableEvent::DROP_TABLE, new DropTableEvent($oldTableNames));
+        }
     }
 
     /**
