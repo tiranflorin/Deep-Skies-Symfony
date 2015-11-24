@@ -28,7 +28,9 @@
                     </p>
                 </a>
             </div>
-            <p class="lead">If you don't already have an account, sign up here:<a href="{{ path('fos_user_registration_register') }}"> Register</a></p>
+            {% if not app.user and not is_granted('ROLE_USER') %}
+                <p class="lead">If you don't already have an account, sign up here:<a href="{{ path('fos_user_registration_register') }}"> Register</a></p>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

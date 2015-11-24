@@ -2,7 +2,6 @@
 
 namespace Dso\ObservationsLogBundle\Controller;
 
-use Doctrine\ORM\EntityRepository;
 use Dso\ObservationsLogBundle\Services\SkylistEntry;
 use Dso\PlannerBundle\Services\SQL\MySqlService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;

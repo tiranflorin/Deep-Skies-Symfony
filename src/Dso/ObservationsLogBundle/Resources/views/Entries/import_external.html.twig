@@ -1,7 +1,9 @@
 {% extends 'base.html.twig' %}
+{% block side_nav %}
+    {% include 'DsoObservationsLogBundle:Dashboard:side_nav.html.twig' %}
+{% endblock %}
 {% block mainContent %}
     <div class="row">
-        {% include 'DsoObservationsLogBundle:Dashboard:menu.html.twig' %}
         <div id="import-form">
             {% for flashMessage in app.session.flashbag.get('notice') %}
                 <div class="alert alert-success">

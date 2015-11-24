@@ -18,6 +18,8 @@
 <div id="wrapper">
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         {% include 'top_nav.html.twig' %}
+        {% block side_nav %}{% endblock %}
+        </div>
     </nav>
     <div id="page-wrapper">
         {% block jumbotronBlock %} {% endblock %}

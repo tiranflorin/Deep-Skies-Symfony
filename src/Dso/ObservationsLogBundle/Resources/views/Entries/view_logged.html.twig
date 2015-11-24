@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
+{% block side_nav %}
+    {% include 'DsoObservationsLogBundle:Dashboard:side_nav.html.twig' %}
+{% endblock %}
 {% block mainContent %}
-        {% include 'DsoObservationsLogBundle:Dashboard:menu.html.twig' %}
         <div class="row">
             <div id="import-form">
                 <p>Latest logged data:</p>

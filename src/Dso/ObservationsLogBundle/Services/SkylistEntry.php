@@ -137,7 +137,6 @@ class SkylistEntry {
                 if (strpos($itemProperty, 'DateObserved=') !== false) {
                     trim($itemProperty);
                     //TODO: Change the string value(2.456892419165283e+06) to DateTime
-//                    $skylistObject->setObservedAt(substr($itemProperty, strlen('DateObserved=')));
                     $skylistObject->setObservedAt(new \DateTime('now'));
                 }
                 if (strpos($itemProperty, 'Comment=') !== false) {
