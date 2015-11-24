@@ -1,19 +1,19 @@
-{% extends 'JordiLlonchCrudGeneratorBundle::layout.html.twig' %}
-
-{% block title %}
-{{ parent() }} - {{ 'views.new.creation'|trans({'%entity%': 'LoggedObject'}, 'JordiLlonchCrudGeneratorBundle') }}
+{% extends 'base.html.twig' %}
+{% block side_nav %}
+    {% include 'DsoObservationsLogBundle:Dashboard:side_nav.html.twig' %}
 {% endblock %}
-
-{% block page %}
+{% block mainContent %}
 
 <h1>{{ 'views.new.creation'|trans({'%entity%': 'LoggedObject'}, 'JordiLlonchCrudGeneratorBundle') }}</h1>
 
+<div class="customized-form">
 <form class="well" action="{{ path('logged-objects_create') }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}
     <p>
         <button type="submit" class="btn btn-success">{{ 'views.new.create'|trans({}, 'JordiLlonchCrudGeneratorBundle') }}</button>
     </p>
 </form>
+</div>
 
 <div>
     <div class="float-left">

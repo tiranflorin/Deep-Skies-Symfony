@@ -15,10 +15,10 @@ dso_observations_log_entries_view_logged:
 
 obs_lists:
     resource: "@DsoObservationsLogBundle/Controller/ObsListController.php"
-    prefix:   /observations-log
+    prefix:   /all
     type:     annotation
 
 logged_objects:
     resource: "@DsoObservationsLogBundle/Controller/LoggedObjectController.php"
-    prefix:   /observations-log
+    prefix:   /all
     type:     annotation

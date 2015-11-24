@@ -1,13 +1,12 @@
-{% extends 'JordiLlonchCrudGeneratorBundle::layout.html.twig' %}
-
-{% block title %}
-{{ parent() }} -  {{ 'views.edit.edit'|trans({'%entity%': 'ObsList'}, 'JordiLlonchCrudGeneratorBundle') }}
+{% extends 'base.html.twig' %}
+{% block side_nav %}
+    {% include 'DsoObservationsLogBundle:Dashboard:side_nav.html.twig' %}
 {% endblock %}
-
-{% block page %}
+{% block mainContent %}
 
 <h1>{{ 'views.edit.edit'|trans({'%entity%': 'ObsList'}, 'JordiLlonchCrudGeneratorBundle') }}</h1>
 
+<div class="customized-form">
 <form class="well" action="{{ path('obs-lists_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
     <input type="hidden" name="_method" value="PUT" />
     {{ form_widget(edit_form) }}
@@ -15,6 +14,7 @@
         <button type="submit" class="btn btn-success">{{ 'views.edit.editbutton'|trans({}, 'JordiLlonchCrudGeneratorBundle') }}</button>
     </p>
 </form>
+</div>
 
 <div>
     <div class="float-left">

@@ -1,10 +1,8 @@
-{% extends 'JordiLlonchCrudGeneratorBundle::layout.html.twig' %}
-
-{% block title %}
-{{ parent() }} - {{ 'views.show.show'|trans({'%entity%': 'ObsList'}, 'JordiLlonchCrudGeneratorBundle') }}
+{% extends 'base.html.twig' %}
+{% block side_nav %}
+    {% include 'DsoObservationsLogBundle:Dashboard:side_nav.html.twig' %}
 {% endblock %}
-
-{% block page %}
+{% block mainContent %}
 
 <h1>ObsList</h1>
 
