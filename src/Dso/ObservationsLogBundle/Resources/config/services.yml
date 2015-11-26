@@ -3,3 +3,8 @@ services:
         class: Dso\ObservationsLogBundle\Services\SkylistEntry
         calls:
             - [setEm, ["@doctrine.orm.entity_manager"]]
+
+    dso_observations_log.diagram_data:
+        class: Dso\ObservationsLogBundle\Services\DiagramData
+        calls:
+            - [setEm, ["@doctrine.orm.entity_manager"]]

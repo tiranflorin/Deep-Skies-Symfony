@@ -30,7 +30,8 @@
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "knplabs/knp-paginator-bundle": "2.4.2",
         "friendsofsymfony/jsrouting-bundle": "1.5.4",
-        "jordillonch/crud-generator": "2.3.x-dev"
+        "jordillonch/crud-generator": "2.3.x-dev",
+        "ob/highcharts-bundle": "1.3"
     },
     "require-dev": {
       "phpunit/phpunit": "4.8.*"
