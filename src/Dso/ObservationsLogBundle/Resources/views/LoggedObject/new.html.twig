@@ -1,4 +1,7 @@
-{% extends 'base.html.twig' %}
+{% extends 'base.html.twig'
+{% block wrapperClasses %}
+    class="extra-left-space"
+{% endblock %}
 {% block side_nav %}
     {% include 'DsoObservationsLogBundle:Dashboard:side_nav.html.twig' %}
 {% endblock %}

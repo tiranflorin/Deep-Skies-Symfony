@@ -78,7 +78,7 @@ footer p {
 }
 
 #import-form {
-    margin-left: 210px;
+    margin-left: 50px;
     text-align: left;
 }
 
@@ -322,4 +322,8 @@ form.well ul li {
 .customized-form select {
     margin-left: 10px;
     color: #000000;
+}
+
+.extra-left-space {
+    padding-left: 225px;
 }
