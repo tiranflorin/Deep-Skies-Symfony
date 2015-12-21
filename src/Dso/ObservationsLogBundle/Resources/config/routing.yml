@@ -13,6 +13,15 @@ dso_observations_log_entries_view_logged:
     defaults: { _controller: DsoObservationsLogBundle:Entries:viewLogged }
     methods:  [GET]
 
+dso_observations_log_log:
+    path:     /observations-log/log/
+    defaults: { _controller: DsoObservationsLogBundle:Dashboard:log }
+
+dso_observations_log_log_ajax_user:
+    path:     /observations-log/log-ajax-user/
+    defaults: { _controller: DsoObservationsLogBundle:Dashboard:logAjax }
+
+
 obs_lists:
     resource: "@DsoObservationsLogBundle/Controller/ObsListController.php"
     prefix:   /all

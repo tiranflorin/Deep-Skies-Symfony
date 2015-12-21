@@ -2,9 +2,13 @@
 
 namespace Dso\ObservationsLogBundle\Controller;
 
+use Dso\ObservationsLogBundle\Entity\ManualObsList;
+use Dso\ObservationsLogBundle\Entity\Task;
 use Dso\ObservationsLogBundle\Services\DiagramData;
 use Ob\HighchartsBundle\Highcharts\Highchart;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class DashboardController
@@ -74,5 +78,41 @@ class DashboardController extends Controller
         return $this->render('DsoObservationsLogBundle:Dashboard:index.html.twig', array(
             'chart' => $ob
         ));
+    }
+
+    public function logAction(Request $request) {
+        $obsList = new ManualObsList();
+        $form = $this->createFormBuilder($obsList)
+            ->add('name', 'text', array('attr' => array('placeholder' => 'Main log entry name')))
+            ->add('dsos', 'tetranz_select2entity', array(
+                'multiple' => true,
+                'class' => 'DsoObservationLogBundle:ManualObsList',
+                'text_property' => 'dsos',
+                'remote_route' => 'dso_observations_log_log_ajax_user',
+                'page_limit' => 10,
+                'placeholder' => 'Search for a DSO',
+                )
+            )
+            ->add('period', 'text')
+            ->add('equipment', 'text')
+            ->add('conditions', 'text')
+            ->add('save', 'submit', array('label' => 'Save DSO log entry'))
+            ->getForm();
+
+        return $this->render('DsoObservationsLogBundle:Dashboard:log.html.twig', array(
+            'form' => $form->createView(),
+        ));
+    }
+
+    public function logAjaxAction() {
+        $data = array(
+            array('id' => 1, 'text' => 'Value 1'),
+            array('id' => 2, 'text' => 'Value 2'),
+            array('id' => 3, 'text' => 'Value 3'),
+            array('id' => 4, 'text' => 'Value 4'),
+            array('id' => 5, 'text' => 'Value 5')
+        );
+
+        return new JsonResponse($data);
     }
 }

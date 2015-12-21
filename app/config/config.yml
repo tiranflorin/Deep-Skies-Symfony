@@ -32,6 +32,7 @@ twig:
     form:
         resources:
             - LexikFormFilterBundle:Form:form_div_layout.html.twig
+            - 'TetranzSelect2EntityBundle:Form:fields.html.twig'
 
 # Assetic Configuration
 assetic:
@@ -39,7 +40,14 @@ assetic:
     use_controller: false
     bundles: [ DsoHomeBundle, DsoObservationsLogBundle, FOSUserBundle, TwigBundle ]
     filters:
+        less:
+            node: /usr/bin/node
+            node_paths: [/usr/lib/node_modules]
+            apply_to: "\.less$"
         cssrewrite: ~
+
+braincrafted_bootstrap:
+    less_filter: less
 
 # Doctrine Configuration
 doctrine:

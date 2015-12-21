@@ -27,6 +27,8 @@ class AppKernel extends Kernel
             new Lexik\Bundle\FormFilterBundle\LexikFormFilterBundle(),
             new JordiLlonch\Bundle\CrudGeneratorBundle\JordiLlonchCrudGeneratorBundle(),
             new Ob\HighchartsBundle\ObHighchartsBundle(),
+            new Braincrafted\Bundle\BootstrapBundle\BraincraftedBootstrapBundle(),
+            new Tetranz\Select2EntityBundle\TetranzSelect2EntityBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

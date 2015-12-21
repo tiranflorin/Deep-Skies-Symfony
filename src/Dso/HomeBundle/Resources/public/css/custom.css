@@ -327,3 +327,12 @@ form.well ul li {
 .extra-left-space {
     padding-left: 225px;
 }
+
+/* Select2 Overrides */
+.select2-results {
+    color: #000000;
+}
+
+.select2-container--default {
+    color: #000000;
+}

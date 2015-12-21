@@ -6,6 +6,7 @@
     <meta name="author" content="Florin Tiran">
     <link rel="shortcut icon" href="{{ asset('bundles/dsohome/images/ico/favicon.ico') }}">
     <title>{% block pageTitle %}Deep-Skies Home{% endblock %}</title>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css" rel="stylesheet" />
     <!-- @see http://symfony.com/doc/current/cookbook/assetic/asset_management.html#including-css-stylesheets -->
     {% stylesheets
     'bundles/dsohome/css/*'
@@ -36,9 +37,11 @@
     {% javascripts
     '@DsoHomeBundle/Resources/public/js/jquery-2.1.0.min.js'
     '@DsoHomeBundle/Resources/public/js/bootstrap-core/*'
+    '@TetranzSelect2EntityBundle/Resources/public/js/select2entity.js'
     '@DsoHomeBundle/Resources/public/js/custom.js' %}
     {#'@DsoHomeBundle/Resources/public/js/geolocation.js' TODO: check where I need to include this. #}
     <script type="text/javascript" src="{{ asset_url }}"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js"></script>
     <script>
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();
