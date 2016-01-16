@@ -13,6 +13,11 @@
                     <strong>Success.</strong> {{ flashMessage }}
                 </div>
             {% endfor %}
+            {% for flashMessage in app.session.flashbag.get('error') %}
+                <div class="alert alert-danger">
+                    <strong>Error.</strong> {{ flashMessage }}
+                </div>
+            {% endfor %}
             <h2>Import SkySafary 4 Plus observation lists</h2>
             {{ form_start(form) }}
             {{ form_widget(form) }}

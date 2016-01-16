@@ -409,4 +409,36 @@ class SkylistEntry {
 
         return SkylistEntry::DSO_NOT_FOUND;
     }
+
+    /**
+     * Checks weather an entry with associated filename and userId already exists.
+     *
+     * @param string  $filename
+     * @param integer $userId
+     * @return bool
+     *
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function doesEntryExist($filename, $userId) {
+        $conn = $this->em->getConnection();
+        $sql = "
+            SELECT
+            `name`
+            FROM obs_lists
+            WHERE 1
+            AND (`name` = :filename)
+            AND (`user_id` = :user_id )
+        ";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue(':filename', $filename);
+        $stmt->bindValue(':user_id', $userId);
+        $stmt->execute();
+
+        $resultsFound = $stmt->fetchAll();
+        if (!empty($resultsFound)) {
+            return true;
+        }
+
+        return false;
+    }
 }

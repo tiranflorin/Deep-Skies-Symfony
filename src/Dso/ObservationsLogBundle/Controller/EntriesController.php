@@ -35,6 +35,19 @@ class EntriesController extends Controller
 
             /** @var SkylistEntry $skylistService */
             $skylistService = $this->get('dso_observations_log.skylist_entry');
+
+            if (TRUE === $skylistService->doesEntryExist(
+                    $uploadedFile->getClientOriginalName(),
+                    $this->getUser()->getId()
+                )) {
+                $request->getSession()->getFlashBag()->add(
+                    'error',
+                    'Duplicate file name! Skylist entry already added.'
+                );
+
+                return $this->redirect($this->generateUrl('dso_observations_log_entries_import_external'));
+            }
+
             $listId = $skylistService->createObservingList(array(
                     'name' => $uploadedFile->getClientOriginalName(),
                     'userId' => $this->getUser()->getId()
