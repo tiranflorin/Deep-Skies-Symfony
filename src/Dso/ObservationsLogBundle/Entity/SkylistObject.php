@@ -202,4 +202,14 @@ class SkylistObject
     {
         return $this->observingSessionName;
     }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 }

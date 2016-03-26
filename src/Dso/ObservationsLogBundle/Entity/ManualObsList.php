@@ -2,8 +2,12 @@
 
 namespace Dso\ObservationsLogBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
 /**
  * Class ManualObsList
+ *
+ * @ORM\Entity
+ * @ORM\Table(name="manual_obs_lists")
  *
  * @package Dso\ObservationsLogBundle\Entity
  *
@@ -11,11 +15,26 @@ namespace Dso\ObservationsLogBundle\Entity;
  */
 class ManualObsList
 {
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
     protected $id;
+
+    /** @ORM\Column(type="string", nullable=TRUE) */ //TODO!!!
     protected $dsos;
+
+    /** @ORM\Column(type="string", nullable=FALSE) */
     protected $name;
+
+    /** @ORM\Column(type="string", nullable=FALSE) */
     protected $period;
+
+    /** @ORM\Column(type="string", nullable=TRUE) */
     protected $equipment;
+
+    /** @ORM\Column(type="string", nullable=TRUE) */
     protected $conditions;
 
     /**

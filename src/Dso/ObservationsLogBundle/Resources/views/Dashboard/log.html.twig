@@ -8,6 +8,11 @@
 {% block mainContent %}
     <div class="row">
         <div class="col-lg-12 customized-form">
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+                <div class="alert alert-success">
+                    <strong>Success.</strong> {{ flashMessage }}
+                </div>
+            {% endfor %}
             {{ form_start(form) }}
             <div class="row">
                 <div class="col-lg-6">
@@ -15,7 +20,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-12">
+                <div class="col-lg-6">
                     {{ form_row(form.dsos) }}
                 </div>
             </div>

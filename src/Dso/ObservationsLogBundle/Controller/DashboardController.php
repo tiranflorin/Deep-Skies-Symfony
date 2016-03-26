@@ -3,7 +3,6 @@
 namespace Dso\ObservationsLogBundle\Controller;
 
 use Dso\ObservationsLogBundle\Entity\ManualObsList;
-use Dso\ObservationsLogBundle\Entity\Task;
 use Dso\ObservationsLogBundle\Services\DiagramData;
 use Ob\HighchartsBundle\Highcharts\Highchart;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -86,7 +85,7 @@ class DashboardController extends Controller
             ->add('name', 'text', array('attr' => array('placeholder' => 'Main log entry name')))
             ->add('dsos', 'tetranz_select2entity', array(
                 'multiple' => true,
-                'class' => 'DsoObservationLogBundle:ManualObsList',
+                'class' => 'DsoObservationsLogBundle:ManualObsList',
                 'text_property' => 'dsos',
                 'remote_route' => 'dso_observations_log_log_ajax_user',
                 'page_limit' => 10,
@@ -99,19 +98,39 @@ class DashboardController extends Controller
             ->add('save', 'submit', array('label' => 'Save DSO log entry'))
             ->getForm();
 
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // TODO: Save the form data
+
+            $request->getSession()->getFlashBag()->add(
+                'notice',
+                'Your entry has been saved!'
+            );
+
+            return $this->redirectToRoute('dso_observations_log_log');
+        }
+
         return $this->render('DsoObservationsLogBundle:Dashboard:log.html.twig', array(
             'form' => $form->createView(),
         ));
     }
 
-    public function logAjaxAction() {
-        $data = array(
-            array('id' => 1, 'text' => 'Value 1'),
-            array('id' => 2, 'text' => 'Value 2'),
-            array('id' => 3, 'text' => 'Value 3'),
-            array('id' => 4, 'text' => 'Value 4'),
-            array('id' => 5, 'text' => 'Value 5')
-        );
+    public function logAjaxAction(Request $request) {
+        $criteria = $request->get('q', null);
+        $em = $this->getDoctrine()->getManager();
+        $dsos = $em->getRepository('DsoObservationsLogBundle:Object')
+            ->findDsosByName($criteria);
+
+        $data = array();
+        if (!empty($dsos)) {
+            $i = 0;
+            foreach ($dsos as $dso_key => $dso_details) {
+                $data[$i]['id'] = $dso_key;
+                $data[$i]['text'] = $dso_details->getName();
+                $i++;
+            }
+        }
 
         return new JsonResponse($data);
     }
