@@ -46,9 +46,6 @@ assetic:
             apply_to: "\.less$"
         cssrewrite: ~
 
-braincrafted_bootstrap:
-    less_filter: less
-
 # Doctrine Configuration
 doctrine:
     dbal:
