@@ -88,7 +88,7 @@ class DashboardController extends Controller
                 'class' => 'DsoObservationsLogBundle:ManualObsList',
                 'text_property' => 'dsos',
                 'remote_route' => 'dso_observations_log_log_ajax_user',
-                'page_limit' => 10,
+                'page_limit' => 15,
                 'placeholder' => 'Search for a DSO',
                 )
             )
@@ -101,7 +101,21 @@ class DashboardController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // TODO: Save the form data
+            $data = $form->getData();
+            $form = $request->request->get('form');
+            $nbObserved = $form['dsos'];
+
+            $em = $this->getDoctrine()->getManager();
+            $repository = $this->getDoctrine()->getRepository('DsoObservationsLogBundle:Object');
+
+            foreach ($nbObserved as $observed) {
+                $obsListClean = clone $data;
+                $observedObject = $repository->find($observed);
+                $obsListClean->setDsoObject($observedObject);
+                $em->persist($obsListClean);
+            }
+
+            $em->flush();
 
             $request->getSession()->getFlashBag()->add(
                 'notice',
@@ -126,7 +140,7 @@ class DashboardController extends Controller
         if (!empty($dsos)) {
             $i = 0;
             foreach ($dsos as $dso_key => $dso_details) {
-                $data[$i]['id'] = $dso_key;
+                $data[$i]['id'] = $dso_details->getId();
                 $data[$i]['text'] = $dso_details->getName();
                 $i++;
             }

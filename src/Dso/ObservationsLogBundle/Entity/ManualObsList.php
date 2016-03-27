@@ -2,6 +2,7 @@
 
 namespace Dso\ObservationsLogBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 /**
  * Class ManualObsList
@@ -22,9 +23,6 @@ class ManualObsList
      */
     protected $id;
 
-    /** @ORM\Column(type="string", nullable=TRUE) */ //TODO!!!
-    protected $dsos;
-
     /** @ORM\Column(type="string", nullable=FALSE) */
     protected $name;
 
@@ -36,6 +34,35 @@ class ManualObsList
 
     /** @ORM\Column(type="string", nullable=TRUE) */
     protected $conditions;
+
+    /** @ORM\Column(type="array", nullable=TRUE) */
+    protected $dsos;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Object", inversedBy="manualObsLists")
+     * @ORM\JoinColumn(name="object_id", referencedColumnName="id")
+     */
+    private $dsoObject;
+
+    /**
+     * @return mixed
+     */
+    public function getDsoObject()
+    {
+        return $this->dsoObject;
+    }
+
+    /**
+     * @param mixed $dsoObject
+     *
+     * @return ManualObsList
+     */
+    public function setDsoObject($dsoObject)
+    {
+        $this->dsoObject = $dsoObject;
+
+        return $this;
+    }
 
     /**
      * @return mixed
@@ -73,6 +100,10 @@ class ManualObsList
         $this->dsos = $dsos;
 
         return $this;
+    }
+
+    public function addDso(Object $dso) {
+        $this->dsos[] = $dso;
     }
 
     /**

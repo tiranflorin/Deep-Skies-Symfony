@@ -2,6 +2,7 @@
 
 namespace Dso\ObservationsLogBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -169,7 +170,16 @@ class Object
      */
     private $notes;
 
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="ManualObsList", mappedBy="dsoObject")
+     */
+    private $manualObsLists;
 
+    public function __construct() {
+        $this->manualObsLists = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -662,5 +672,25 @@ class Object
     public function getNotes()
     {
         return $this->notes;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getManualObsLists()
+    {
+        return $this->manualObsLists;
+    }
+
+    /**
+     * @param mixed $manualObsLists
+     *
+     * @return Object
+     */
+    public function setManualObsLists($manualObsLists)
+    {
+        $this->manualObsLists = $manualObsLists;
+
+        return $this;
     }
 }
