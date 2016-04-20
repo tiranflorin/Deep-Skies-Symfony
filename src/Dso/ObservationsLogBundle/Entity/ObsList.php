@@ -39,6 +39,14 @@ class ObsList
     protected $conditions;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Object", inversedBy="obsLists")
+     * @ORM\JoinColumn(name="object_id", referencedColumnName="id")
+     */
+    private $dsoObject;
+
+    protected $dsos;
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -134,6 +142,46 @@ class ObsList
     public function setUserId($user_id)
     {
         $this->user_id = $user_id;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDsoObject()
+    {
+        return $this->dsoObject;
+    }
+    /**
+     * @param mixed $dsoObject
+     *
+     * @return ObsList
+     */
+    public function setDsoObject($dsoObject)
+    {
+        $this->dsoObject = $dsoObject;
+
+        return $this;
+    }
+
+
+    /**
+     * @return array
+     */
+    public function getDsos()
+    {
+        return $this->dsos;
+    }
+
+    /**
+     * @param array $dsos
+     *
+     * @return ObsList
+     */
+    public function setDsos($dsos)
+    {
+        $this->dsos = $dsos;
 
         return $this;
     }

@@ -3,8 +3,11 @@
 namespace Dso\ObservationsLogBundle\Controller;
 
 use Dso\ObservationsLogBundle\Entity\ManualObsList;
+use Dso\ObservationsLogBundle\Entity\ObsList;
 use Dso\ObservationsLogBundle\Services\DiagramData;
+use Dso\ObservationsLogBundle\Services\SkylistEntry;
 use Ob\HighchartsBundle\Highcharts\Highchart;
+use Proxies\__CG__\Dso\ObservationsLogBundle\Entity\LoggedObject;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -80,12 +83,12 @@ class DashboardController extends Controller
     }
 
     public function logAction(Request $request) {
-        $obsList = new ManualObsList();
+        $obsList = new ObsList();
         $form = $this->createFormBuilder($obsList)
             ->add('name', 'text', array('attr' => array('placeholder' => 'Main log entry name')))
             ->add('dsos', 'tetranz_select2entity', array(
                 'multiple' => true,
-                'class' => 'DsoObservationsLogBundle:ManualObsList',
+                'class' => 'DsoObservationsLogBundle:ObsList',
                 'text_property' => 'dsos',
                 'remote_route' => 'dso_observations_log_log_ajax_user',
                 'page_limit' => 15,
@@ -105,17 +108,35 @@ class DashboardController extends Controller
             $form = $request->request->get('form');
             $nbObserved = $form['dsos'];
 
+            /** @var SkylistEntry $skylistService */
+            $skylistService = $this->get('dso_observations_log.skylist_entry');
             $em = $this->getDoctrine()->getManager();
-            $repository = $this->getDoctrine()->getRepository('DsoObservationsLogBundle:Object');
 
+            $listId = $skylistService->createObservingList(array(
+                    'name' => $data->getName(),
+                    'userId' => $this->getUser()->getId(),
+                    'period' => $data->getPeriod(),
+                    'equipment' => $data->getEquipment(),
+                    'conditions' => $data->getConditions(),
+                )
+            );
+
+            $i = 0;
+            $batchSize = 20;
             foreach ($nbObserved as $observed) {
-                $obsListClean = clone $data;
-                $observedObject = $repository->find($observed);
-                $obsListClean->setDsoObject($observedObject);
-                $em->persist($obsListClean);
-            }
+                $loggedObject = new LoggedObject();
+                $loggedObject->setObjId($observed);
+                $loggedObject->setUserId($this->getUser()->getId());
+                $loggedObject->setListId($listId);
 
-            $em->flush();
+                $em->persist($loggedObject);
+                if (($i % $batchSize) === 0) {
+                    $em->flush($loggedObject);
+                }
+                $i++;
+            }
+            $em->flush(); // Persist objects that did not make up an entire batch.
+            $em->clear();
 
             $request->getSession()->getFlashBag()->add(
                 'notice',
@@ -139,9 +160,13 @@ class DashboardController extends Controller
         $data = array();
         if (!empty($dsos)) {
             $i = 0;
-            foreach ($dsos as $dso_key => $dso_details) {
-                $data[$i]['id'] = $dso_details->getId();
-                $data[$i]['text'] = $dso_details->getName();
+            foreach ($dsos as $dso_key => $dsoDetails) {
+                $data[$i]['id'] = $dsoDetails->getId();
+                $data[$i]['text'] = $dsoDetails->getName();
+                $otherName = $dsoDetails->getOtherName();
+                if (!empty($otherName)) {
+                    $data[$i]['text'] = $dsoDetails->getOtherName() . ' (' . $dsoDetails->getName() . ')';
+                }
                 $i++;
             }
         }

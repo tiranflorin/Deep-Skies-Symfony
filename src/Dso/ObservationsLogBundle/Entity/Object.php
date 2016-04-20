@@ -173,12 +173,12 @@ class Object
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="ManualObsList", mappedBy="dsoObject")
+     * @ORM\OneToMany(targetEntity="ObsList", mappedBy="dsoObject")
      */
-    private $manualObsLists;
+    private $obsLists;
 
     public function __construct() {
-        $this->manualObsLists = new ArrayCollection();
+        $this->obsLists = new ArrayCollection();
     }
 
     /**
@@ -677,19 +677,19 @@ class Object
     /**
      * @return mixed
      */
-    public function getManualObsLists()
+    public function getObsLists()
     {
-        return $this->manualObsLists;
+        return $this->obsLists;
     }
 
     /**
-     * @param mixed $manualObsLists
+     * @param mixed $obsLists
      *
      * @return Object
      */
-    public function setManualObsLists($manualObsLists)
+    public function setObsLists($obsLists)
     {
-        $this->manualObsLists = $manualObsLists;
+        $this->obsLists = $obsLists;
 
         return $this;
     }
