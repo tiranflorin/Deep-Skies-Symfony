@@ -75,7 +75,6 @@ class EntriesController extends Controller
         /** @var MySqlService $mysql_service */
         $mysqlService = $this->get('dso_planner.mysql_service');
         $paginator  = $this->get('knp_paginator');
-
         $sql = "
         SELECT
             `obj`.`name`,
@@ -94,13 +93,11 @@ class EntriesController extends Controller
         WHERE `logged`.`user_id` = (?)
         ORDER BY `logged`.`id` DESC
         ";
-
         $stmt = $mysqlService->getConn()->executeQuery(
             $sql,
             array($this->getUser()->getId()),
             array(\PDO::PARAM_INT)
         );
-
         $pagination = $paginator->paginate(
             $stmt->fetchAll(),
             $request->query->getInt('page', 1),
