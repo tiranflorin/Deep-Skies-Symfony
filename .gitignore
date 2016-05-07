@@ -21,7 +21,3 @@
 /web/css/*
 /web/js/*
 /web/fonts/*
-
-# PHPStorm specific
-###############################
-/.idea/*

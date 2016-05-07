@@ -2,7 +2,6 @@
 
 namespace Dso\ObservationsLogBundle\Controller;
 
-use Dso\ObservationsLogBundle\Entity\ManualObsList;
 use Dso\ObservationsLogBundle\Entity\ObsList;
 use Dso\ObservationsLogBundle\Services\DiagramData;
 use Dso\ObservationsLogBundle\Services\SkylistEntry;

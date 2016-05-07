@@ -10,7 +10,7 @@ function handle_geolocation_query(position){
 
     $.ajax({
         type: "POST",
-        url: "/planner/async/update_settings",
+        url: Routing.generate('dso_planner_asynchronous_update_settings'),
         data: {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude

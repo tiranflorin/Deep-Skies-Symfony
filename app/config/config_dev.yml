@@ -8,7 +8,7 @@ framework:
     profiler: { only_exceptions: false }
 
 web_profiler:
-    toolbar: true
+    toolbar: false
     intercept_redirects: false
 
 monolog:
@@ -30,7 +30,7 @@ monolog:
         #    level:  info
 
 assetic:
-    use_controller: true
+    use_controller: false
 
 #swiftmailer:
 #    delivery_address: me@example.com

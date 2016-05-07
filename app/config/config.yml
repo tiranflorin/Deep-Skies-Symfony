@@ -87,3 +87,6 @@ knp_paginator:
     template:
         pagination: 'KnpPaginatorBundle:Pagination:twitter_bootstrap_v3_pagination.html.twig'
         sortable: 'KnpPaginatorBundle:Pagination:sortable_link.html.twig'
+
+fos_js_routing:
+    routes_to_expose: [ dso_planner_asynchronous_update_settings ]
