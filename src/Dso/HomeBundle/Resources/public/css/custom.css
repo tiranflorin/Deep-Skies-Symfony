@@ -340,3 +340,9 @@ form.well ul li {
 .select2-container--default .select2-results>.select2-results__options {
     max-height: 480px;
 }
+
+.btn-facebook {
+    color: #fff;
+    background-color: #3b5998;
+    border-color: rgba(0,0,0,0.2);
+}

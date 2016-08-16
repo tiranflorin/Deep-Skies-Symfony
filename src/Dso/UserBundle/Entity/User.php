@@ -25,6 +25,13 @@ class User extends BaseUser
     protected $id;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="facebook_id", type="string", nullable=true)
+     */
+    private $facebookID;
+
+    /**
      * @ORM\Column(type="string", nullable=TRUE)
      */
     protected $latitude;
@@ -130,5 +137,25 @@ class User extends BaseUser
     public function getDateTime()
     {
         return $this->dateTime;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFacebookID()
+    {
+        return $this->facebookID;
+    }
+
+    /**
+     * @param string $facebookID
+     *
+     * @return User
+     */
+    public function setFacebookID($facebookID)
+    {
+        $this->facebookID = $facebookID;
+
+        return $this;
     }
 }

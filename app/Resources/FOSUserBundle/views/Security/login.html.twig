@@ -14,13 +14,17 @@
                     {{ error.messageKey|trans(error.messageData, 'security') }}
                     </div>
                 {% endif %}
-                <h2 class="form-signin-heading text-center">Please sign in</h2>
+                <h2 class="form-signin-heading text-center">Please log in</h2>
                 <input type="text" name="_username" class="form-control" placeholder="Username" required autofocus>
                 <input type="password" name="_password" class="form-control" placeholder="Password" required>
-                <label class="checkbox text-left">
-                    <input type="checkbox" value="remember-me"> Remember me
-                </label>
-                <button class="btn btn-lg btn-primary btn-block" name="_submit" type="submit">Sign in</button>
+                <button class="btn btn-lg btn-primary btn-block" name="_submit" type="submit">Log in</button>
+
+                <br><br>
+                <span>Use Facebook instead:</span>
+                <a href="{{ path('hwi_oauth_service_redirect', {'service': 'facebook' }) }}" class="btn btn-lg btn-block btn-facebook">
+                    <span>Login with Facebook</span>
+                </a>
+
             </form>
             <h3 class="form-signin-heading text-center">Or set up a new account here:<a href="{{ path('fos_user_registration_register') }}"> Register</a></h3>
         </div>
