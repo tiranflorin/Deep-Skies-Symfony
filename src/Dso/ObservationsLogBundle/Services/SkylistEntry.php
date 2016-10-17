@@ -133,11 +133,14 @@ class SkylistEntry {
             $skylistObject->setObjId($dso_id);
             $content = strstr($item, 'EndObject=SkyObject', true);
             $pieces = array_filter(explode("\n\t", $content));
+            $date = new \DateTime('now', new \DateTimeZone('UTC'));
             foreach ($pieces as $itemProperty) {
                 if (strpos($itemProperty, 'DateObserved=') !== false) {
-                    trim($itemProperty);
-                    //TODO: Change the string value(2.456892419165283e+06) to DateTime
-                    $skylistObject->setObservedAt(new \DateTime('now'));
+                    $val = trim(preg_replace('/\s+/', ' ', $itemProperty)); // Removes the extra \n
+                    $number = (float) substr($val, 13, strlen($val)); // Cast the scientific notation string to float.
+                    $timestamp = ($number - 2440587.5) * 86400; // Convert it from Julian notation to Unix timestamp.
+                    $date->setTimestamp($timestamp);
+                    $skylistObject->setObservedAt($date);
                 }
                 if (strpos($itemProperty, 'Comment=') !== false) {
                     trim($itemProperty);

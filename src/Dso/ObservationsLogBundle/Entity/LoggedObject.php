@@ -63,7 +63,9 @@ class LoggedObject
      */
     public function setObservedAtValue()
     {
-        $this->observedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        if (empty($this->observedAt)) {
+            $this->observedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        }
     }
 
     /**
