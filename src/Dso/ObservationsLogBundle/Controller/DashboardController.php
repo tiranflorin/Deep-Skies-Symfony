@@ -23,9 +23,11 @@ class DashboardController extends Controller
     public function indexAction()
     {
         $dsoTypesObserved = $this->getTypesObservedChart();
+        $most10Observed = $this->getMost10ObservedChart();
 
         return $this->render('DsoObservationsLogBundle:Dashboard:index.html.twig', array(
-            'chart' => $dsoTypesObserved
+            'chart1' => $dsoTypesObserved,
+            'chart2' => $most10Observed
         ));
     }
 
@@ -116,7 +118,31 @@ class DashboardController extends Controller
             $dataToRender[] = array($type, (float) number_format($val, 2));
         }
 
-        return $this->setUpPieHighChart('DSOs by Category', 'Observed deep sky objects by category (all time)', $dataToRender);
+        return $this->setUpTypesObservedChart('DSOs by Category', 'Observed deep sky objects by category (all time)', $dataToRender);
+    }
+
+    /**
+     * @return Highchart
+     */
+    protected function getMost10ObservedChart() {
+        $values = array();
+        $dataToRender = array();
+        /** @var DiagramData $diagramData */
+        $diagramData = $this->get('dso_observations_log.diagram_data');
+        $mostObserved =  $diagramData->getMost10Observed($this->getUser()->getId());
+
+        foreach ($mostObserved as $item) {
+            $name = $item['name'];
+            if (!empty($item['other_name'])) {
+                $name = $item['other_name'] . ' (' . $name . ')';
+            }
+            $values['name'] = $name;
+            $values['data'] = array( (int) $item['nb_times']);
+
+            array_push($dataToRender, $values);
+        }
+
+        return $this->setUpMost10ObservedChart('Most 10 observed objects', '10 most often watched objects', $dataToRender);
     }
 
     /**
@@ -126,9 +152,9 @@ class DashboardController extends Controller
      *
      * @return Highchart
      */
-    private function setUpPieHighChart($name, $title, $dataToRender) {
+    private function setUpTypesObservedChart($name, $title, $dataToRender) {
         $ob = new Highchart();
-        $ob->chart->renderTo('piechart');
+        $ob->chart->renderTo('dso_types_observed_chart');
         $ob->chart->type('pie');
         $ob->title->text($title);
         $ob->subtitle->text('Click a slice to bring to focus.');
@@ -155,6 +181,45 @@ class DashboardController extends Controller
                 )
             )
         );
+
+        return $ob;
+    }
+
+    /**
+     * @param string $name
+     * @param string $title
+     * @param array  $dataToRender
+     *
+     * @return Highchart
+     */
+    private function setUpMost10ObservedChart($name, $title, $dataToRender) {
+        $ob = new Highchart();
+        $ob->chart->renderTo('most_10observed_chart');
+        $ob->chart->type('bar');
+        $ob->title->text($title);
+        $ob->subtitle->text('');
+        $ob->plotOptions->bar(array('dataLabels' => array('enabled' => true)));
+        $xAxis = array(
+            'categories' => array(
+                ''
+            ),
+            'title' => array(
+                'text' => null
+            )
+        );
+        $yAxis = array(
+            'min' => 0,
+            'title' => array(
+                'text' => 'How many times they were seen'
+            ),
+            'labels' => array(
+                'overflow' => 'justify'
+            )
+        );
+        $ob->xAxis($xAxis);
+        $ob->yAxis($yAxis);
+        $ob->tooltip->valueSuffix('{point.name} times');
+        $ob->series($dataToRender);
 
         return $ob;
     }

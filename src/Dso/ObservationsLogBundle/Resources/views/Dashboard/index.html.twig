@@ -29,12 +29,10 @@
 
             <div class="row placeholders">
                 <div class="col-xs-6 col-sm-4 placeholder">
-                    <div id="piechart" style="min-width: 350px; height: 350px; margin: 0 auto"></div>
+                    <div id="dso_types_observed_chart" style="min-width: 370px; height: 350px; margin: 0 auto"></div>
                 </div>
                 <div class="col-xs-6 col-sm-4 placeholder">
-                    <img data-src="holder.js/200x200/auto/vine" class="img-responsive" alt="img">
-                    <h4>Label</h4>
-                    <span class="text-muted">Something else</span>
+                    <div id="most_10observed_chart" style="min-width: 370px; height: 350px; margin: 0 auto"></div>
                 </div>
                 <div class="col-xs-6 col-sm-4 placeholder">
                     <img data-src="holder.js/200x200/auto/sky" class="img-responsive" alt="img">
@@ -93,7 +91,7 @@
 {% endblock %}
 {% block footer_javascripts %}
     {{ parent() }}
-    {% if chart is defined %}
+    {% if chart1 is defined %}
         <script src="//code.highcharts.com/4.1.8/highcharts.js"></script>
         <script src="//code.highcharts.com/4.1.8/modules/exporting.js"></script>
 
@@ -105,7 +103,8 @@
         <script type="text/javascript">
             // Apply the theme
             Highcharts.setOptions(Highcharts.theme);
-            {{ chart(chart) }}
+            {{ chart(chart1) }}
+            {{ chart(chart2) }}
         </script>
     {% endif %}
 {% endblock %}

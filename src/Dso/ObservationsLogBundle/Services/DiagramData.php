@@ -46,6 +46,30 @@ class DiagramData {
         return $results;
     }
 
+    public function getMost10Observed($userId) {
+        $sql = "
+            SELECT
+            `name`,
+            other_name,
+            COUNT(obj_id) AS nb_times
+            FROM logged_objects AS logged
+            INNER JOIN object AS obj_details
+            ON obj_details.id = logged.obj_id
+            WHERE user_id = (:userId)
+            GROUP BY obj_id
+            ORDER BY nb_times DESC
+            LIMIT 10;
+        ";
+
+        $conn = $this->em->getConnection();
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue('userId', $userId);
+        $stmt->execute();
+        $results = $stmt->fetchAll();
+
+        return $results;
+    }
+
     /**
      * @param EntityManager $em
      *
