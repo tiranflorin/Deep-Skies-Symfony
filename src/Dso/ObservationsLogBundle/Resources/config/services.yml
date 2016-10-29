@@ -8,3 +8,8 @@ services:
         class: Dso\ObservationsLogBundle\Services\DiagramData
         calls:
             - [setEm, ["@doctrine.orm.entity_manager"]]
+
+    dso_observations_log.logged_stats:
+        class: Dso\ObservationsLogBundle\Services\LoggedStats
+        calls:
+            - [setEm, ["@doctrine.orm.entity_manager"]]

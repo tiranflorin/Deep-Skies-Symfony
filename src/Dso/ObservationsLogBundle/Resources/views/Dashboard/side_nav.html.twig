@@ -1,16 +1,16 @@
 <ul id="active" class="nav navbar-nav side-nav">
     <li class="selected"><a href="{{ path('dso_observations_log_homepage') }}"><i class="fa fa-bullseye"></i> Dashboard</a></li>
-    <li><a href="#"><i class="fa fa-tasks"></i> Planets</a></li>
-    <li><a href="#"><i class="fa fa-globe"></i> Comets</a></li>
+
+    <li><a href="{{ path('dso_observations_log_log') }}"><i class="fa fa-star"></i> Log</a></li>
+    <li><a href="{{ path('dso_observations_log_entries_view_logged') }}"><i class="fa fa-eye"></i> View Logged</a></li>
+    <li><a href="{{ path('dso_observations_log_entries_import_external') }}"><i class="fa fa-upload"></i> Import external</a></li>
+    <li><a href="#"><i class="fa fa-download"></i> Export</a></li>
+
+    <li><a href="#"><i class="fa fa-tasks"></i> Comets</a></li>
+    <li><a href="#"><i class="fa fa-globe"></i> Planets</a></li>
     <li><a href="#"><i class="fa fa-list-ol"></i> Others</a></li>
-
-    <li><a href="{{ path('dso_observations_log_log') }}"><i class="fa fa-font"></i> Log</a></li>
-    <li><a href="{{ path('dso_observations_log_entries_view_logged') }}"><i class="fa fa-font"></i> View Logged</a></li>
-    <li><a href="{{ path('dso_observations_log_entries_import_external') }}"><i class="fa fa-list-ol"></i> Import external</a></li>
-    <li><a href="#"><i class="fa fa-font"></i> Export</a></li>
-
+    <hr>
     <li><a href="#"><i class="fa fa-list-ul"></i> Telescopes</a></li>
     <li><a href="#"><i class="fa fa-table"></i> Eyepieces</a></li>
-    <li><a href="#"><i class="fa fa-table"></i> Filters</a></li>
-    <li><a href="#"><i class="fa fa-table"></i> Others</a></li>
+    <li><a href="#"><i class="fa fa-table fa-"></i> Filters</a></li>
 </ul>

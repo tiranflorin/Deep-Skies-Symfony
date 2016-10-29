@@ -4,9 +4,10 @@ namespace Dso\ObservationsLogBundle\Controller;
 
 use Dso\ObservationsLogBundle\Entity\ObsList;
 use Dso\ObservationsLogBundle\Services\DiagramData;
+use Dso\ObservationsLogBundle\Services\LoggedStats;
 use Dso\ObservationsLogBundle\Services\SkylistEntry;
 use Ob\HighchartsBundle\Highcharts\Highchart;
-use Proxies\__CG__\Dso\ObservationsLogBundle\Entity\LoggedObject;
+use Dso\ObservationsLogBundle\Entity\LoggedObject;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,10 +25,14 @@ class DashboardController extends Controller
     {
         $dsoTypesObserved = $this->getTypesObservedChart();
         $most10Observed = $this->getMost10ObservedChart();
+        /** @var LoggedStats $loggedStats */
+        $loggedStats = $this->get('dso_observations_log.logged_stats');
+        $latestLogged =  $loggedStats->getLatest20Logged($this->getUser()->getId());
 
         return $this->render('DsoObservationsLogBundle:Dashboard:index.html.twig', array(
             'chart1' => $dsoTypesObserved,
-            'chart2' => $most10Observed
+            'chart2' => $most10Observed,
+            'latestLogged' => $latestLogged
         ));
     }
 

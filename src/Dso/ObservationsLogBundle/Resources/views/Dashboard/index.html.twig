@@ -41,50 +41,40 @@
                 </div>
             </div>
 
-            <h2 class="sub-header">Section title</h2>
-            <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Header</th>
-                        <th>Header</th>
-                        <th>Header</th>
-                        <th>Header</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>1,001</td>
-                        <td>Lorem</td>
-                        <td>ipsum</td>
-                        <td>dolor</td>
-                        <td>sit</td>
-                    </tr>
-                    <tr>
-                        <td>1,002</td>
-                        <td>amet</td>
-                        <td>consectetur</td>
-                        <td>adipiscing</td>
-                        <td>elit</td>
-                    </tr>
-                    <tr>
-                        <td>1,003</td>
-                        <td>Integer</td>
-                        <td>nec</td>
-                        <td>odio</td>
-                        <td>Praesent</td>
-                    </tr>
-                    <tr>
-                        <td>1,003</td>
-                        <td>libero</td>
-                        <td>Sed</td>
-                        <td>cursus</td>
-                        <td>ante</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+            {% if latestLogged is not empty %}
+                <h2 class="sub-header">My latest 20 objects logged</h2>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>List added in</th>
+                            <th>DateTime</th>
+                            <th>Comments</th>
+                            <th>Equipment</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for entry in latestLogged %}
+                            <tr>
+                                <td>
+                                {% if entry.objOtherName is empty %}
+                                    {{ entry.objOtherName }}
+                                {% else %}
+                                    {{ entry.objOtherName }} ( {{ entry.objName }} )
+                                {% endif %}
+                                </td>
+                                <td>{{ entry.listName }}</td>
+                                <td>{{ entry.observedAt }}</td>
+                                <td>{{ entry.comment }}</td>
+                                <td>{{ entry.equipment }}</td>
+                            </tr>
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
         </div>
     </div>
 
