@@ -28,7 +28,7 @@ security:
                 resource_owners:
                     facebook: "/login/check-facebook"
                 oauth_user_provider:
-                    service: app.provider.oauth
+                    service: dso_app.provider.oauth
             logout:
                 path:   /auth/logout
                 target: /auth/login

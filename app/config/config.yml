@@ -95,7 +95,11 @@ hwi_oauth:
     # name of the firewall in which this bundle is active, this setting MUST be set
     firewall_names: [ main ]
     connect:
-        account_connector: app.provider.oauth
+        account_connector: dso_app.provider.oauth
+    fosub:
+        username_iterations: 30
+        properties:
+            facebook:    facebook_id
     resource_owners:
         facebook:
             type:                facebook
@@ -103,7 +107,5 @@ hwi_oauth:
             client_secret:       %facebook_client_secret%
             scope:               "email, public_profile"
             infos_url:           "https://graph.facebook.com/me?fields=id,name,email,picture.type(large)"
-            paths:
-                email: email
             options:
-                display: page
+                csrf: true

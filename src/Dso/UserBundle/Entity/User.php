@@ -31,6 +31,8 @@ class User extends BaseUser
      */
     private $facebookID;
 
+    private $facebookAccessToken;
+
     /**
      * @ORM\Column(type="string", nullable=TRUE)
      */
@@ -157,5 +159,24 @@ class User extends BaseUser
         $this->facebookID = $facebookID;
 
         return $this;
+    }
+
+    /**
+     * @param string $facebookAccessToken
+     * @return User
+     */
+    public function setFacebookAccessToken($facebookAccessToken)
+    {
+        $this->facebookAccessToken = $facebookAccessToken;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFacebookAccessToken()
+    {
+        return $this->facebookAccessToken;
     }
 }

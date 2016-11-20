@@ -2,8 +2,3 @@ dso_home_homepage:
     pattern:  /
     defaults: { _controller: DsoHomeBundle:Home:index }
     methods:  [GET]
-
-dso_check_facebook:
-    pattern:  /login/check-facebook
-    defaults: { _controller: DsoHomeBundle:Home:checkFacebook }
-    methods:  [GET]
