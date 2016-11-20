@@ -6,13 +6,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Object
+ * DeepSkyItem
  *
  * @ORM\Table(name="object")
  * @ORM\Entity
  * @ORM\Entity(repositoryClass="Dso\ObservationsLogBundle\Entity\DsoObjectRepository")
  */
-class Object
+class DeepSkyItem
 {
     /**
      * @var integer
@@ -195,7 +195,7 @@ class Object
      * Set name
      *
      * @param string $name
-     * @return Object
+     * @return DeepSkyItem
      */
     public function setName($name)
     {
@@ -218,7 +218,7 @@ class Object
      * Set otherName
      *
      * @param string $otherName
-     * @return Object
+     * @return DeepSkyItem
      */
     public function setOtherName($otherName)
     {
@@ -241,7 +241,7 @@ class Object
      * Set type
      *
      * @param string $type
-     * @return Object
+     * @return DeepSkyItem
      */
     public function setType($type)
     {
@@ -264,7 +264,7 @@ class Object
      * Set constellation
      *
      * @param string $constellation
-     * @return Object
+     * @return DeepSkyItem
      */
     public function setConstellation($constellation)
     {
@@ -287,7 +287,7 @@ class Object
      * Set ra
      *
      * @param string $ra
-     * @return Object
+     * @return DeepSkyItem
      */
     public function setRa($ra)
     {
@@ -310,7 +310,7 @@ class Object
      * Set dec
      *
      * @param string $dec
-     * @return Object
+     * @return DeepSkyItem
      */
     public function setDec($dec)
     {
@@ -333,7 +333,7 @@ class Object
      * Set raFloat
      *
      * @param string $raFloat
-     * @return Object
+     * @return DeepSkyItem
      */
     public function setRaFloat($raFloat)
     {
@@ -356,7 +356,7 @@ class Object
      * Set decFloat
      *
      * @param string $decFloat
-     * @return Object
+     * @return DeepSkyItem
      */
     public function setDecFloat($decFloat)
     {
@@ -379,7 +379,7 @@ class Object
      * Set mag
      *
      * @param string $mag
-     * @return Object
+     * @return DeepSkyItem
      */
     public function setMag($mag)
     {
@@ -402,7 +402,7 @@ class Object
      * Set subr
      *
      * @param string $subr
-     * @return Object
+     * @return DeepSkyItem
      */
     public function setSubr($subr)
     {
@@ -425,7 +425,7 @@ class Object
      * Set u2k
      *
      * @param string $u2k
-     * @return Object
+     * @return DeepSkyItem
      */
     public function setU2k($u2k)
     {
@@ -448,7 +448,7 @@ class Object
      * Set ti
      *
      * @param string $ti
-     * @return Object
+     * @return DeepSkyItem
      */
     public function setTi($ti)
     {
@@ -471,7 +471,7 @@ class Object
      * Set sizeMax
      *
      * @param string $sizeMax
-     * @return Object
+     * @return DeepSkyItem
      */
     public function setSizeMax($sizeMax)
     {
@@ -494,7 +494,7 @@ class Object
      * Set sizeMin
      *
      * @param string $sizeMin
-     * @return Object
+     * @return DeepSkyItem
      */
     public function setSizeMin($sizeMin)
     {
@@ -517,7 +517,7 @@ class Object
      * Set pa
      *
      * @param string $pa
-     * @return Object
+     * @return DeepSkyItem
      */
     public function setPa($pa)
     {
@@ -540,7 +540,7 @@ class Object
      * Set class
      *
      * @param string $class
-     * @return Object
+     * @return DeepSkyItem
      */
     public function setClass($class)
     {
@@ -563,7 +563,7 @@ class Object
      * Set nsts
      *
      * @param string $nsts
-     * @return Object
+     * @return DeepSkyItem
      */
     public function setNsts($nsts)
     {
@@ -586,7 +586,7 @@ class Object
      * Set brstr
      *
      * @param string $brstr
-     * @return Object
+     * @return DeepSkyItem
      */
     public function setBrstr($brstr)
     {
@@ -609,7 +609,7 @@ class Object
      * Set bchm
      *
      * @param string $bchm
-     * @return Object
+     * @return DeepSkyItem
      */
     public function setBchm($bchm)
     {
@@ -632,7 +632,7 @@ class Object
      * Set ngcDescription
      *
      * @param string $ngcDescription
-     * @return Object
+     * @return DeepSkyItem
      */
     public function setNgcDescription($ngcDescription)
     {
@@ -655,7 +655,7 @@ class Object
      * Set notes
      *
      * @param string $notes
-     * @return Object
+     * @return DeepSkyItem
      */
     public function setNotes($notes)
     {
@@ -685,7 +685,7 @@ class Object
     /**
      * @param mixed $obsLists
      *
-     * @return Object
+     * @return DeepSkyItem
      */
     public function setObsLists($obsLists)
     {

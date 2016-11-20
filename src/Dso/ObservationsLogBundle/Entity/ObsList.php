@@ -39,7 +39,7 @@ class ObsList
     protected $conditions;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Object", inversedBy="obsLists")
+     * @ORM\ManyToOne(targetEntity="DeepSkyItem", inversedBy="obsLists")
      * @ORM\JoinColumn(name="object_id", referencedColumnName="id")
      */
     private $dsoObject;

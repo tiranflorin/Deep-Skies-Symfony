@@ -79,7 +79,7 @@ class DashboardController extends Controller
     public function logAjaxAction(Request $request) {
         $criteria = $request->get('q', null);
         $em = $this->getDoctrine()->getManager();
-        $dsos = $em->getRepository('DsoObservationsLogBundle:Object')
+        $dsos = $em->getRepository('DsoObservationsLogBundle:DeepSkyItem')
             ->findDsosByName($criteria);
 
         $data = array();

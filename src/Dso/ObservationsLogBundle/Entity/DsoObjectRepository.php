@@ -23,7 +23,7 @@ class DsoObjectRepository extends EntityRepository
             ->createQuery(
                 '
                 SELECT o
-                FROM DsoObservationsLogBundle:Object o
+                FROM DsoObservationsLogBundle:DeepSkyItem o
                 WHERE (o.name LIKE :name) OR (o.otherName LIKE :otherName)
                 ORDER BY o.name ASC'
             )
