@@ -3,6 +3,7 @@
 namespace Dso\ObservationsLogBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Acl\Exception\Exception;
 
 /**
  * Class ObsList
@@ -29,8 +30,11 @@ class ObsList
     /** @ORM\Column(type="string", nullable=FALSE) */
     protected $name;
 
-    /** @ORM\Column(type="string", nullable=TRUE) */
-    protected $period;
+    /** @ORM\Column(type="datetime") */
+    protected $start;
+
+    /** @ORM\Column(type="datetime") */
+    protected $end;
 
     /** @ORM\Column(type="string", nullable=TRUE) */
     protected $equipment;
@@ -76,22 +80,6 @@ class ObsList
     public function setName($name)
     {
         $this->name = $name;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPeriod()
-    {
-        return $this->period;
-    }
-
-    /**
-     * @param mixed $period
-     */
-    public function setPeriod($period)
-    {
-        $this->period = $period;
     }
 
     /**
@@ -189,5 +177,67 @@ class ObsList
     public function __toString()
     {
         return (string) $this->id;
+    }
+
+    /**
+     * Set start
+     *
+     * @param \DateTime $start
+     * @return ObsList
+     */
+    public function setStart($start)
+    {
+        if (!($start instanceof \DateTime)) {
+            try {
+                $start = new \DateTime($start);
+            } catch (Exception $e) {
+                $start = new \DateTime('now', new \DateTimeZone('UTC'));
+            }
+        }
+
+        $this->start = $start;
+
+        return $this;
+    }
+
+    /**
+     * Get start
+     *
+     * @return \DateTime 
+     */
+    public function getStart()
+    {
+        return $this->start;
+    }
+
+    /**
+     * Set end
+     *
+     * @param \DateTime $end
+     * @return ObsList
+     */
+    public function setEnd($end)
+    {
+        if (!($end instanceof \DateTime)) {
+            try {
+                $end = new \DateTime($end);
+            } catch (Exception $e) {
+                $end = new \DateTime('now', new \DateTimeZone('UTC'));
+            }
+        }
+
+        $this->end = $end;
+
+        return $this;
+    }
+
+    /**
+     * Get end
+     *
+     * @return \DateTime 
+     */
+    public function getEnd()
+    {
+        return $this->end;
     }
 }

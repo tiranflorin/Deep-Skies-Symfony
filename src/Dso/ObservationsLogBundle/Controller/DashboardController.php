@@ -25,6 +25,7 @@ class DashboardController extends Controller
     {
         $dsoTypesObserved = $this->getTypesObservedChart();
         $most10Observed = $this->getMost10ObservedChart();
+        $observingSessions = $this->getObservingSessionsPerYear();
         /** @var LoggedStats $loggedStats */
         $loggedStats = $this->get('dso_observations_log.logged_stats');
         $latestLogged =  $loggedStats->getLatest20Logged($this->getUser()->getId());
@@ -32,6 +33,7 @@ class DashboardController extends Controller
         return $this->render('DsoObservationsLogBundle:Dashboard:index.html.twig', array(
             'chart1' => $dsoTypesObserved,
             'chart2' => $most10Observed,
+            'chart3' => $observingSessions,
             'latestLogged' => $latestLogged
         ));
     }
@@ -49,7 +51,8 @@ class DashboardController extends Controller
                 'placeholder' => 'Search for a DSO',
                 )
             )
-            ->add('period', 'text')
+            ->add('start', 'text')
+            ->add('end', 'text')
             ->add('equipment', 'text')
             ->add('conditions', 'text')
             ->add('save', 'submit', array('label' => 'Save DSO log entry'))
@@ -151,6 +154,24 @@ class DashboardController extends Controller
     }
 
     /**
+     * @return Highchart
+     */
+    protected function getObservingSessionsPerYear() {
+
+        $dataToRender = array();
+        /** @var DiagramData $diagramData */
+        $diagramData = $this->get('dso_observations_log.diagram_data');
+        $sessions =  $diagramData->getSessionsPerYear($this->getUser()->getId());
+
+        foreach ($sessions as $session) {
+            $values = array($session['corresponding_year'], (int) $session['sessions_per_year']);
+            array_push($dataToRender, $values);
+        }
+
+        return $this->setUpSessionsPerYear('Observing sessions per year', 'Observing sessions/year', $dataToRender);
+    }
+
+    /**
      * @param string $name
      * @param string $title
      * @param array  $dataToRender
@@ -161,6 +182,11 @@ class DashboardController extends Controller
         $ob = new Highchart();
         $ob->chart->renderTo('dso_types_observed_chart');
         $ob->chart->type('pie');
+        $ob->chart->options3d(array(
+            'enabled' => true,
+            'alpha' => 45,
+            'beta' => 0
+        ));
         $ob->title->text($title);
         $ob->subtitle->text('Click a slice to bring to focus.');
         $ob->plotOptions->series(
@@ -174,7 +200,7 @@ class DashboardController extends Controller
                 )
             )
         );
-        $ob->plotOptions->pie(array('allowPointSelect' => true, 'cursor' => 'pointer'));
+        $ob->plotOptions->pie(array('allowPointSelect' => true, 'cursor' => 'pointer', 'depth' => 35));
         $ob->tooltip->headerFormat('<span style="font-size:11px">{series.name}</span><br>');
         $ob->tooltip->pointFormat('<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>');
         $ob->series(
@@ -230,6 +256,45 @@ class DashboardController extends Controller
     }
 
     /**
+     * @param string $name
+     * @param string $title
+     * @param array  $dataToRender
+     *
+     * @return Highchart
+     */
+    private function setUpSessionsPerYear($name, $title, $dataToRender) {
+        $ob = new Highchart();
+        $ob->chart->renderTo('sessions_per_year_chart');
+        $ob->chart->type('column');
+        $ob->title->text($title);
+        $ob->subtitle->text('');
+        $ob->plotOptions->series(array('dataLabels' => array(
+            'enabled' => true
+        )));
+        $xAxis = array(
+            'type' => 'category',
+            'labels' => array(
+                'rotation' => -45
+            )
+        );
+        $yAxis = array(
+            'min' => 0,
+            'title' => array(
+                'text' => 'Number of observing sessions'
+            ),
+        );
+        $ob->xAxis($xAxis);
+        $ob->yAxis($yAxis);
+        $ob->tooltip->pointFormat('{point.y} sessions logged.');
+        $ob->series(array(array(
+            'name' => 'Years',
+            'data' => $dataToRender))
+        );
+
+        return $ob;
+    }
+
+    /**
      * @param ObsList $data
      * @param array   $observedObjects
      */
@@ -241,7 +306,8 @@ class DashboardController extends Controller
         $listId = $skylistService->createObservingList(array(
                 'name' => $data->getName(),
                 'userId' => $this->getUser()->getId(),
-                'period' => $data->getPeriod(),
+                'start' => $data->getStart(),
+                'end' => $data->getEnd(),
                 'equipment' => $data->getEquipment(),
                 'conditions' => $data->getConditions(),
             )

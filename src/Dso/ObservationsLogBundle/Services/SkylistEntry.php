@@ -165,7 +165,8 @@ class SkylistEntry {
         $defaults = array(
             'userId' => 0,
             'name' => '',
-            'period' => '',
+            'start' => new \DateTime('now', new \DateTimeZone('UTC')),
+            'end' => new \DateTime('now', new \DateTimeZone('UTC')),
             'equipment' => '',
             'conditions' => '',
         );
@@ -173,7 +174,8 @@ class SkylistEntry {
 
         $obsList = new ObsList();
         $obsList->setName($merged['name']);
-        $obsList->setPeriod($merged['period']);
+        $obsList->setStart($merged['start']);
+        $obsList->setEnd($merged['end']);
         $obsList->setEquipment($merged['equipment']);
         $obsList->setConditions($merged['conditions']);
         $obsList->setUserId($merged['userId']);

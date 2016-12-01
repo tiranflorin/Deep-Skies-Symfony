@@ -70,6 +70,26 @@ class DiagramData {
         return $results;
     }
 
+    public function getSessionsPerYear($userId) {
+        $sql = "
+            SELECT
+            COUNT(*) as sessions_per_year,
+            YEAR(start) as corresponding_year
+            FROM `deep-skies-sym`.obs_lists
+            WHERE user_id = (:userId) and YEAR(start) != 0
+            GROUP BY corresponding_year
+            ORDER BY corresponding_year DESC
+        ";
+
+        $conn = $this->em->getConnection();
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue('userId', $userId);
+        $stmt->execute();
+        $results = $stmt->fetchAll();
+
+        return $results;
+    }
+
     /**
      * @param EntityManager $em
      *

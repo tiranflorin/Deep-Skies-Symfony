@@ -35,11 +35,16 @@
                     <div id="most_10observed_chart" style="min-width: 370px; height: 350px; margin: 0 auto"></div>
                 </div>
                 <div class="col-xs-6 col-sm-4 placeholder">
-                    <img data-src="holder.js/200x200/auto/sky" class="img-responsive" alt="img">
-                    <h4>Label</h4>
-                    <span class="text-muted">Something else</span>
+                    <div id="sessions_per_year_chart" style="min-width: 370px; height: 350px; margin: 0 auto"></div>
                 </div>
             </div>
+
+            <h2 class="sub-header">Facts</h2>
+            <ul>
+                <li><strong>125</strong> Different objects logged.</li> {# TODO: add links for each list item#}
+                <li><strong>9</strong> Observing sessions.</li>
+                <li><strong>4</strong> Saved locations.</li>
+            </ul>
 
             {% if latestLogged is not empty %}
                 <h2 class="sub-header">My latest 20 objects logged</h2>
@@ -95,6 +100,7 @@
             Highcharts.setOptions(Highcharts.theme);
             {{ chart(chart1) }}
             {{ chart(chart2) }}
+            {{ chart(chart3) }}
         </script>
     {% endif %}
 {% endblock %}

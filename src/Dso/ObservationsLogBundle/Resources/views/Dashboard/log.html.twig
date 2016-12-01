@@ -15,27 +15,30 @@
             {% endfor %}
             {{ form_start(form) }}
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-4">
                     {{ form_row(form.name) }}
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-8">
                     {{ form_row(form.dsos) }}
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-6">
-                    {{ form_row(form.period) }}
+                <div class="col-lg-4">
+                    {{ form_row(form.start) }}
+                </div>
+                <div class="col-lg-4">
+                    {{ form_row(form.end) }}
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-4">
                     {{ form_row(form.equipment) }}
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-4">
                     {{ form_row(form.conditions) }}
                 </div>
             </div>
