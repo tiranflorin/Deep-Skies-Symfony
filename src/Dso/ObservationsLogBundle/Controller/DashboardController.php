@@ -29,12 +29,16 @@ class DashboardController extends Controller
         /** @var LoggedStats $loggedStats */
         $loggedStats = $this->get('dso_observations_log.logged_stats');
         $latestLogged =  $loggedStats->getLatest20Logged($this->getUser()->getId());
+        $uniqueObjectsCount = $loggedStats->getUniqueObjectsCount($this->getUser()->getId());
+        $uniqueObsSessionsCount = $loggedStats->getUniqueObsSessionsCount($this->getUser()->getId());
 
         return $this->render('DsoObservationsLogBundle:Dashboard:index.html.twig', array(
             'chart1' => $dsoTypesObserved,
             'chart2' => $most10Observed,
             'chart3' => $observingSessions,
-            'latestLogged' => $latestLogged
+            'latestLogged' => $latestLogged,
+            'uniqueObjectsCount' => $uniqueObjectsCount,
+            'uniqueObsSessionsCount' => $uniqueObsSessionsCount
         ));
     }
 

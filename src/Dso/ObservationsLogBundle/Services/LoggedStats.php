@@ -44,6 +44,36 @@ class LoggedStats {
         return $results;
     }
 
+    public function getUniqueObjectsCount($userId) {
+        $sql = "
+            SELECT COUNT(DISTINCT obj_id) FROM logged_objects
+            WHERE user_id = (:userId);
+        ";
+
+        $conn = $this->em->getConnection();
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue('userId', $userId);
+        $stmt->execute();
+        $results = $stmt->fetchColumn();
+
+        return $results;
+    }
+
+    public function getUniqueObsSessionsCount($userId) {
+        $sql = "
+            SELECT COUNT(DISTINCT list_id) FROM logged_objects
+            WHERE user_id = (:userId);
+        ";
+
+        $conn = $this->em->getConnection();
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue('userId', $userId);
+        $stmt->execute();
+        $results = $stmt->fetchColumn();
+
+        return $results;
+    }
+
     /**
      * @param EntityManager $em
      *

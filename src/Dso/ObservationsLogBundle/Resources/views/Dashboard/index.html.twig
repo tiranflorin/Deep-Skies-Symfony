@@ -41,9 +41,9 @@
 
             <h2 class="sub-header">Facts</h2>
             <ul>
-                <li><strong>125</strong> Different objects logged.</li> {# TODO: add links for each list item#}
-                <li><strong>9</strong> Observing sessions.</li>
-                <li><strong>4</strong> Saved locations.</li>
+                <li><strong>{{ uniqueObjectsCount }}</strong> Different objects logged.</li>
+                <li><strong>{{ uniqueObsSessionsCount }}</strong> Observing sessions.</li>
+                <li><strong>todo</strong> Saved locations.</li>
             </ul>
 
             {% if latestLogged is not empty %}
