@@ -33,3 +33,4 @@ services:
         calls:
             - [setVisibleObjectsService, ["@dso_planner.visible_objects"]]
             - [setDispatcher, ["@event_dispatcher"]]
+            - [setEm, ["@doctrine.orm.entity_manager"]]

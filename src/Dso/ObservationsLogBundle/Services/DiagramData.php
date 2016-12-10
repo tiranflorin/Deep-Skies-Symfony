@@ -25,15 +25,11 @@ class DiagramData {
 
         $sql = "
             SELECT
-                `type`,
+                object.`type`,
                 COUNT(*) AS nb_times
-            FROM object
-            WHERE id IN(
-              SELECT DISTINCT obj_id
-              FROM logged_objects
-              WHERE user_id = (:userId)
-            )
-            AND `type` != ''
+            FROM object JOIN (SELECT DISTINCT obj_id FROM logged_objects WHERE user_id = (:userId)) as logged
+            ON object.id = logged.obj_id
+                AND object.`type` != ''
             GROUP BY `type`
         ";
 

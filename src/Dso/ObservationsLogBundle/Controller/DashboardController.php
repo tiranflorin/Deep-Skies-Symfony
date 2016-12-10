@@ -31,6 +31,7 @@ class DashboardController extends Controller
         $latestLogged =  $loggedStats->getLatest20Logged($this->getUser()->getId());
         $uniqueObjectsCount = $loggedStats->getUniqueObjectsCount($this->getUser()->getId());
         $uniqueObsSessionsCount = $loggedStats->getUniqueObsSessionsCount($this->getUser()->getId());
+        $savedLocationsCount = $loggedStats->getSavedLocationsCount($this->getUser()->getId());
 
         return $this->render('DsoObservationsLogBundle:Dashboard:index.html.twig', array(
             'chart1' => $dsoTypesObserved,
@@ -38,7 +39,8 @@ class DashboardController extends Controller
             'chart3' => $observingSessions,
             'latestLogged' => $latestLogged,
             'uniqueObjectsCount' => $uniqueObjectsCount,
-            'uniqueObsSessionsCount' => $uniqueObsSessionsCount
+            'uniqueObsSessionsCount' => $uniqueObsSessionsCount,
+            'savedLocationsCount' => $savedLocationsCount
         ));
     }
 

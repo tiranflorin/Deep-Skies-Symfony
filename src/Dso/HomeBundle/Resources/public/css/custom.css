@@ -64,6 +64,10 @@ a.list-group-item:hover, a.list-group-item:focus {
     margin-top: 10px;
 }
 
+.form-control {
+    color: #1b1b1b;
+}
+
 #location-edit small {
     float: left;
     margin-top: 18px;

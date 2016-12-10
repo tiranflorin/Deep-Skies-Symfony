@@ -34,24 +34,9 @@ class User extends BaseUser
     private $facebookAccessToken;
 
     /**
-     * @ORM\Column(type="string", nullable=TRUE)
+     * @ORM\Column(name="current_observing_site_id", type="integer", nullable=TRUE)
      */
-    protected $latitude;
-
-    /**
-     * @ORM\Column(type="string", nullable=TRUE)
-     */
-    protected $longitude;
-
-    /**
-     * @ORM\Column(type="string", nullable=TRUE)
-     */
-    protected $timeZone;
-
-    /**
-     * @ORM\Column(type="string", nullable=TRUE)
-     */
-    protected $dateTime;
+    protected $currentObservingSiteId;
 
     /**
      * Class constructor
@@ -62,13 +47,13 @@ class User extends BaseUser
     }
 
     /**
-     * @param mixed $latitude
+     * @param string $observingSite
      *
      * @return User
      */
-    public function setLatitude($latitude)
+    public function setCurrentObservingSiteId($observingSite)
     {
-        $this->latitude = $latitude;
+        $this->currentObservingSiteId = $observingSite;
 
         return $this;
     }
@@ -76,69 +61,9 @@ class User extends BaseUser
     /**
      * @return mixed
      */
-    public function getLatitude()
+    public function getCurrentObservingSiteId()
     {
-        return $this->latitude;
-    }
-
-    /**
-     * @param mixed $longitude
-     *
-     * @return User
-     */
-    public function setLongitude($longitude)
-    {
-        $this->longitude = $longitude;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLongitude()
-    {
-        return $this->longitude;
-    }
-
-    /**
-     * @param mixed $timeZone
-     *
-     * @return User
-     */
-    public function setTimeZone($timeZone)
-    {
-        $this->timeZone = $timeZone;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTimeZone()
-    {
-        return $this->timeZone;
-    }
-
-    /**
-     * @param mixed $dateTime
-     *
-     * @return User
-     */
-    public function setDateTime($dateTime)
-    {
-        $this->dateTime = $dateTime;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDateTime()
-    {
-        return $this->dateTime;
+        return $this->currentObservingSiteId;
     }
 
     /**

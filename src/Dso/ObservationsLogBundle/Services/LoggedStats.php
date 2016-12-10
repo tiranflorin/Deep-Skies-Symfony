@@ -74,6 +74,21 @@ class LoggedStats {
         return $results;
     }
 
+    public function getSavedLocationsCount($userId) {
+        $sql = "
+            SELECT COUNT(*) FROM observing_sites
+            WHERE user_id = (:userId);
+        ";
+
+        $conn = $this->em->getConnection();
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue('userId', $userId);
+        $stmt->execute();
+        $results = $stmt->fetchColumn();
+
+        return $results;
+    }
+
     /**
      * @param EntityManager $em
      *

@@ -43,7 +43,7 @@
             <ul>
                 <li><strong>{{ uniqueObjectsCount }}</strong> Different objects logged.</li>
                 <li><strong>{{ uniqueObsSessionsCount }}</strong> Observing sessions.</li>
-                <li><strong>todo</strong> Saved locations.</li>
+                <li><strong>{{ savedLocationsCount }}</strong> Saved locations.</li>
             </ul>
 
             {% if latestLogged is not empty %}
@@ -87,8 +87,9 @@
 {% block footer_javascripts %}
     {{ parent() }}
     {% if chart1 is defined %}
-        <script src="//code.highcharts.com/4.1.8/highcharts.js"></script>
-        <script src="//code.highcharts.com/4.1.8/modules/exporting.js"></script>
+        <script src="//code.highcharts.com/5.0.6/highcharts.js"></script>
+        <script src="//code.highcharts.com/highcharts-3d.js"></script>
+        <script src="//code.highcharts.com/5.0.6/modules/exporting.js"></script>
 
         {% javascripts
         '@DsoHomeBundle/Resources/public/js/highchart-sand-theme.js' %}

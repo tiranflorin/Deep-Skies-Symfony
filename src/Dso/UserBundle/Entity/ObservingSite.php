@@ -2,31 +2,63 @@
 
 namespace Dso\UserBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
- * Class LocationDetails
+ * Class ObservingSite
+ *
+ * @ORM\Entity
+ * @ORM\Table(name="observing_sites")
  *
  * @package Dso\UserBundle\Entity
  *
  * @author  Florin Tiran  <tiran.florin@gmail.com>
  */
-class LocationDetails
+class ObservingSite
 {
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
     protected $id;
 
-    protected $email;
+    /**
+     * @ORM\Column(type="string", nullable=TRUE)
+     */
+    protected $name;
 
+    /**
+     * @ORM\Column(type="string", nullable=TRUE)
+     */
     protected $latitude;
 
+    /**
+     * @ORM\Column(type="string", nullable=TRUE)
+     */
     protected $longitude;
 
+    /**
+     * @ORM\Column(name="time_zone", type="string", nullable=TRUE)
+     */
     protected $timeZone;
 
+    /**
+     * @ORM\Column(name="user_id", type="integer", nullable=TRUE)
+     */
+    protected $userId;
+
+    /**
+     * Used to save the planned session time. TODO: Refactor this!
+     *
+     * @ORM\Column(name="date_time", type="string", nullable=TRUE)
+     */
     protected $dateTime;
 
     /**
      * @param mixed $dateTime
      *
-     * @return LocationDetails
+     * @return ObservingSite
      */
     public function setDateTime($dateTime)
     {
@@ -44,13 +76,13 @@ class LocationDetails
     }
 
     /**
-     * @param mixed $email
+     * @param mixed $userId
      *
-     * @return LocationDetails
+     * @return ObservingSite
      */
-    public function setEmail($email)
+    public function setUserId($userId)
     {
-        $this->email = $email;
+        $this->userId = $userId;
 
         return $this;
     }
@@ -58,15 +90,15 @@ class LocationDetails
     /**
      * @return mixed
      */
-    public function getEmail()
+    public function getUserId()
     {
-        return $this->email;
+        return $this->userId;
     }
 
     /**
      * @param mixed $id
      *
-     * @return LocationDetails
+     * @return ObservingSite
      */
     public function setId($id)
     {
@@ -84,9 +116,29 @@ class LocationDetails
     }
 
     /**
+     * @param mixed $name
+     *
+     * @return ObservingSite
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
      * @param mixed $latitude
      *
-     * @return LocationDetails
+     * @return ObservingSite
      */
     public function setLatitude($latitude)
     {
@@ -106,7 +158,7 @@ class LocationDetails
     /**
      * @param mixed $longitude
      *
-     * @return LocationDetails
+     * @return ObservingSite
      */
     public function setLongitude($longitude)
     {
@@ -126,7 +178,7 @@ class LocationDetails
     /**
      * @param mixed $timeZone
      *
-     * @return LocationDetails
+     * @return ObservingSite
      */
     public function setTimeZone($timeZone)
     {

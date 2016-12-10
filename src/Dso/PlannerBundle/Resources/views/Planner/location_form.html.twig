@@ -4,23 +4,28 @@
         <h2 class="text-center">Edit location details</h2>
         <form action="{{ path('dso_planner_update_location_settings') }}" method="post" name="form" class="form-validation">
             <div class="row">
+                <div class="col-lg-7 col-md-7"><input type="text" name="name" class="form-control" placeholder="Observing site name" autofocus
+                            {% if currentObservingSite.name is not null %} value="{{ currentObservingSite.name }}"{% endif %}></div>
+                <div class="col-lg-5 col-md-5"><small class="text-muted">(Eg. Cluj-Napoca)</small></div>
+            </div>
+            <div class="row">
                 <div class="col-lg-7 col-md-7"><input type="text" name="latitude" class="form-control" placeholder="Latitude" autofocus
-                            {% if user.latitude is not null %} value="{{ user.latitude }}"{% endif %}></div>
+                            {% if currentObservingSite.latitude is not null %} value="{{ currentObservingSite.latitude }}"{% endif %}></div>
                 <div class="col-lg-5 col-md-5"><small class="text-muted">(Eg. 43.234)</small></div>
             </div>
             <div class="row">
                 <div class="col-lg-7 col-md-7"><input type="text" name="longitude" class="form-control" placeholder="Longitude"
-                            {% if user.longitude is not null %} value="{{ user.longitude }}"{% endif %}></div>
+                            {% if currentObservingSite.longitude is not null %} value="{{ currentObservingSite.longitude }}"{% endif %}></div>
                 <div class="col-lg-5 col-md-5"><small class="text-muted">(Eg. 24.531)</small></div>
             </div>
             <div class="row">
                 <div class="col-lg-7 col-md-7"><input type="text" name="timezone" class="form-control" placeholder="TimeZone"
-                            {% if user.timezone is not null %} value="{{ user.timezone }}"{% endif %}></div>
+                            {% if currentObservingSite.timezone is not null %} value="{{ currentObservingSite.timezone }}"{% endif %}></div>
                 <div class="col-lg-5 col-md-5"><small class="text-muted">(Eg. Europe/Bucharest)</small></div>
             </div>
             <div class="row">
                 <div class="col-lg-7 col-md-7"><input type="text" name="datetime" class="form-control" placeholder="DateTime"
-                            {% if user.datetime is not null %} value="{{ user.datetime }}"{% endif %}></div>
+                            {% if currentObservingSite.datetime is not null %} value="{{ currentObservingSite.datetime }}"{% endif %}></div>
                 <div class="col-lg-5 col-md-5"><small class="text-muted">(Eg. 2014-12-2615:47:09)</small></div>
             </div>
 

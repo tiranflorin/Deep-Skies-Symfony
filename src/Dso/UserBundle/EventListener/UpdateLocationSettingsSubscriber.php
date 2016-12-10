@@ -23,7 +23,6 @@ class UpdateLocationSettingsSubscriber implements EventSubscriberInterface
     {
         return array(
             'update.location' => array('onUpdateLocation', 1),
-            'update.time'     => array('onUpdateTime', 2)
         );
     }
 
@@ -48,24 +47,8 @@ class UpdateLocationSettingsSubscriber implements EventSubscriberInterface
     {
         $locationDetails = $event->getLocationDetails();
         /** @var User $user */
-        $user = $this->userManager->findUserByEmail($locationDetails->getEmail());
-        $user->setLatitude($locationDetails->getLatitude())
-            ->setLongitude($locationDetails->getLongitude());
-        $this->userManager->updateUser($user);
-    }
-
-    /**
-     * Set time details for the user.
-     *
-     * @param UpdateLocationSettingsEvent $event
-     */
-    public function onUpdateTime(UpdateLocationSettingsEvent $event)
-    {
-        $locationDetails = $event->getLocationDetails();
-        /** @var User $user */
-        $user = $this->userManager->findUserByEmail($locationDetails->getEmail());
-        $user->setTimeZone($locationDetails->getTimeZone())
-            ->setDatetime($locationDetails->getDateTime());
+        $user = $this->userManager->findUserBy(array('id' => $locationDetails->getUserId()));
+        $user->setCurrentObservingSiteId($locationDetails->getId());
         $this->userManager->updateUser($user);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Dso\UserBundle\Event;
 
-use Dso\UserBundle\Entity\LocationDetails;
+use Dso\UserBundle\Entity\ObservingSite;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
@@ -15,16 +15,15 @@ use Symfony\Component\EventDispatcher\Event;
 class UpdateLocationSettingsEvent extends Event
 {
     const UPDATE_LOCATION = 'update.location';
-    const UPDATE_TIME = 'update.time';
 
     protected $locationDetails;
 
-    public function __construct(LocationDetails $locationDetails) {
+    public function __construct(ObservingSite $locationDetails) {
         $this->locationDetails = $locationDetails;
     }
 
     /**
-     * @return LocationDetails
+     * @return ObservingSite
      */
     public function getLocationDetails()
     {

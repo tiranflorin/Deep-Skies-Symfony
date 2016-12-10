@@ -4,6 +4,7 @@ namespace Dso\PlannerBundle\Controller;
 
 use Dso\PlannerBundle\Exception\HijackException;
 use Dso\PlannerBundle\Services\SettingsManager;
+use Dso\UserBundle\Entity\ObservingSite;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,9 +41,11 @@ class PlannerController extends Controller
 
         $selection = $filterService->getSelectedFilter($request->get('selection'));
         $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getManager();
+        $observingSite = $em->find('Dso\UserBundle\Entity\ObservingSite', $user->getCurrentObservingSiteId());
 
         $filterService->setConfigurationDetails(
-            $this->get('dso_planner.visible_objects')->getVisibleObjectsTableName($user),
+            $this->get('dso_planner.visible_objects')->getVisibleObjectsTableName($observingSite, $user->getUsername()),
             $filterType,
             $selection
         );
@@ -116,8 +119,13 @@ class PlannerController extends Controller
     public function editLocationSettingsAction()
     {
         $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getManager();
+        $observingSite = new ObservingSite();
+        if (null !==  $user->getCurrentObservingSiteId()) {
+            $observingSite = $em->find('Dso\UserBundle\Entity\ObservingSite', $user->getCurrentObservingSiteId());
+        }
         return $this->render('DsoPlannerBundle:Planner:location_form.html.twig', array(
-            'user' => $user
+            'currentObservingSite' => $observingSite
         ));
     }
 
@@ -169,8 +177,13 @@ class PlannerController extends Controller
             throw new \LogicException('No user found.');
         }
 
+        $em = $this->getDoctrine()->getManager();
+        $observingSite = new ObservingSite();
+        if (null !==  $user->getCurrentObservingSiteId()) {
+            $observingSite = $em->find('Dso\UserBundle\Entity\ObservingSite', $user->getCurrentObservingSiteId());
+        }
         return $this->render('DsoPlannerBundle:Planner:location_settings.html.twig', array(
-            'user' => $user)
+            'currentObservingSite' => $observingSite)
         );
     }
 
