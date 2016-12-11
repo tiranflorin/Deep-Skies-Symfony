@@ -164,6 +164,7 @@ class SkylistEntry {
     {
         $defaults = array(
             'userId' => 0,
+            'locationId' => 0,
             'name' => '',
             'start' => new \DateTime('now', new \DateTimeZone('UTC')),
             'end' => new \DateTime('now', new \DateTimeZone('UTC')),
@@ -179,6 +180,7 @@ class SkylistEntry {
         $obsList->setEquipment($merged['equipment']);
         $obsList->setConditions($merged['conditions']);
         $obsList->setUserId($merged['userId']);
+        $obsList->setLocationId($merged['locationId']);
 
         $this->em->persist($obsList);
         $this->em->flush();

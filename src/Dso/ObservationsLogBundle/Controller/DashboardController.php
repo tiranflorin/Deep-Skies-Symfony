@@ -6,9 +6,11 @@ use Dso\ObservationsLogBundle\Entity\ObsList;
 use Dso\ObservationsLogBundle\Services\DiagramData;
 use Dso\ObservationsLogBundle\Services\LoggedStats;
 use Dso\ObservationsLogBundle\Services\SkylistEntry;
+use Dso\UserBundle\Entity\User;
 use Ob\HighchartsBundle\Highcharts\Highchart;
 use Dso\ObservationsLogBundle\Entity\LoggedObject;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -45,6 +47,24 @@ class DashboardController extends Controller
     }
 
     public function logAction(Request $request) {
+        $securityContext = $this->get('security.context');
+        /** @var User $user */
+        $user = $securityContext->getToken()->getUser();
+        $em = $this->getDoctrine()->getManager();
+        $choices = array();
+        $observingSites = array();
+        if (null !== $user->getCurrentObservingSiteId()) {
+            $observingSites = $em->getRepository('Dso\UserBundle\Entity\ObservingSite')->findBy(
+                array('userId' => $user->getId()),
+                array('id' => 'DESC')
+            );
+        }
+        if (!empty($observingSites)) {
+            foreach ($observingSites as $site) {
+                $choices[$site->getId()] = $site->getName();
+            }
+        }
+
         $obsList = new ObsList();
         $form = $this->createFormBuilder($obsList)
             ->add('name', 'text', array('attr' => array('placeholder' => 'Main log entry name')))
@@ -57,6 +77,10 @@ class DashboardController extends Controller
                 'placeholder' => 'Search for a DSO',
                 )
             )
+            ->add('locationId', 'choice', array(
+                'choices'  => $choices,
+                'label' => 'Location (Select from observing sites defined on your profile)'
+            ))
             ->add('start', 'text')
             ->add('end', 'text')
             ->add('equipment', 'text')
@@ -312,6 +336,7 @@ class DashboardController extends Controller
         $listId = $skylistService->createObservingList(array(
                 'name' => $data->getName(),
                 'userId' => $this->getUser()->getId(),
+                'locationId' => $data->getLocationId(),
                 'start' => $data->getStart(),
                 'end' => $data->getEnd(),
                 'equipment' => $data->getEquipment(),

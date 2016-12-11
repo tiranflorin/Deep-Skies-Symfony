@@ -27,6 +27,9 @@ class ObsList
     /** @ORM\Column(type="integer", name="user_id") */
     protected $user_id;
 
+    /** @ORM\Column(type="integer", name="location_id") */
+    protected $locationId;
+
     /** @ORM\Column(type="string", nullable=FALSE) */
     protected $name;
 
@@ -80,6 +83,26 @@ class ObsList
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLocationId()
+    {
+        return $this->locationId;
+    }
+
+    /**
+     * @param mixed $locationId
+     *
+     * @return ObsList
+     */
+    public function setLocationId($locationId)
+    {
+        $this->locationId = $locationId;
+
+        return $this;
     }
 
     /**

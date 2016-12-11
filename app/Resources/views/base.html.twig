@@ -38,16 +38,13 @@
     '@DsoHomeBundle/Resources/public/js/jquery-2.1.0.min.js'
     '@DsoHomeBundle/Resources/public/js/bootstrap-core/*'
     '@TetranzSelect2EntityBundle/Resources/public/js/select2entity.js'
+    '@DsoHomeBundle/Resources/public/js/geolocation-map.js'
     '@DsoHomeBundle/Resources/public/js/custom.js' %}
     {#'@DsoHomeBundle/Resources/public/js/geolocation.js' TODO: check where I need to include this. #}
     <script type="text/javascript" src="{{ asset_url }}"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js"></script>
-    <script>
-        $(document).ready(function(){
-            $('[data-toggle="tooltip"]').tooltip();
-        });
-    </script>
     {% endjavascripts %}
+    <script type="text/javascript"> $(document).ready(function(){ $('[data-toggle="tooltip"]').tooltip(); });</script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js"></script>
     <script type="text/javascript" src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
     <script type="text/javascript" src="/js/fos_js_routes.js"></script>
 {% endblock %}
