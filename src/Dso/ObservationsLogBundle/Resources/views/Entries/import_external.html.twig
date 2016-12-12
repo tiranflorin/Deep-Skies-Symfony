@@ -19,9 +19,13 @@
                 </div>
             {% endfor %}
             <h2>Import SkySafary 4 Plus observation lists</h2>
-            {{ form_start(form) }}
-            {{ form_widget(form) }}
-            {{ form_end(form) }}
+            <div class="row">
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    {{ form_start(form) }}
+                    {{ form_widget(form) }}
+                    {{ form_end(form) }}
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}

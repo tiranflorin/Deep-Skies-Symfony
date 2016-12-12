@@ -111,3 +111,6 @@ hwi_oauth:
             infos_url:           "https://graph.facebook.com/me?fields=id,name,email,picture.type(large)"
             options:
                 csrf: true
+    http_client:
+        timeout:     30
+        verify_peer: false
