@@ -38,7 +38,25 @@ dso_planner_update_location_settings:
     defaults: { _controller: DsoPlannerBundle:Planner:updateLocationSettings }
     methods:  [POST]
 
-dso_planner_asynchronous_update_settings:
+dso_planner_async_update_settings:
     pattern:  /planner/async/update_settings
-    defaults: { _controller: DsoPlannerBundle:Planner:asynchronousUpdateSettings }
+    defaults: { _controller: DsoPlannerBundle:Planner:asyncUpdateSettings }
     methods:  [POST]
+    options:
+        expose: true
+
+dso_planner_async_add_item_to_list:
+    pattern:  /planner/observing-list/add-item
+    defaults: { _controller: DsoPlannerBundle:Planner:asyncAddItemToLists }
+    methods:  [POST]
+    options:
+        expose: true
+
+dso_planner_async_retrieve_observing_list:
+    pattern:  /planner/observing-list/retrieve/{dsoId}/
+    defaults: { _controller: DsoPlannerBundle:Planner:asyncRetrievePlannedLists }
+    methods:  [GET]
+    options:
+        expose: true
+    requirements:
+        dsoId: '\d+'

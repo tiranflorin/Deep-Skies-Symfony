@@ -2,6 +2,8 @@
 
 namespace Dso\PlannerBundle\Controller;
 
+use Dso\PlannerBundle\Entity\PlannedList;
+use Dso\PlannerBundle\Entity\PlannedObject;
 use Dso\PlannerBundle\Exception\HijackException;
 use Dso\PlannerBundle\Services\SettingsManager;
 use Dso\UserBundle\Entity\ObservingSite;
@@ -194,7 +196,7 @@ class PlannerController extends Controller
      *
      * @return JsonResponse|Response
      */
-    public function asynchronousUpdateSettingsAction(Request $request)
+    public function asyncUpdateSettingsAction(Request $request)
     {
         if (!$request->isXMLHttpRequest()) {
             return new Response('Hijack attempt!', Response::HTTP_BAD_REQUEST );
@@ -209,5 +211,110 @@ class PlannerController extends Controller
         }
 
         return new JsonResponse('ok', Response::HTTP_OK);
+    }
+
+    public function asyncAddItemToListsAction(Request $request)
+    {
+        if (!$request->isXMLHttpRequest()) {
+            return new Response('Hijack attempt!', Response::HTTP_BAD_REQUEST );
+        }
+
+        $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getManager();
+        $listIds = $request->request->get('listIds', array()); // TODO: check if these exist in DB
+
+        $newObsListName = $request->request->get('listName');
+        if (!empty($newObsListName)) {
+            $newPlannedItem = $this->createPlannedListItem($newObsListName, $request->request->get('selectedDsoId'));
+            array_push($listIds, $newPlannedItem->getId());
+        }
+
+        foreach ($listIds as $listId) {
+            $plannedObject = new PlannedObject();
+            $plannedObject->setObjId($request->request->get('selectedDsoId'))
+                ->setListId($listId)
+                ->setUserId($user->getId());
+            $em->persist($plannedObject);
+        }
+        $em->flush();
+
+        return new JsonResponse('ok', Response::HTTP_OK);
+    }
+
+    public function asyncRetrievePlannedListsAction(Request $request)
+    {
+        if (!$request->isXMLHttpRequest()) {
+            return new Response('Hijack attempt!', Response::HTTP_BAD_REQUEST );
+        }
+
+        $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getManager();
+
+        $allSavedLists = $em->getRepository('Dso\PlannerBundle\Entity\PlannedList')
+            ->findBy(array('userId' => $user->getId()));
+
+        $queryBuilder = $em->createQueryBuilder();
+        $query = $queryBuilder
+        ->select('p.listId')
+        ->distinct()
+        ->from('Dso\PlannerBundle\Entity\PlannedObject', 'p')
+        ->where('p.userId = :userId')
+        ->andWhere('p.objId = :objId')
+        ->orderBy('p.listId')
+        ->getQuery();
+        $query->setParameter(':userId', $user->getId());
+        $query->setParameter(':objId', $request->get('dsoId'));
+        $listsDsoAdded = $query->getResult();
+
+        $jsReady = array();
+        if (!empty($allSavedLists)) {
+            /** @var PlannedList $list */
+            foreach ($allSavedLists as $list) {
+                $jsReady[] = array(
+                    'listId' => $list->getId(),
+                    'listName' => $list->getName(),
+                    'dsoOnList' => $this->isDsoOnList($list->getId(), $listsDsoAdded)
+                );
+            }
+        }
+
+        return new JsonResponse($jsReady, Response::HTTP_OK);
+    }
+
+    protected function createPlannedListItem($listName, $objId) {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getManager();
+
+        // Create the new Observing list.
+        $plannedList = new PlannedList();
+        $plannedList->setName($listName)
+            ->setUserId($user->getId());
+        $em->persist($plannedList);
+        $em->flush();
+
+        // Add the selected dso to the Observing list.
+        $plannedObject = new PlannedObject();
+        $plannedObject->setObjId($objId)
+            ->setListId($plannedList->getId())
+            ->setUserId($user->getId());
+        $em->persist($plannedObject);
+        $em->flush();
+
+        return $plannedObject;
+    }
+
+    private function isDsoOnList($listId, $listsDsoAlreadyAdded) {
+        $dsoOnList = false;
+        $listIdsToSearch = array();
+
+        foreach ($listsDsoAlreadyAdded as $listIdAdded) {
+            $listIdsToSearch[] = $listIdAdded['listId'];
+        }
+
+        if (in_array($listId, $listIdsToSearch)) {
+            $dsoOnList = true;
+        }
+
+        return $dsoOnList;
     }
 }

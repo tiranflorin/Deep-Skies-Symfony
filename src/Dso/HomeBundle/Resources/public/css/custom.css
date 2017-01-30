@@ -365,3 +365,11 @@ form.well ul li {
 .address-issue-warning {
     color: #f0ad4e;
 }
+
+div.list-group-item {
+    color: #BDBDBD;
+}
+
+.group-item-value {
+    color: #ffffff;
+}

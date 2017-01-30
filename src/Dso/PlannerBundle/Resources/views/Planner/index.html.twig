@@ -31,32 +31,26 @@
                     </div>
                 </div>
 
-                <!-- Table -->
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Mag</th>
-                            <th>Constellation</th>
-                            <th>Obj Type</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% for object in pagination %}
-                        <tr {% if loop.index is odd %}class="color"{% endif %}>
-                            <td>
-                                {{ object.Name1 }}
-                                {% if object.Name2 is defined  %}
-                                    ({{ object.Name2 }})
-                                {% endif %}
-                            </td>
-                            <td>{{ object.ObjMagnitude }}</td>
-                            <td>{{ object.Constellation }}</td>
-                            <td>{{ object.ObjType }}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                {% for object in pagination %}
+                    <div class="row">
+                        <div class="col-lg-5 col-md-5 col-sm-5">
+                            <div class="list-group" style="margin-left:15px;">
+                                <div class="list-group-item">
+                                    <h4 class="list-group-item-heading">{{ object.Name1 }}
+                                        {% if object.Name2 is defined  %}
+                                            ({{ object.Name2 }})
+                                        {% endif %}</h4>
+                                    <p class="list-group-item-text">Magnitude: <span class="group-item-value"> {{ object.ObjMagnitude }} </span> . Constellation: <span class="group-item-value">{{ object.Constellation }}</span></p>
+                                    <p class="list-group-item-text">Type: <span class="group-item-value">{{ object.ObjType }}</span> . NGC Description: <span class="group-item-value">{{ object.Ngc_desc }}</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-1 col-md-1 col-sm-1">
+                            <button class="add-item-to-list" data-dsoId="{{ object.Object_id }}" type="button" title="Add item to observing list"> + </button>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6"></div>
+                    </div>
+                {% endfor %}
 
                 <div class="panel-body">
                     {# display navigation #}
@@ -67,5 +61,37 @@
             </div>
         </div>
 
+        <div id="dialog-form" title="Add selected item to*">
+            <form>
+                <div id="existingPlannedLists"></div>
+
+                <p style="margin-top: 25px;">Create a new observing list:</p>
+                <label for="list_name">List Name</label>
+                <input type="text" name="list_name" id="list_name" class="text ui-widget-content ui-corner-all">
+
+                <!-- Allow form submission with keyboard without duplicating the dialog button -->
+                <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+            </form>
+            <p><small>* Item will be added to selected lists or to a newly created list only after hitting "Save".</small></p>
+        </div>
+        <div id="dialog-message-ok" title="Success!">
+            <p>
+                <span class="ui-icon ui-icon-circle-check" style="float:left; margin:2px 5px 40px 0;"></span>
+                Object was added to selected observing lists.
+            </p>
+        </div>
+        <div id="dialog-message-error" class="ui-state-error" title="Failed!">
+            <p>
+                <span class="ui-icon ui-icon-alert" style="float:left; margin:2px 5px 40px 0;"></span>
+                Something went wrong and the object wasn't added to the selected observing lists.
+            </p>
+        </div>
     {% endif %}
 {% endblock %} {# <!-- end mainContent block --> #}
+{% block footer_javascripts %}
+    {{ parent() }}
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    {% javascripts '@DsoHomeBundle/Resources/public/js/add-result-to-list.js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

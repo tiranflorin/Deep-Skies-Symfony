@@ -61,7 +61,7 @@ class EntriesController extends Controller
             return $this->redirectToRoute('dso_observations_log_log');
         }
 
-        return $this->render('DsoObservationsLogBundle:Dashboard:log.html.twig', array(
+        return $this->render('DsoObservationsLogBundle:Entries:log.html.twig', array(
             'form' => $form->createView(),
         ));
     }
