@@ -1,0 +1,106 @@
+{% extends 'base.html.twig' %}
+{% block stylesheetsArea %}
+    {% stylesheets
+    'bundles/dsohome/css/*'
+    filter="cssrewrite" %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+    <link href="/bundles/jordillonchcrudgenerator/css/crud.css" rel="stylesheet">
+{% endblock %}
+{% block wrapperClasses %}{% endblock %}
+{% block side_nav %}{% endblock %}
+{% block mainContent %}
+    <div class="container">
+        <div class="row">
+
+            <div class="span8">
+                <h1>{{ 'views.index.list'|trans({'%entity%': 'PlannedList'}, 'JordiLlonchCrudGeneratorBundle') }}</h1>
+            </div>
+            <div class="span2">
+                {% if form_errors(filterForm) %}
+                    <div class="alert alert-block alert-error fade in form-errors">
+                        {{ form_errors(filterForm) }}
+                    </div>
+                {% endif %}
+                &nbsp;
+            </div>
+            <div class="span2">
+                {#TODO: Fix the rendering of filters#}
+                {#<div class="filters-right">#}
+                    {#<a class="btn dropdown-toggle" data-toggle="collapse" data-target="#filters">#}
+                        {#{{ 'views.index.filters'|trans({}, 'JordiLlonchCrudGeneratorBundle') }}#}
+                        {#<span class="caret"></span>#}
+                    {#</a>#}
+                {#</div>#}
+            </div>
+
+            <div class="span12">
+                <div id="filters" class="collapse">
+
+                    <form class="well" action="{{ path('planner_planned-lists') }}"
+                          method="get" {{ form_enctype(filterForm) }}>
+                        {{ form_row(filterForm.id) }}
+                        {{ form_row(filterForm.name) }}
+                        {{ form_rest(filterForm) }}
+
+                        <p>
+                            <button type="submit" name="filter_action"
+                                    value="filter">{{ 'views.index.filter'|trans({}, 'JordiLlonchCrudGeneratorBundle') }}</button>
+                            <button type="submit" name="filter_action"
+                                    value="reset">{{ 'views.index.reset'|trans({}, 'JordiLlonchCrudGeneratorBundle') }}</button>
+                        </p>
+                    </form>
+                </div>
+            </div>
+
+            <div class="span12">
+
+                <table class="table table-striped table-bordered table-condensed">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>{{ 'views.index.actions'|trans({}, 'JordiLlonchCrudGeneratorBundle') }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for entity in entities %}
+                        <tr>
+                            <td>
+                                <a href="{{ path('planner_planned-lists_show', { 'id': entity.id }) }}">{{ entity.id }}</a>
+                            </td>
+                            <td>{{ entity.name }}</td>
+                            <td>
+                                <a class="btn btn-mini"
+                                   href="{{ path('planner_planned-lists_show', { 'id': entity.id }) }}">
+                                    {{ 'views.actions.show'|trans({}, 'JordiLlonchCrudGeneratorBundle') }}
+                                </a>
+                                <a class="btn btn-mini"
+                                   href="{{ path('planner_planned-lists_edit', { 'id': entity.id }) }}">
+                                    {{ 'views.actions.edit'|trans({}, 'JordiLlonchCrudGeneratorBundle') }}
+                                </a></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6 ">
+                    <div class="navigation">
+                        <div class="jquery-custom-class-identifier-ul">
+                            {% autoescape %}
+                            {{ pagerHtml|raw }} {# var won't be escaped #}
+                            {% endautoescape %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <a class="btn btn-primary likepaginator right" href="{{ path('planner_planned-lists_new') }}">
+                        {{ 'views.index.createnew'|trans({}, 'JordiLlonchCrudGeneratorBundle') }} PlannedList
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

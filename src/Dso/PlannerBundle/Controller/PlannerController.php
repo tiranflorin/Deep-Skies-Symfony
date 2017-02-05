@@ -100,8 +100,10 @@ class PlannerController extends Controller
         );
         $user = $this->get('security.context')->getToken()->getUser();
 
+        $em = $this->getDoctrine()->getManager();
+        $observingSite = $em->find('Dso\UserBundle\Entity\ObservingSite', $user->getCurrentObservingSiteId());
         $filterService->setConfigurationDetails(
-            $this->get('dso_planner.visible_objects')->getVisibleObjectsTableName($user),
+            $this->get('dso_planner.visible_objects')->getVisibleObjectsTableName($observingSite, $user),
             $filterType,
             $selection
         );

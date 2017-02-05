@@ -9,11 +9,13 @@
     <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css" rel="stylesheet" />
     <link href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" >
     <!-- @see http://symfony.com/doc/current/cookbook/assetic/asset_management.html#including-css-stylesheets -->
+    {% block stylesheetsArea %}
     {% stylesheets
     'bundles/dsohome/css/*'
     filter="cssrewrite" %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
+    {% endblock %}
 </head>
 
 <body>

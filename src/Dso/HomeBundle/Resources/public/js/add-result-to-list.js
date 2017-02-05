@@ -9,7 +9,6 @@ $(function () {
             url: Routing.generate('dso_planner_async_retrieve_observing_list', { dsoId: selectedDsoId }),
             dataType: "json",
             success: function (savedLists) {
-                console.log(savedLists);
                 if (savedLists.length === 0) {
                     $('#existingPlannedLists').html("<p>There are no observing lists yet. Add new one bellow.</p>")
                 } else {
@@ -72,7 +71,6 @@ $(function () {
             },
             dataType: "json",
             success: function (response) {
-                console.log(response);
                 dialog.dialog("close");
                 $("#dialog-message-ok").dialog({
                     width: 400,
@@ -89,7 +87,6 @@ $(function () {
                 });
             },
             error: function (response) {
-                console.log(response);
                 dialog.dialog("close");
                 $("#dialog-message-error").dialog({
                     width: 450,

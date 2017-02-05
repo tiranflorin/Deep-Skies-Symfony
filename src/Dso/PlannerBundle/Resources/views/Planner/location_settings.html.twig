@@ -1,5 +1,11 @@
-<p>Name: {{ currentObservingSite.name }} </p>
-<p>Latitude: {{ currentObservingSite.latitude }} </p>
-<p>Longitude: {{ currentObservingSite.longitude }} </p>
-<p>Datetime: {{ currentObservingSite.datetime }} </p>
-<p>TimeZone: {{ currentObservingSite.timeZone }} </p>
+<div class="row">
+    <div class="col-sm-6 col-md-6 col-lg-6">
+        <p>TimeZone: {{ currentObservingSite.timeZone }} </p>
+        <p>Datetime: {{ currentObservingSite.datetime }} </p>
+    </div>
+    <div class="col-sm-6 col-md-6 col-lg-6">
+        <p>Name: {{ currentObservingSite.name }} </p>
+        <p>Latitude: {{ currentObservingSite.latitude }} </p>
+        <p>Longitude: {{ currentObservingSite.longitude }} </p>
+    </div>
+</div>

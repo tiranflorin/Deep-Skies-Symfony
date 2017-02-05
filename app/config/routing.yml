@@ -1,3 +1,7 @@
+dso_planner_planned_list:
+    resource: "@DsoPlannerBundle/Controller/PlannedListController.php"
+    type:     annotation
+
 hwi_oauth_redirect:
     resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
     prefix:   /connect
