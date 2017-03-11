@@ -103,8 +103,8 @@ class FilterResults
             source.notes as `Other_notes`,
             altaz_coord.altitude as `obj_altitude`,
             altaz_coord.azimuth as `obj_azimuth`,
-            IFNULL(img.thumb, 'default_thumbnail') as `thumb`,
-            IFNULL(img.full_size, 'default_full_size') as `full_size`
+            IFNULL(img.thumb, 'no_image_available.png') as `thumb`,
+            IFNULL(img.full_size, 'no_image_available_large.png') as `full_size`
         FROM `{$this->baseTable}`  as source
         LEFT JOIN `{$this->visibleObjectsTable}` as altaz_coord
             ON altaz_coord.object_id = source.id

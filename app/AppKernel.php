@@ -30,6 +30,7 @@ class AppKernel extends Kernel
             new Braincrafted\Bundle\BootstrapBundle\BraincraftedBootstrapBundle(),
             new Tetranz\Select2EntityBundle\TetranzSelect2EntityBundle(),
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
+            new Uran1980\FancyBoxBundle\Uran1980FancyBoxBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

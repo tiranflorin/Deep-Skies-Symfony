@@ -1,5 +1,5 @@
 $(function () {
-    var dialog, form;
+    var dialog, dialogOk, dialogError, form;
     var selectedDsoId = 0;
 
     function prependDialogForm() {
@@ -27,6 +27,35 @@ $(function () {
             }
         });
     }
+
+    dialogOk = $("#dialog-message-ok").dialog({
+        autoOpen: false,
+        width: 400,
+        modal: false,
+        buttons: {
+            Ok: function () {
+                $(this).dialog("close");
+            }
+        },
+        open: function () {
+            setTimeout("$('#dialog-message-ok').dialog('close')", 2000);
+        },
+        hide: {effect: "fade", duration: 800}
+    });
+    dialogError = $("#dialog-message-error").dialog({
+        autoOpen: false,
+        width: 450,
+        modal: false,
+        buttons: {
+            Ok: function () {
+                $(this).dialog("close");
+            }
+        },
+        open: function () {
+            setTimeout("$('#dialog-message-error').dialog('close')", 2000);
+        },
+        hide: {effect: "fade", duration: 800}
+    });
 
     dialog = $("#dialog-form").dialog({
         autoOpen: false,
@@ -72,35 +101,11 @@ $(function () {
             dataType: "json",
             success: function (response) {
                 dialog.dialog("close");
-                $("#dialog-message-ok").dialog({
-                    width: 400,
-                    modal: false,
-                    buttons: {
-                        Ok: function () {
-                            $(this).dialog("close");
-                        }
-                    },
-                    open: function () {
-                        setTimeout("$('#dialog-message-ok').dialog('close')", 2000);
-                    },
-                    hide: {effect: "fade", duration: 800}
-                });
+                dialogOk.dialog("open");
             },
             error: function (response) {
                 dialog.dialog("close");
-                $("#dialog-message-error").dialog({
-                    width: 450,
-                    modal: false,
-                    buttons: {
-                        Ok: function () {
-                            $(this).dialog("close");
-                        }
-                    },
-                    open: function () {
-                        setTimeout("$('#dialog-message-error').dialog('close')", 2000);
-                    },
-                    hide: {effect: "fade", duration: 800}
-                });
+                dialogError.dialog("open");
             }
         });
     });

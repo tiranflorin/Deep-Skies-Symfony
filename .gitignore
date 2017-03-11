@@ -17,7 +17,8 @@
 
 # Application specific
 ###############################
-/ngcPhotos/
+/ngcPics/*
+/web/images/ngcPics/*
 /web/css/*
 /web/js/*
 /web/fonts/*
