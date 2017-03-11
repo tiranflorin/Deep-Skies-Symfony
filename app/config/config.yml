@@ -80,6 +80,9 @@ fos_user:
     db_driver: orm
     firewall_name: main
     user_class: Dso\UserBundle\Entity\User
+    from_email:
+        address: tiran.florin@gmail.com
+        sender_name: Florin
 
 knp_paginator:
     page_range: 5
