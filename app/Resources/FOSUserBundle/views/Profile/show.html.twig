@@ -14,8 +14,13 @@
         <p>Username: {{ user.username }}</p>
         <p>Email: {{ user.email }}</p>
         <p>Change your password: <a href="{{ path('fos_user_change_password') }}">Change</a></p>
+
         <h2>Current Location settings <small> (<a href="{{ path('dso_planner_display_location_settings_form') }}">Update</a>)   </small></h2>
         {{ render(controller('DsoPlannerBundle:Planner:locationSettings')) }}
+
+        <h2>My Items</h2>
+        <p><a href="{{ path('planner_planned-lists')}}" class="btn btn-primary">My planned lists</a></p>
+        <p><a href="{{ path('dso_observations_log_entries_view_logged')}}" class="btn btn-primary">My logged objects</a></p>
     </div>
 </div>
 

@@ -90,6 +90,8 @@ class CreateVisibleObjectsTable
         $this->creation = $creation;
         $tmp = new \DateTime($creation);
         $creationDateTime = $tmp->format('YmdHis');
+        $username = strtolower($username);
+        $username = str_replace(' ', '', $username);
 
         //TODO: validate the $lat, $long, $creation
         // Expected format: $lat, long = float with three decimals.
@@ -353,6 +355,8 @@ class CreateVisibleObjectsTable
     public function getVisibleObjectsTableName(ObservingSite $site, $username)
     {
         $tmp = new \DateTime($site->getDateTime(), new \DateTimeZone($site->getTimeZone()));
+        $username = strtolower($username);
+        $username = str_replace(' ', '', $username);
         return 'temp__custom__'. strtolower($username) .'_' . $site->getLatitude() . '_' . $site->getLongitude() . '_' . $tmp->format('YmdHis');;
     }
 

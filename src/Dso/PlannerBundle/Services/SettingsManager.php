@@ -44,7 +44,8 @@ class SettingsManager
         $this->em->persist($locationDetails);
         $this->em->flush();
 
-        $username = $user->getUsername();
+        $username = strtolower($user->getUsername());
+        $username = str_replace(' ', '', $username);
         $mySqlService = $this->visibleObjectsService->getMysqlService();
         $oldTableNames = $mySqlService->getConn()->fetchAll("SHOW TABLES LIKE '%temp__custom__$username%'");
         $this->visibleObjectsService->setConfigurationDetails($user->getUsername(), $locationDetails->getLatitude(), $locationDetails->getLongitude(), $locationDetails->getDateTime());

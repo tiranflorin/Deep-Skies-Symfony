@@ -31,10 +31,14 @@
             </div>
             <div class="row">
                 <div class="col-lg-4">
-                    {{ form_row(form.start) }}
+                    <div class="form-group"><label class="control-label required" for="form_start">Start Time</label>
+                        <input type="text" id="form_start" name="form[start]" required="required" class="form-control">
+                    </div>
                 </div>
                 <div class="col-lg-4">
-                    {{ form_row(form.end) }}
+                    <div class="form-group"><label class="control-label required" for="form_end">End Time</label>
+                        <input type="text" id="form_end" name="form[end]" required="required" class="form-control">
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -47,7 +51,9 @@
                     {{ form_row(form.conditions) }}
                 </div>
             </div>
-            {{ form_end(form) }}
+            {{ form_row(form._token) }}
+            {{ form_row(form.save) }}
+            {{ form_end(form, {'render_rest': false}) }}
         </div>
     </div>
 {% endblock %}
