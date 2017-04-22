@@ -7,3 +7,8 @@ dso_check_facebook:
     pattern:  /login/check-facebook
     defaults: { _controller: DsoHomeBundle:Home:checkFacebook }
     methods:  [GET]
+
+dso_search_form:
+    pattern:  /search
+    defaults: { _controller: DsoHomeBundle:Home:search }
+    methods:  [POST]

@@ -129,6 +129,13 @@ class FilterResults
             $constellation[0] = 0;
         }
 
+        // Fine tuning for searching nebula.
+        if ($type[0] == 'other'){
+            // Add the other available types of nebula.
+            $type[] = 'brtnb';
+            $type[] = 'drknb';
+            $type[] = 'cl+nb';
+        }
 
         $stmt = $this->mysqlService->getConn()->executeQuery(
             $sql,
@@ -144,6 +151,49 @@ class FilterResults
                 $typeConst,
                 $typeDsoObjects
             )
+        );
+
+        $paginatedResults = $this->paginator->paginate(
+            $stmt->fetchAll(),
+            $this->pageLimit,
+            $this->resultsPerPage
+        );
+
+        return $paginatedResults;
+    }
+
+    public function retrieveSearchResults($page, $keywords)
+    {
+        $this->pageLimit = $page;
+        $sql = "
+        SELECT
+            source.id as `id`,
+            source.name as `Name1`,
+            source.other_name as `Name2`,
+            source.type as `ObjType`,
+            source.constellation as `Constellation`,
+            source.mag as `ObjMagnitude`,
+            source.size_min as `ObjMinSize`,
+            source.size_max as `ObjMaxSize`,
+            source.ngc_description as `Ngc_desc`,
+            source.notes as `Other_notes`,
+            IFNULL(img.thumb, 'no_image_available.png') as `thumb`,
+            IFNULL(img.full_size, 'no_image_available_large.png') as `full_size`
+        FROM `{$this->baseTable}` as source
+        LEFT JOIN `{$this->imagePathsTable}` as img
+            ON img.object_id = source.id
+        WHERE
+        name LIKE ? OR
+        other_name LIKE ? OR
+        notes LIKE ?
+        ORDER BY
+            `mag`";
+
+        $keyword = "%$keywords%";
+        $stmt = $this->mysqlService->getConn()->executeQuery(
+            $sql,
+            array($keyword, $keyword, $keyword),
+            array(\PDO::PARAM_STR, \PDO::PARAM_STR, \PDO::PARAM_STR)
         );
 
         $paginatedResults = $this->paginator->paginate(
