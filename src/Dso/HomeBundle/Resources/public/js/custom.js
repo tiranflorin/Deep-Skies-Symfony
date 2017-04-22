@@ -11,7 +11,6 @@ if (bootstrap2Pagination) {
     Datetimepicker handlers.
  */
 if (undefined !== $('#datetimepicker').val()) {
-    debugger;
     $('#datetimepicker').datetimepicker({
         format:'Y-m-d H:i',
         startDate:new Date(),
@@ -20,7 +19,6 @@ if (undefined !== $('#datetimepicker').val()) {
     });
 }
 if (undefined !== $('#form_start').val()) {
-    debugger;
     $('#form_start').datetimepicker({
         format:'Y-m-d H:i',
         startDate:new Date(),
@@ -29,7 +27,6 @@ if (undefined !== $('#form_start').val()) {
     });
 }
 if (undefined !== $('#form_end').val()) {
-    debugger;
     $('#form_end').datetimepicker({
         format:'Y-m-d H:i',
         startDate:new Date(),

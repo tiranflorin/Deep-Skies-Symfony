@@ -128,8 +128,19 @@ class PlannerController extends Controller
         if (null !==  $user->getCurrentObservingSiteId()) {
             $observingSite = $em->find('Dso\UserBundle\Entity\ObservingSite', $user->getCurrentObservingSiteId());
         }
+
+        $timezones = array();
+        $timestamp = time();
+        $zones = \DateTimeZone::listIdentifiers(\DateTimeZone::ALL);
+        foreach ($zones as $key => $zone) {
+            date_default_timezone_set($zone);
+            $timezones[$key]['zone'] = $zone;
+            $timezones[$key]['diff_from_GMT'] = 'UTC/GMT ' . date('P', $timestamp);
+        }
+
         return $this->render('DsoPlannerBundle:Planner:location_form.html.twig', array(
-            'currentObservingSite' => $observingSite
+            'currentObservingSite' => $observingSite,
+            'timezones' => $timezones
         ));
     }
 
