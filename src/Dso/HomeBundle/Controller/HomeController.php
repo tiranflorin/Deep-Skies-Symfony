@@ -13,9 +13,9 @@ class HomeController extends Controller
         return $this->render('DsoHomeBundle:Home:index.html.twig');
     }
 
-    public function termsAndAgreementAction()
+    public function termsAndConditionsAction()
     {
-        return $this->render('DsoHomeBundle:Home:terms_and_agreement.html.twig');
+        return $this->render('DsoHomeBundle:Home:terms_and_conditions.html.twig');
     }
 
     public function checkFacebookAction()

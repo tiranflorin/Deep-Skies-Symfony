@@ -380,3 +380,13 @@ li.obs-log-menu-delimiter {
     margin-left: 15px;
     margin-top: 10px;
 }
+
+.navbar-brand {
+    padding: 0;
+}
+
+.navbar-brand>img {
+    width: 90px;
+    margin-left: 50px;
+
+}
