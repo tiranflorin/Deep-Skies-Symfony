@@ -3,6 +3,11 @@ dso_home_homepage:
     defaults: { _controller: DsoHomeBundle:Home:index }
     methods:  [GET]
 
+dso_home_terms_and_agreement:
+    pattern:  /terms-and-agreement
+    defaults: { _controller: DsoHomeBundle:Home:termsAndAgreement }
+    methods:  [GET]
+
 dso_check_facebook:
     pattern:  /login/check-facebook
     defaults: { _controller: DsoHomeBundle:Home:checkFacebook }

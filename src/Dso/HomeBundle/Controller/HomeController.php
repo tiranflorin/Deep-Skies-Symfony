@@ -13,6 +13,11 @@ class HomeController extends Controller
         return $this->render('DsoHomeBundle:Home:index.html.twig');
     }
 
+    public function termsAndAgreementAction()
+    {
+        return $this->render('DsoHomeBundle:Home:terms_and_agreement.html.twig');
+    }
+
     public function checkFacebookAction()
     {
         // TODO: Further check why this route is mandatory </login/check-facebook>
