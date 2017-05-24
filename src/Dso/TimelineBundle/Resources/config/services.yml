@@ -1,0 +1,8 @@
+services:
+
+    dso_timeline.create_event_subscriber:
+        class: Dso\TimelineBundle\EventListener\TimelineEventSubscriber
+        calls:
+            - [setEm, ["@doctrine.orm.entity_manager"]]
+        tags:
+            - { name: kernel.event_subscriber }

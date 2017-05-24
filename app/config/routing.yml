@@ -30,6 +30,10 @@ dso_planner:
     resource: "@DsoPlannerBundle/Resources/config/routing.yml"
     prefix:   /
 
+dso_timeline:
+    resource: "@DsoTimelineBundle/Resources/config/routing.yml"
+    prefix:   /
+
 fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"
     prefix:   /auth

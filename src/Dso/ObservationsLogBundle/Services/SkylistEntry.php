@@ -170,6 +170,7 @@ class SkylistEntry {
             'end' => new \DateTime('now', new \DateTimeZone('UTC')),
             'equipment' => '',
             'conditions' => '',
+            'visibilityLevel' => 'private',
         );
         $merged = array_merge($defaults, $details);
 
@@ -181,6 +182,7 @@ class SkylistEntry {
         $obsList->setConditions($merged['conditions']);
         $obsList->setUserId($merged['userId']);
         $obsList->setLocationId($merged['locationId']);
+        $obsList->setVisibilityLevel($merged['visibilityLevel']);
 
         $this->em->persist($obsList);
         $this->em->flush();

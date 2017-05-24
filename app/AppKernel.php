@@ -17,25 +17,26 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new FOS\UserBundle\FOSUserBundle(),
-            new Dso\PlannerBundle\DsoPlannerBundle(),
-            new Dso\HomeBundle\DsoHomeBundle(),
-            new Dso\UserBundle\DsoUserBundle(),
-            new Dso\ObservationsLogBundle\DsoObservationsLogBundle(),
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
-            new Dso\SearchBundle\DsoSearchBundle(),
             new Lexik\Bundle\FormFilterBundle\LexikFormFilterBundle(),
-            new JordiLlonch\Bundle\CrudGeneratorBundle\JordiLlonchCrudGeneratorBundle(),
             new Ob\HighchartsBundle\ObHighchartsBundle(),
             new Braincrafted\Bundle\BootstrapBundle\BraincraftedBootstrapBundle(),
             new Tetranz\Select2EntityBundle\TetranzSelect2EntityBundle(),
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
             new Uran1980\FancyBoxBundle\Uran1980FancyBoxBundle(),
+            new Dso\HomeBundle\DsoHomeBundle(),
+            new Dso\UserBundle\DsoUserBundle(),
+            new Dso\SearchBundle\DsoSearchBundle(),
+            new Dso\PlannerBundle\DsoPlannerBundle(),
+            new Dso\ObservationsLogBundle\DsoObservationsLogBundle(),
+            new Dso\TimelineBundle\DsoTimelineBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
+            $bundles[] = new JordiLlonch\Bundle\CrudGeneratorBundle\JordiLlonchCrudGeneratorBundle();
         }
 
         return $bundles;

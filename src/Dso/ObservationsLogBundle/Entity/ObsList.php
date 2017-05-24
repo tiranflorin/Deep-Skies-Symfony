@@ -45,6 +45,9 @@ class ObsList
     /** @ORM\Column(type="string", nullable=TRUE) */
     protected $conditions;
 
+    /** @ORM\Column(type="string", nullable=TRUE, name="visibility_level") */
+    protected $visibilityLevel;
+
     /**
      * @ORM\ManyToOne(targetEntity="DeepSkyItem", inversedBy="obsLists")
      * @ORM\JoinColumn(name="object_id", referencedColumnName="id")
@@ -262,5 +265,25 @@ class ObsList
     public function getEnd()
     {
         return $this->end;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVisibilityLevel()
+    {
+        return $this->visibilityLevel;
+    }
+
+    /**
+     * @param string $visibilityLevel
+     *
+     * @return ObsList
+     */
+    public function setVisibilityLevel($visibilityLevel)
+    {
+        $this->visibilityLevel = $visibilityLevel;
+
+        return $this;
     }
 }

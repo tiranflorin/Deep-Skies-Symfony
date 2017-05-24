@@ -1,0 +1,11 @@
+dso_timeline:
+    pattern:  /timeline
+    defaults: { _controller: DsoTimelineBundle:Timeline:index }
+    methods:  [GET]
+
+dso_timeline_observing_list_items:
+    pattern:  /timeline-obs-list-items
+    defaults: { _controller: DsoTimelineBundle:Timeline:obsListItems }
+    methods:  [GET]
+    requirements:
+        obsListId: '\d+'

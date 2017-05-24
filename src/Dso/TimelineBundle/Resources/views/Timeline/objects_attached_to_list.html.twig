@@ -1,0 +1,10 @@
+{% for loggedObj in loggedObjects %}
+
+    {% if loggedObj.otherName is empty %}
+        {{ loggedObj.name }}
+    {% else %}
+        <strong>{{ loggedObj.otherName }}</strong> (<em>{{ loggedObj.name }}</em>)
+    {% endif %}
+
+    {% if not loop.last %}, {% endif %}
+{% endfor %}

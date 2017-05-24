@@ -4,6 +4,7 @@ namespace Dso\ObservationsLogBundle\Controller;
 
 use Dso\ObservationsLogBundle\Services\SkylistEntry;
 use Dso\PlannerBundle\Services\SQL\MySqlService;
+use Dso\TimelineBundle\Event\CreateTimelineEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,6 +38,10 @@ class EntriesController extends Controller
             ->add('locationId', 'choice', array(
                 'choices'  => $this->buildLocationChoices(),
                 'label' => 'Location (Select from observing sites defined on your profile)'
+            ))
+            ->add('visibilityLevel', 'choice', array(
+                'choices'  => array('private' => 'Private', 'public' => 'Public'),
+                'label' => 'Visibility Level (Public actions will be made visible for everyone)'
             ))
             ->add('start', 'text')
             ->add('end', 'text')
@@ -97,6 +102,10 @@ class EntriesController extends Controller
                 'choices'  => $this->buildLocationChoices(),
                 'label' => 'Location (Select from observing sites defined on your profile)'
             ))
+            ->add('visibilityLevel', 'choice', array(
+                'choices'  => array('private' => 'Private', 'public' => 'Public'),
+                'label' => 'Visibility Level (Public actions will be made visible for everyone)'
+            ))
             ->add('save', 'submit', array('label' => 'Import', 'attr' => array('class'=>'btn btn-primary')))
             ->getForm();
         $form->handleRequest($request);
@@ -108,7 +117,7 @@ class EntriesController extends Controller
             if ('skylist' !== $uploadedFile->getClientOriginalExtension()) {
                 $request->getSession()->getFlashBag()->add(
                     'error',
-                    'Invalid file! Onky "skylist" entries allowed.'
+                    'Invalid file! Only "skylist" entries allowed.'
                 );
 
                 return $this->redirect($this->generateUrl('dso_observations_log_entries_import_external'));
@@ -127,9 +136,24 @@ class EntriesController extends Controller
             $listId = $skylistService->createObservingList(array(
                     'name' => $uploadedFile->getClientOriginalName(),
                     'userId' =>  $userId,
-                    'locationId' => $data['locationId']
+                    'locationId' => $data['locationId'],
+                    'visibilityLevel' => $data['visibilityLevel']
                 )
             );
+
+            if ($data['visibilityLevel'] === 'public') {
+                $this->get('event_dispatcher')->dispatch(
+                    CreateTimelineEvent::CREATE_TIMELINE_EVENT,
+                    new CreateTimelineEvent(
+                        array(
+                            'name' => 'Observation log added (processed from SkySafari list)',
+                            'userId' => $userId,
+                            'obsListId' => $listId
+                        )
+                    )
+                );
+            }
+
             $skylistService->persistDsos($skylistService->parseContent($content), $userId, $listId);
             $request->getSession()->getFlashBag()->add('notice', 'Your file has been uploaded and processed!');
 
@@ -195,8 +219,23 @@ class EntriesController extends Controller
                 'end' => $data->getEnd(),
                 'equipment' => $data->getEquipment(),
                 'conditions' => $data->getConditions(),
+                'visibilityLevel' => $data->getVisibilityLevel(),
             )
         );
+
+        if ($data->getVisibilityLevel() === 'public') {
+            $user = $this->get('security.context')->getToken()->getUser();
+            $this->get('event_dispatcher')->dispatch(
+                CreateTimelineEvent::CREATE_TIMELINE_EVENT,
+                new CreateTimelineEvent(
+                    array(
+                        'name' => 'Observation log added (manual entry)',
+                        'userId' => $user->getId(),
+                        'obsListId' => $listId
+                    )
+                )
+            );
+        }
 
         $i = 0;
         $batchSize = 20;
