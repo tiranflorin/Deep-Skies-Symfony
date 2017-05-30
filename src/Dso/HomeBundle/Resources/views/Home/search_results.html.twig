@@ -46,9 +46,12 @@
                                         </div>
                                     </div>
                                 </div>
+                                {#Feature not available without a logged in user. #}
+                                {% if app.user %}
                                 <div class="col-lg-1 col-md-1 col-sm-1">
                                     <button class="add-item-to-list" data-dsoId="{{ object.id }}" type="button" title="Add item to observing list"> + </button>
                                 </div>
+                                {% endif %}
                             </div>
                         {% endfor %}
 

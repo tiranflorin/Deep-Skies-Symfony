@@ -1,40 +1,95 @@
 {% extends 'base.html.twig' %}
 {% block jumbotronBlock %}
-<div class="row">
-    <div class="col-lg-12 col-sm-12 col-xs-12 main">
-    <div class="jumbotron">
-        <div class="container">
-            {% for flashMessage in app.session.flashbag.get('warning') %}
-                <div class="alert alert-warning alert-dismissable" style="margin-top: 15px;">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <strong>Warning.</strong> {{ flashMessage }}
+    <div class="row">
+        <div class="col-lg-12 col-sm-12 col-xs-12 main">
+            <div class="jumbotron">
+                <div class="container">
+                    {% for flashMessage in app.session.flashbag.get('warning') %}
+                        <div class="alert alert-warning alert-dismissable" style="margin-top: 15px;">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                            <strong>Warning.</strong> {{ flashMessage }}
+                        </div>
+                    {% endfor %}
+                    <h1>Welcome to Deep-Skies.com</h1>
+
+                    <p class="lead text-right">
+                        A community of amateur astronomers passionate about deep sky objects.
+                    </p>
+
+                    <p class="lead">Available tools:</p>
+
+                    <div class="list-group">
+                        <a href="{{ path('dso_planner_homepage') }}" class="list-group-item">
+                            <p class="list-group-item-text">
+                                <span class="label label-default"><strong>Planner</strong></span>
+                                A quick and easy to use tool for planning your observing sessions.
+                            </p>
+                        </a>
+                        <a href="{{ path('dso_observations_log_homepage') }}" class="list-group-item">
+                            <p class="list-group-item-text">
+                                <span class="label label-default"><strong>Observations Log</strong></span>
+                                Save all your observations in one place, view entries,
+                                manage equipment, import data and more.
+                            </p>
+                        </a>
+                    </div>
+                    {% if not app.user and not is_granted('ROLE_USER') %}
+                        <p class="lead">If you don't already have an account, sign up here:<a
+                                    href="{{ path('fos_user_registration_register') }}"> Register</a></p>
+                    {% endif %}
                 </div>
-            {% endfor %}
-            <h1>Welcome to Deep-Skies.com</h1>
-            <p class="lead">
-                A community of amateur astronomers passionate about deep sky objects.
-            </p>
-            <p class="lead">Available tools:</p>
-            <div class="list-group">
-                <a href="{{ path('dso_planner_homepage') }}" class="list-group-item">
-                    <p class="list-group-item-text">
-                        <span class="label label-default"><strong>Planner</strong></span>
-                        A quick and easy to use tool for planning your observing sessions.
-                    </p>
-                </a>
-                <a href="{{ path('dso_observations_log_homepage') }}" class="list-group-item">
-                    <p class="list-group-item-text">
-                        <span class="label label-default"><strong>Observations Log</strong></span>
-                        Save all your observations in one place, view log entries,
-                        manage equipment, import data and more.
-                    </p>
-                </a>
             </div>
-            {% if not app.user and not is_granted('ROLE_USER') %}
-                <p class="lead">If you don't already have an account, sign up here:<a href="{{ path('fos_user_registration_register') }}"> Register</a></p>
-            {% endif %}
         </div>
     </div>
+{% endblock %}
+{% block mainContent %}
+    <div class="row">
+        <div class="col-lg-12 col-sm-12 col-xs-12 main">
+            <div class="jumbotron">
+                <p class="home-showcase ">Metrics based on your logged deep-sky objects available on a dashboard:</p>
+
+                <div class="row">
+                    <div class="col-lg-4 col-sm-10 col-xs-12 main">
+                        <a href="{{ path('dso_observations_log_homepage') }}">
+                            <img src="{{ asset('bundles/dsohome/images/by_category.png') }}" class="img-responsive">
+                        </a>
+                    </div>
+                    <div class="col-lg-4 col-sm-10 col-xs-12 main">
+                        <a href="{{ path('dso_observations_log_homepage') }}">
+                            <img src="{{ asset('bundles/dsohome/images/by_most_watched.png') }}" class="img-responsive">
+                        </a>
+                    </div>
+                    <div class="col-lg-4 col-sm-10 col-xs-12 main">
+                        <a href="{{ path('dso_observations_log_homepage') }}">
+                            <img src="{{ asset('bundles/dsohome/images/by_sessions_per_year.png') }}"
+                                 class="img-responsive">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-sm-12 col-xs-12 main">
+
+            <div class="jumbotron">
+                <p class="home-showcase ">Certain actions can be made public - they will be showcased on
+                    timeline:</p>
+
+                <div class="row">
+                    <div class="col-lg-6 col-sm-10 col-xs-12">
+                        <a href="{{ path('dso_timeline') }}">
+                            <img src="{{ asset('bundles/dsohome/images/timeline_third.png') }}" class="img-responsive">
+                        </a>
+                    </div>
+                    <div class="col-lg-6 col-sm-10 col-xs-12">
+                        <a href="{{ path('dso_timeline') }}">
+                            <img src="{{ asset('bundles/dsohome/images/timeline_first.png') }}" class="img-responsive">
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}
