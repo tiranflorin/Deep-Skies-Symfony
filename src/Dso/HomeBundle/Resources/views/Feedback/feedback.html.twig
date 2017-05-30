@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 {% block mainContent %}
-    <form action="{{ path('dso_planner_feedback') }}" method="post" {{ form_enctype(form) }}>
+    <form action="{{ path('dso_home_feedback') }}" method="post" {{ form_enctype(form) }}>
         {{ form_widget(form) }}
     </form>
 {% endblock %}

@@ -1,14 +1,14 @@
 <?php
 
-namespace Dso\PlannerBundle\Entity;
+namespace Dso\HomeBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Feedback
  *
+ * @ORM\Entity
  * @ORM\Table(name="feedback")
- * @ORM\Entity(repositoryClass="Dso\PlannerBundle\Entity\FeedbackRepository")
  */
 class Feedback
 {

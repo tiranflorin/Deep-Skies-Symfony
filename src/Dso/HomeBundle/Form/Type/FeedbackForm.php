@@ -1,6 +1,6 @@
 <?php
 
-namespace Dso\PlannerBundle\Form\Type;
+namespace Dso\HomeBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;

@@ -13,16 +13,6 @@ dso_planner_custom_filter:
     defaults: { _controller: DsoPlannerBundle:Planner:filterCustom }
     methods:  [GET]
 
-dso_planner_feedback:
-    pattern:  /feedback/
-    defaults: { _controller: DsoPlannerBundle:Feedback:feedback }
-    methods:  [GET, POST]
-
-dso_planner_feedback_sent:
-    pattern:  /feedback-sent/
-    defaults: { _controller: DsoPlannerBundle:Feedback:feedbacksent }
-    methods:  [GET]
-
 dso_planner_current_location_settings:
     pattern:  /planner/location_settings
     defaults: { _controller: DsoPlannerBundle:Planner:locationSettings }

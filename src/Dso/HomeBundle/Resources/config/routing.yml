@@ -17,3 +17,13 @@ dso_search_form:
     pattern:  /search
     defaults: { _controller: DsoHomeBundle:Home:search }
     methods:  [POST]
+
+dso_home_feedback:
+    pattern:  /feedback/
+    defaults: { _controller: DsoHomeBundle:Feedback:feedback }
+    methods:  [GET, POST]
+
+dso_home_feedback_sent:
+    pattern:  /feedback-sent/
+    defaults: { _controller: DsoHomeBundle:Feedback:feedbacksent }
+    methods:  [GET]

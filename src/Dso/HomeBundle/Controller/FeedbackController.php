@@ -1,9 +1,9 @@
 <?php
 
-namespace Dso\PlannerBundle\Controller;
+namespace Dso\HomeBundle\Controller;
 
-use Dso\PlannerBundle\Entity\Feedback;
-use Dso\PlannerBundle\Form\Type\FeedbackForm;
+use Dso\HomeBundle\Entity\Feedback;
+use Dso\HomeBundle\Form\Type\FeedbackForm;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -25,7 +25,7 @@ class FeedbackController extends Controller
                     ->setTo($this->container->getParameter('administrator_email'))
                     ->setBody(
                         $this->renderView(
-                            'DsoPlannerBundle:Feedback:email_template.html.twig',
+                            'DsoHomeBundle:Feedback:email_template.html.twig',
                             array(
                                 'name' => $feedbackEntity->getName(),
                                 'message' => $feedbackEntity->getMessage()
@@ -40,17 +40,17 @@ class FeedbackController extends Controller
                 $em->persist($feedbackEntity);
                 $em->flush();
 
-                return $this->redirectToRoute('dso_planner_feedback_sent');
+                return $this->redirectToRoute('dso_home_feedback_sent');
             }
         }
 
-        return $this->render('DsoPlannerBundle:Feedback:feedback.html.twig', array(
+        return $this->render('DsoHomeBundle:Feedback:feedback.html.twig', array(
             'form' => $form->createView()
         ));
     }
 
     public function feedbacksentAction()
     {
-        return $this->render('DsoPlannerBundle:Feedback:feedback_sent.html.twig');
+        return $this->render('DsoHomeBundle:Feedback:feedback_sent.html.twig');
     }
 }
