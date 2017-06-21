@@ -411,3 +411,7 @@ li.obs-log-menu-delimiter {
     margin-bottom: -10px;
     margin-top: 10px;
 }
+
+.jumbotron .container {
+    width: 97%;
+}
