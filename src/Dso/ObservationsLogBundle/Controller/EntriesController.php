@@ -180,7 +180,7 @@ class EntriesController extends Controller
             `logged`.`comment`,
             `logged`.`observedAt`,
             `obs_lists`.`name` AS 'obsList'
-        FROM `deep-skies-sym`.logged_objects AS `logged`
+        FROM `" . $this->container->getParameter('database_name') . "`.logged_objects AS `logged`
         LEFT JOIN `object` AS `obj`
             ON `logged`.`obj_id` = `obj`.`id`
         LEFT JOIN `obs_lists`

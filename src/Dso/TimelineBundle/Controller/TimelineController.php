@@ -23,7 +23,7 @@ class TimelineController extends Controller
             obs_lists.name as 'obsListName',
             obs_lists.equipment as 'obsEquipment',
             obs_lists.conditions as 'obsConditions'
-        FROM `deep-skies-sym`.timeline_events AS `timeline`
+        FROM `" . $this->container->getParameter('database_name') . "`.timeline_events AS `timeline`
         LEFT JOIN `obs_lists`
             ON `timeline`.`obs_list_id` = `obs_lists`.`id`
         LEFT JOIN `fos_user`

@@ -71,7 +71,7 @@ class DiagramData {
             SELECT
             COUNT(*) as sessions_per_year,
             YEAR(start) as corresponding_year
-            FROM `deep-skies-sym`.obs_lists
+            FROM `" . $this->em->getConnection()->getDatabase() . "`.obs_lists
             WHERE user_id = (:userId) and YEAR(start) != 0
             GROUP BY corresponding_year
             ORDER BY corresponding_year DESC
