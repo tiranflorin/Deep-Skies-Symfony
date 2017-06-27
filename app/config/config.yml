@@ -49,6 +49,7 @@ assetic:
             node_paths: [/usr/lib/node_modules]
             apply_to: "\.less$"
         cssrewrite: ~
+    read_from: '%kernel.root_dir%/../public_html'
 
 # Doctrine Configuration
 doctrine:

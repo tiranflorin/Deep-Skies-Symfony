@@ -1,6 +1,6 @@
 # Symfony2 specific
 ###############################
-/web/bundles/*
+/public_html/bundles/*
 /app/bootstrap.php.cache
 /app/cache/*
 /app/config/parameters.yml
@@ -18,7 +18,7 @@
 # Application specific
 ###############################
 /ngcPics/*
-/web/images/ngcPics/*
-/web/css/*
-/web/js/*
-/web/fonts/*
+/public_html/images/ngcPics/*
+/public_html/css/*
+/public_html/js/*
+/public_html/fonts/*
