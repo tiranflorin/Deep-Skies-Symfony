@@ -6,6 +6,18 @@
             <form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register form-signin">
                 <h2 class="form-signin-heading text-center">Please sign up</h2>
                 <div id="fos_user_registration_form">
+
+                    {% if app.request.hasPreviousSession %}
+                        {% for type, messages in app.session.flashBag.all %}
+                            {% for message in messages %}
+                                <div class="{{ type }}">
+                                    {{ message|trans({}, 'FOSUserBundle') }}
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                    {% endif %}
+
+
                     <input type="email" id="fos_user_registration_form_email" name="fos_user_registration_form[email]" class="form-control" required="required" placeholder="Email">
                     <input type="text" id="fos_user_registration_form_username" name="fos_user_registration_form[username]" class="form-control" required="required" maxlength="255" pattern=".{2,}" placeholder="Username">
                     <input type="password" id="fos_user_registration_form_plainPassword_first" name="fos_user_registration_form[plainPassword][first]" class="form-control" required="required" placeholder="Password" style="margin-bottom: 0;">

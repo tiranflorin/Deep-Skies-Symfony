@@ -4,6 +4,7 @@ namespace Dso\UserBundle\Entity;
 
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class User
@@ -32,6 +33,16 @@ class User extends BaseUser
     private $facebookID;
 
     private $facebookAccessToken;
+
+    /**
+     * @var string
+     *
+     * @Assert\Email(
+     *     message = "The email '{{ value }}' is not a valid email.",
+     *     checkMX = true
+     * )
+     */
+    protected $email;
 
     /**
      * @ORM\Column(name="current_observing_site_id", type="integer", nullable=TRUE)
