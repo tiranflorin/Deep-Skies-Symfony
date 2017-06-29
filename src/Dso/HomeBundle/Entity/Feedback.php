@@ -3,6 +3,7 @@
 namespace Dso\HomeBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Feedback
@@ -32,6 +33,11 @@ class Feedback
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=60)
+     *
+     * @Assert\Email(
+     *     message = "The email '{{ value }}' is not a valid email.",
+     *     checkMX = true
+     * )
      */
     private $email;
 

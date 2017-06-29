@@ -21,13 +21,14 @@ class FeedbackController extends Controller
                 $mailer = $this->get('mailer');
                 $message = $mailer->createMessage()
                     ->setSubject('[Deep-Skies.com] Feedback')
-                    ->setFrom($feedbackEntity->getEmail())
+                    ->setFrom($this->container->getParameter('mailer_user'))
                     ->setTo($this->container->getParameter('administrator_email'))
                     ->setBody(
                         $this->renderView(
                             'DsoHomeBundle:Feedback:email_template.html.twig',
                             array(
                                 'name' => $feedbackEntity->getName(),
+                                'email' => $feedbackEntity->getEmail(),
                                 'message' => $feedbackEntity->getMessage()
                             )
                         ),
