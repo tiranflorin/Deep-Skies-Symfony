@@ -133,9 +133,14 @@ class EntriesController extends Controller
                 return $this->redirect($this->generateUrl('dso_observations_log_entries_import_external'));
             }
 
+            $parsedContent = $skylistService->parseContent($content);
+            /** @var LoggedObject $firstObservedItem */
+            $firstObservedItem = reset($parsedContent);
             $listId = $skylistService->createObservingList(array(
                     'name' => $uploadedFile->getClientOriginalName(),
                     'userId' =>  $userId,
+                    'start' => $firstObservedItem->getObservedAt(),
+                    'end' => $firstObservedItem->getObservedAt(),
                     'locationId' => $data['locationId'],
                     'visibilityLevel' => $data['visibilityLevel']
                 )
@@ -154,7 +159,7 @@ class EntriesController extends Controller
                 );
             }
 
-            $skylistService->persistDsos($skylistService->parseContent($content), $userId, $listId);
+            $skylistService->persistDsos($parsedContent, $userId, $listId);
             $request->getSession()->getFlashBag()->add('notice', 'Your file has been uploaded and processed!');
 
             return $this->redirect($this->generateUrl('dso_observations_log_entries_import_external'));
