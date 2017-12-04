@@ -42,7 +42,7 @@ twig:
 assetic:
     debug: "%kernel.debug%"
     use_controller: false
-    bundles: [ DsoHomeBundle, DsoPlannerBundle, DsoObservationsLogBundle, FOSUserBundle, TwigBundle ]
+    bundles: [ DsoHomeBundle, DsoPlannerBundle, DsoObservationsLogBundle, DsoTimelineBundle, FOSUserBundle, TwigBundle ]
     filters:
         less:
             node: /usr/bin/node

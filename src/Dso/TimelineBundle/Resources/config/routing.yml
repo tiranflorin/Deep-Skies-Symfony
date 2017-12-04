@@ -4,8 +4,15 @@ dso_timeline:
     methods:  [GET]
 
 dso_timeline_observing_list_items:
-    pattern:  /timeline-obs-list-items
+    pattern:  /timeline-obs-list-items/{obsListId}
     defaults: { _controller: DsoTimelineBundle:Timeline:obsListItems }
+    methods:  [GET]
+    requirements:
+        obsListId: '\d+'
+
+dso_shareable_observing_list:
+    pattern:  /observing-list/{observingListId}
+    defaults: { _controller: DsoTimelineBundle:Timeline:shareableObsList }
     methods:  [GET]
     requirements:
         obsListId: '\d+'
