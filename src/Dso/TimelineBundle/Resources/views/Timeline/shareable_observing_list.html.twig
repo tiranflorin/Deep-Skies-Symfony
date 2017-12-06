@@ -20,34 +20,54 @@
 
 {% block mainContent %}
     {% if event %}
-        <div>
-            <h2 id="timeline" style="margin-top: 0; padding-top: 0;">{{ event.obsListName }}</h2>
-            <p>Shared by: <strong>{{ event.username }}</strong></p>
-            <div class="timeline-heading">
-                <span><i class="fa fa-clock-o fa-2x"></i> {{ event.addedOn|date('M d Y - H:i') }}</span>
-                <h4 class="timeline-title" style="margin-top: 10px">{{ event.eventName }}</h4>
-            </div>
-            {% if event.obsEquipment is not empty %}
-                <p>Equipment used: {{ event.obsEquipment }}</p>
-            {% endif %}
-            {% if event.obsConditions is not empty %}<p>
-                <p>Overall observing conditions: {{ event.obsConditions }}</p>
-            {% endif %}
-
-            {% if app.user %}
-                {% if app.user.id == event.id  %}
-                    {#Only display the share button for the owner of the Obs Log#}
-                    <div class="fb-share-button"
-                         data-href="{{ url('dso_shareable_observing_list', {'observingListId' : event.obsListId}) }}"
-                         data-layout="button" data-size="large"
-                         data-mobile-iframe="true">
-                        <a class="fb-xfbml-parse-ignore" target="_blank"
-                           href="{{ url('dso_shareable_observing_list', {'observingListId' : event.obsListId}) }}">Share your observations</a>
+        <div class="row">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 id="timeline" style="margin-top: 0; margin-bottom: 0; padding-top: 0;">{{ event.obsListName }}</h2>
+                </div>
+                <div class="panel-body" style="padding-left: 0;">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <h4 class="timeline-title">{{ event.eventName }}</h4>
                     </div>
-                {% endif %}
-            {% endif %}
-
+                    <div class="col-lg-2 col-md-4 col-sm-6">
+                        <div class="timeline-heading">
+                            <span><i class="fa fa-clock-o fa-2x" style="vertical-align: middle;"></i> {{ event.addedOn|date('M d Y - H:i') }}</span>
+                        </div>
+                    </div>
+                    <div class="col-lg-10 col-md-8 col-sm-6">
+                        <p>Added by: <strong>{{ event.username }}</strong></p>
+                    </div>
+                    {% if event.obsEquipment is not empty %}
+                        <div class="col-lg-2 col-md-4 col-sm-6">
+                            <div class="timeline-heading">
+                                <span>Equipment used: {{ event.obsEquipment }}</span>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if event.obsConditions is not empty %}
+                        <div class="col-lg-10 col-md-8 col-sm-6">
+                            <span>Overall observing conditions: <strong>{{ event.obsConditions }}</strong></span>
+                        </div>
+                    {% endif %}
+                    <div class="col-lg-12 col-md-12 col-sm-12" style="margin-top: 5px">
+                        {% if app.user %}
+                            {% if app.user.id == event.id  %}
+                                {#Only display the share button for the owner of the Obs Log#}
+                                <div class="fb-share-button"
+                                     data-href="{{ url('dso_shareable_observing_list', {'observingListId' : event.obsListId}) }}"
+                                     data-layout="button" data-size="large"
+                                     data-mobile-iframe="true">
+                                    <a class="fb-xfbml-parse-ignore" target="_blank"
+                                       href="{{ url('dso_shareable_observing_list', {'observingListId' : event.obsListId}) }}">Share your observations</a>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
         </div>
+
+
         <div class="row">
             <div class="object-list">
                 <div class="panel panel-default">
