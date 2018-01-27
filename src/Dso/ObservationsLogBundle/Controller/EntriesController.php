@@ -177,10 +177,13 @@ class EntriesController extends Controller
         $paginator  = $this->get('knp_paginator');
         $sql = "
         SELECT
-            `obj`.`name`,
-            `obj`.`other_name` AS 'otherName',
+            `obj`.name as `name`,
+            `obj`.cat1 as `cat1`,
+            `obj`.id1 as `id1`,
+            `obj`.cat2 as `cat2`,
+            `obj`.id2 as `id2`,
             `obj`.`type`,
-            `obj`.`constellation`,
+            `obj`.`const`,
             `obj`.`name`,
             `logged`.`comment`,
             `logged`.`observedAt`,

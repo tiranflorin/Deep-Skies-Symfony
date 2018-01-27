@@ -33,9 +33,30 @@ class DeepSkyItem
     /**
      * @var string
      *
-     * @ORM\Column(name="other_name", type="string", length=255, nullable=false)
+     * @ORM\Column(name="cat1", type="string", length=255, nullable=false)
      */
-    private $otherName;
+    private $cat1;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="id1", type="string", length=255, nullable=false)
+     */
+    private $id1;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cat2", type="string", length=255, nullable=false)
+     */
+    private $cat2;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="id2", type="string", length=255, nullable=false)
+     */
+    private $id2;
 
     /**
      * @var string
@@ -47,37 +68,93 @@ class DeepSkyItem
     /**
      * @var string
      *
-     * @ORM\Column(name="constellation", type="string", length=255, nullable=false)
+     * @ORM\Column(name="const", type="string", length=255, nullable=false)
      */
     private $constellation;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="ra", type="string", length=255, nullable=false)
-     */
-    private $ra;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="dec", type="string", length=255, nullable=false)
-     */
-    private $dec;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="ra_float", type="string", length=30, nullable=false)
+     * @ORM\Column(name="rahour", type="string", length=30, nullable=false)
      */
     private $raFloat;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="dec_float", type="string", length=30, nullable=false)
+     * @ORM\Column(name="decdeg", type="string", length=30, nullable=false)
      */
     private $decFloat;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="rarad", type="string", length=30, nullable=false)
+     */
+    private $raRad;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="decrad", type="string", length=30, nullable=false)
+     */
+    private $decRad;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="databaseid", type="string", length=30, nullable=false)
+     */
+    private $databaseId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="semimajor", type="string", length=30, nullable=false)
+     */
+    private $semiMajor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="semiminor", type="string", length=30, nullable=false)
+     */
+    private $semiMinor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="semimajorangle", type="string", length=30, nullable=false)
+     */
+    private $semiMajorAngle;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="object_source", type="string", length=30, nullable=false)
+     */
+    private $objectSource;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="dupid", type="string", length=30, nullable=false)
+     */
+    private $dupId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="dupcat", type="string", length=30, nullable=false)
+     */
+    private $dupCat;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="display_mag", type="string", length=30, nullable=false)
+     */
+    private $displayMag;
 
     /**
      * @var string
@@ -89,79 +166,9 @@ class DeepSkyItem
     /**
      * @var string
      *
-     * @ORM\Column(name="subr", type="string", length=255, nullable=false)
+     * @ORM\Column(name="other_names", type="string", length=255, nullable=false)
      */
-    private $subr;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="u2k", type="string", length=255, nullable=false)
-     */
-    private $u2k;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="ti", type="string", length=255, nullable=false)
-     */
-    private $ti;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="size_max", type="string", length=255, nullable=false)
-     */
-    private $sizeMax;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="size_min", type="string", length=255, nullable=false)
-     */
-    private $sizeMin;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="pa", type="string", length=255, nullable=false)
-     */
-    private $pa;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="class", type="string", length=255, nullable=false)
-     */
-    private $class;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="nsts", type="string", length=255, nullable=false)
-     */
-    private $nsts;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="brstr", type="string", length=255, nullable=false)
-     */
-    private $brstr;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="bchm", type="string", length=255, nullable=false)
-     */
-    private $bchm;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="ngc_description", type="string", length=255, nullable=false)
-     */
-    private $ngcDescription;
+    private $otherName;
 
     /**
      * @var string
@@ -284,52 +291,6 @@ class DeepSkyItem
     }
 
     /**
-     * Set ra
-     *
-     * @param string $ra
-     * @return DeepSkyItem
-     */
-    public function setRa($ra)
-    {
-        $this->ra = $ra;
-
-        return $this;
-    }
-
-    /**
-     * Get ra
-     *
-     * @return string 
-     */
-    public function getRa()
-    {
-        return $this->ra;
-    }
-
-    /**
-     * Set dec
-     *
-     * @param string $dec
-     * @return DeepSkyItem
-     */
-    public function setDec($dec)
-    {
-        $this->dec = $dec;
-
-        return $this;
-    }
-
-    /**
-     * Get dec
-     *
-     * @return string 
-     */
-    public function getDec()
-    {
-        return $this->dec;
-    }
-
-    /**
      * Set raFloat
      *
      * @param string $raFloat
@@ -399,259 +360,6 @@ class DeepSkyItem
     }
 
     /**
-     * Set subr
-     *
-     * @param string $subr
-     * @return DeepSkyItem
-     */
-    public function setSubr($subr)
-    {
-        $this->subr = $subr;
-
-        return $this;
-    }
-
-    /**
-     * Get subr
-     *
-     * @return string 
-     */
-    public function getSubr()
-    {
-        return $this->subr;
-    }
-
-    /**
-     * Set u2k
-     *
-     * @param string $u2k
-     * @return DeepSkyItem
-     */
-    public function setU2k($u2k)
-    {
-        $this->u2k = $u2k;
-
-        return $this;
-    }
-
-    /**
-     * Get u2k
-     *
-     * @return string 
-     */
-    public function getU2k()
-    {
-        return $this->u2k;
-    }
-
-    /**
-     * Set ti
-     *
-     * @param string $ti
-     * @return DeepSkyItem
-     */
-    public function setTi($ti)
-    {
-        $this->ti = $ti;
-
-        return $this;
-    }
-
-    /**
-     * Get ti
-     *
-     * @return string 
-     */
-    public function getTi()
-    {
-        return $this->ti;
-    }
-
-    /**
-     * Set sizeMax
-     *
-     * @param string $sizeMax
-     * @return DeepSkyItem
-     */
-    public function setSizeMax($sizeMax)
-    {
-        $this->sizeMax = $sizeMax;
-
-        return $this;
-    }
-
-    /**
-     * Get sizeMax
-     *
-     * @return string 
-     */
-    public function getSizeMax()
-    {
-        return $this->sizeMax;
-    }
-
-    /**
-     * Set sizeMin
-     *
-     * @param string $sizeMin
-     * @return DeepSkyItem
-     */
-    public function setSizeMin($sizeMin)
-    {
-        $this->sizeMin = $sizeMin;
-
-        return $this;
-    }
-
-    /**
-     * Get sizeMin
-     *
-     * @return string 
-     */
-    public function getSizeMin()
-    {
-        return $this->sizeMin;
-    }
-
-    /**
-     * Set pa
-     *
-     * @param string $pa
-     * @return DeepSkyItem
-     */
-    public function setPa($pa)
-    {
-        $this->pa = $pa;
-
-        return $this;
-    }
-
-    /**
-     * Get pa
-     *
-     * @return string 
-     */
-    public function getPa()
-    {
-        return $this->pa;
-    }
-
-    /**
-     * Set class
-     *
-     * @param string $class
-     * @return DeepSkyItem
-     */
-    public function setClass($class)
-    {
-        $this->class = $class;
-
-        return $this;
-    }
-
-    /**
-     * Get class
-     *
-     * @return string 
-     */
-    public function getClass()
-    {
-        return $this->class;
-    }
-
-    /**
-     * Set nsts
-     *
-     * @param string $nsts
-     * @return DeepSkyItem
-     */
-    public function setNsts($nsts)
-    {
-        $this->nsts = $nsts;
-
-        return $this;
-    }
-
-    /**
-     * Get nsts
-     *
-     * @return string 
-     */
-    public function getNsts()
-    {
-        return $this->nsts;
-    }
-
-    /**
-     * Set brstr
-     *
-     * @param string $brstr
-     * @return DeepSkyItem
-     */
-    public function setBrstr($brstr)
-    {
-        $this->brstr = $brstr;
-
-        return $this;
-    }
-
-    /**
-     * Get brstr
-     *
-     * @return string 
-     */
-    public function getBrstr()
-    {
-        return $this->brstr;
-    }
-
-    /**
-     * Set bchm
-     *
-     * @param string $bchm
-     * @return DeepSkyItem
-     */
-    public function setBchm($bchm)
-    {
-        $this->bchm = $bchm;
-
-        return $this;
-    }
-
-    /**
-     * Get bchm
-     *
-     * @return string 
-     */
-    public function getBchm()
-    {
-        return $this->bchm;
-    }
-
-    /**
-     * Set ngcDescription
-     *
-     * @param string $ngcDescription
-     * @return DeepSkyItem
-     */
-    public function setNgcDescription($ngcDescription)
-    {
-        $this->ngcDescription = $ngcDescription;
-
-        return $this;
-    }
-
-    /**
-     * Get ngcDescription
-     *
-     * @return string 
-     */
-    public function getNgcDescription()
-    {
-        return $this->ngcDescription;
-    }
-
-    /**
      * Set notes
      *
      * @param string $notes
@@ -672,6 +380,82 @@ class DeepSkyItem
     public function getNotes()
     {
         return $this->notes;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCat1()
+    {
+        return $this->cat1;
+    }
+
+    /**
+     * @param string $cat1
+     * @return DeepSkyItem
+     */
+    public function setCat1($cat1)
+    {
+        $this->cat1 = $cat1;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getId1()
+    {
+        return $this->id1;
+    }
+
+    /**
+     * @param string $id1
+     * @return DeepSkyItem
+     */
+    public function setId1($id1)
+    {
+        $this->id1 = $id1;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCat2()
+    {
+        return $this->cat2;
+    }
+
+    /**
+     * @param string $cat2
+     * @return DeepSkyItem
+     */
+    public function setCat2($cat2)
+    {
+        $this->cat2 = $cat2;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getId2()
+    {
+        return $this->id2;
+    }
+
+    /**
+     * @param string $id2
+     * @return DeepSkyItem
+     */
+    public function setId2($id2)
+    {
+        $this->id2 = $id2;
+
+        return $this;
     }
 
     /**

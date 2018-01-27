@@ -54,19 +54,10 @@ class CreateVisibleObjectsTable
      */
     public function executeFlow()
     {
-        //create intermediary table:
         $this->createIntermediaryTable();
-
-        //insert data into intermediary table:
         $this->populateIntermediaryTable();
-
-        //create visible objects table:
         $this->createVisibleObjectsTable();
-
-        //calculate objects visible:
         $this->populateVisibleObjectsTable();
-
-        //delete intermediary table
         $this->deleteIntermediaryTable();
 
         $result = array(
@@ -116,7 +107,7 @@ class CreateVisibleObjectsTable
         SELECT
           *
         FROM `object`
-        WHERE dec_float > {$desiredDeclination}
+        WHERE decdeg > {$desiredDeclination}
         ";
 
         try {
@@ -146,8 +137,8 @@ class CreateVisibleObjectsTable
         $sSql = "
         SELECT
           `id`,
-          `ra_float`,
-          `dec_float`
+          `rahour`,
+          `decdeg`
         FROM `{$this->intermediaryTableName}`
         ";
 
@@ -158,8 +149,8 @@ class CreateVisibleObjectsTable
         }
 
         foreach ($results as $row) {
-            $iRa = $row['ra_float'];
-            $iDec = $row['dec_float'];
+            $iRa = $row['rahour'];
+            $iDec = $row['decdeg'];
             $aObjectInfo = $this->getObjectHorizontalCoordinates($iRa, $iDec, $this->lat, $this->long, $this->creation);
 
             $objId = $row['id'];
@@ -229,25 +220,26 @@ class CreateVisibleObjectsTable
         CREATE TABLE IF NOT EXISTS `{$this->intermediaryTableName}`(
          `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
          `name` varchar(255) CHARACTER SET latin1 NOT NULL DEFAULT '',
-         `other_name` varchar(255) CHARACTER SET latin1 NOT NULL DEFAULT '',
+         `other_names` varchar(255) CHARACTER SET latin1 NOT NULL DEFAULT '',
          `type` varchar(255) CHARACTER SET latin1 NOT NULL DEFAULT '',
-         `constellation` varchar(255) CHARACTER SET latin1 NOT NULL DEFAULT '',
-         `ra` varchar(255) CHARACTER SET latin1 NOT NULL DEFAULT '',
-         `dec` varchar(255) CHARACTER SET latin1 NOT NULL DEFAULT '',
-         `ra_float` varchar(30) CHARACTER SET latin1 NOT NULL,
-         `dec_float` varchar(30) CHARACTER SET latin1 NOT NULL,
+         `const` varchar(255) CHARACTER SET latin1 NOT NULL DEFAULT '',
+         `id1` varchar(255) CHARACTER SET latin1,
+         `id2` varchar(255) CHARACTER SET latin1,
+         `cat1` varchar(30) CHARACTER SET latin1,
+         `cat2` varchar(30) CHARACTER SET latin1,
+         `rahour` varchar(30) CHARACTER SET latin1,
+         `decdeg` varchar(30) CHARACTER SET latin1,
+         `rarad` varchar(30) CHARACTER SET latin1,
+         `decrad` varchar(30) CHARACTER SET latin1,
+         `databaseid` varchar(255) CHARACTER SET latin1,
+         `semimajor` varchar(255) CHARACTER SET latin1,
+         `semininor` varchar(255) CHARACTER SET latin1,
+         `semimajorangle` varchar(255) CHARACTER SET latin1,
+         `object_source` varchar(255) CHARACTER SET latin1,
+         `dupid` varchar(255) CHARACTER SET latin1,
+         `dupcat` varchar(255) CHARACTER SET latin1,
+         `display_mag` varchar(255) CHARACTER SET latin1,
          `mag` decimal(3,1) NOT NULL DEFAULT '0.0',
-         `subr` varchar(255) CHARACTER SET latin1 NOT NULL DEFAULT '',
-         `u2k` varchar(255) CHARACTER SET latin1 NOT NULL DEFAULT '',
-         `ti` varchar(255) CHARACTER SET latin1 NOT NULL DEFAULT '',
-         `size_max` varchar(255) CHARACTER SET latin1 NOT NULL DEFAULT '',
-         `size_min` varchar(255) CHARACTER SET latin1 NOT NULL DEFAULT '',
-         `pa` varchar(255) CHARACTER SET latin1 NOT NULL DEFAULT '',
-         `class` varchar(255) CHARACTER SET latin1 NOT NULL DEFAULT '',
-         `nsts` varchar(255) CHARACTER SET latin1 NOT NULL DEFAULT '',
-         `brstr` varchar(255) CHARACTER SET latin1 NOT NULL DEFAULT '',
-         `bchm` varchar(255) CHARACTER SET latin1 NOT NULL DEFAULT '',
-         `ngc_description` varchar(255) CHARACTER SET latin1 NOT NULL DEFAULT '',
          `notes` text CHARACTER SET latin1 NOT NULL,
          PRIMARY KEY (`id`)
         ) ENGINE=MyIsam DEFAULT CHARSET=utf8
@@ -275,7 +267,7 @@ class CreateVisibleObjectsTable
     }
 
     /**
-     * The CORE of the application.
+     * The CORE of the Planner application.
      * This method calculates the alt-azimuthal coordinates of an object
      *
      * @param string $rightAscension

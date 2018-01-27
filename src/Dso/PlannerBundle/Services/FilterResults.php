@@ -92,14 +92,14 @@ class FilterResults
         $sql = "
         SELECT
             altaz_coord.object_id as `Object_id`,
-            source.name as `Name1`,
-            source.other_name as `Name2`,
+            source.name as `name`,
+            source.cat1 as `cat1`,
+            source.id1 as `id1`,
+            source.cat2 as `cat2`,
+            source.id2 as `id2`,
             source.type as `ObjType`,
-            source.constellation as `Constellation`,
+            source.const as `Constellation`,
             source.mag as `ObjMagnitude`,
-            source.size_min as `ObjMinSize`,
-            source.size_max as `ObjMaxSize`,
-            source.ngc_description as `Ngc_desc`,
             source.notes as `Other_notes`,
             altaz_coord.altitude as `obj_altitude`,
             altaz_coord.azimuth as `obj_azimuth`,
@@ -114,7 +114,7 @@ class FilterResults
             AND `altitude` > 10
             AND `source`.`mag` >= ?
             AND `source`.`mag` <= ?
-            AND `source`.`constellation` IN (?)
+            AND `source`.`const` IN (?)
             AND `source`.`type` IN (?)
         ORDER BY
             `ObjMagnitude`";
@@ -132,9 +132,11 @@ class FilterResults
         // Fine tuning for searching nebula.
         if ($type[0] == 'other'){
             // Add the other available types of nebula.
-            $type[] = 'brtnb';
-            $type[] = 'drknb';
-            $type[] = 'cl+nb';
+            $type[] = 'neb';
+            $type[] = 'neb?';
+            $type[] = 'SNR';
+            $type[] = 'OC+Neb';
+            $type[] = 'HIIRgn';
         }
 
         $stmt = $this->mysqlService->getConn()->executeQuery(
@@ -162,20 +164,28 @@ class FilterResults
         return $paginatedResults;
     }
 
+    /**
+     * @TODO: Need to improve the way main search works!
+     *
+     * @param $page
+     * @param $keywords
+     * @return \Knp\Component\Pager\Pagination\PaginationInterface
+     * @throws \Doctrine\DBAL\DBALException
+     */
     public function retrieveSearchResults($page, $keywords)
     {
         $this->pageLimit = $page;
         $sql = "
         SELECT
             source.id as `id`,
-            source.name as `Name1`,
-            source.other_name as `Name2`,
+            source.name as `name`,
+            source.cat1 as `cat1`,
+            source.id1 as `id1`,
+            source.cat2 as `cat2`,
+            source.id2 as `id2`,
             source.type as `ObjType`,
-            source.constellation as `Constellation`,
+            source.const as `Constellation`,
             source.mag as `ObjMagnitude`,
-            source.size_min as `ObjMinSize`,
-            source.size_max as `ObjMaxSize`,
-            source.ngc_description as `Ngc_desc`,
             source.notes as `Other_notes`,
             IFNULL(img.thumb, 'no_image_available.png') as `thumb`,
             IFNULL(img.full_size, 'no_image_available_large.png') as `full_size`
@@ -184,7 +194,6 @@ class FilterResults
             ON img.object_id = source.id
         WHERE
         name LIKE ? OR
-        other_name LIKE ? OR
         notes LIKE ?
         ORDER BY
             `mag`";
@@ -192,7 +201,7 @@ class FilterResults
         $keyword = "%$keywords%";
         $stmt = $this->mysqlService->getConn()->executeQuery(
             $sql,
-            array($keyword, $keyword, $keyword),
+            array($keyword, $keyword),
             array(\PDO::PARAM_STR, \PDO::PARAM_STR, \PDO::PARAM_STR)
         );
 

@@ -45,8 +45,11 @@ class DiagramData {
     public function getMost10Observed($userId) {
         $sql = "
             SELECT
-            `name`,
-            other_name,
+            obj_details.name as `name`,
+            obj_details.cat1 as `cat1`,
+            obj_details.id1 as `id1`,
+            obj_details.cat2 as `cat2`,
+            obj_details.id2 as `id2`,
             COUNT(obj_id) AS nb_times
             FROM logged_objects AS logged
             INNER JOIN object AS obj_details

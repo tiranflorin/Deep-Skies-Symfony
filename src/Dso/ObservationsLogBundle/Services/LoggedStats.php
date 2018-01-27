@@ -19,8 +19,11 @@ class LoggedStats {
     public function getLatest20Logged($userId) {
         $sql = "
             SELECT
-            obj_details.`name` AS objName,
-            obj_details.other_name AS objOtherName,
+            obj_details.name as `name`,
+            obj_details.cat1 as `cat1`,
+            obj_details.id1 as `id1`,
+            obj_details.cat2 as `cat2`,
+            obj_details.id2 as `id2`,
             lists.`name` AS listName,
             logged.comment AS comment,
             logged.observedAt AS observedAt,

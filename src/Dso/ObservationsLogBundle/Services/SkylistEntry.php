@@ -285,7 +285,7 @@ class SkylistEntry {
             $this->extractDetailsFromSkylistItem($skylistObject, $itemProperty);
         }
         $conn = $this->em->getConnection();
-        $sql = "INSERT INTO object (name, other_name) VALUES (:common_name, :other_name)";
+        $sql = "INSERT INTO object (name, other_names) VALUES (:common_name, :other_names)";
         $stmt = $conn->prepare($sql);
 
         if ($skylistObject->getCommonName() != ''
@@ -309,7 +309,7 @@ class SkylistEntry {
                 $commonName = $skylistObject->getCommonName();
             }
             $stmt->bindValue('common_name', str_replace(' ', '', $commonName));
-            $stmt->bindValue('other_name', str_replace(' ', '', $otherName));
+            $stmt->bindValue('other_names', str_replace(' ', '', $otherName));
             $stmt->execute();
 
             // TODO: find a faster way (without an extra query) to get the "inserted_id";
@@ -402,11 +402,11 @@ class SkylistEntry {
                 *
             FROM object
             WHERE 1
-            AND (other_name LIKE :other_name)
+            AND (other_names LIKE :other_names)
             ";
 
         $stmt = $conn->prepare($sql);
-        $stmt->bindValue('other_name', str_replace(' ', '', "%$otherName%"));
+        $stmt->bindValue('other_names', str_replace(' ', '', "%$otherName%"));
         $stmt->execute();
         $resultsFound = $stmt->fetchAll();
         if (!empty($resultsFound)) {

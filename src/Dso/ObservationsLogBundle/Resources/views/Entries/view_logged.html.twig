@@ -12,8 +12,7 @@
                 <table class="table table-striped table-bordered table-condensed">
                     <thead>
                     <tr>
-                        <th>Common Name</th>
-                        <th>Other Name</th>
+                        <th>Object Name</th>
                         <th>Type</th>
                         <th>Const</th>
                         <th>Comment</th>
@@ -23,12 +22,33 @@
                     </thead>
                     <tbody>
                     {% for dso in pagination %}
-                        {#{{ dump(dso) }}#}
+                        {#Build the object name#}
+                        {% set dsoName = '' %}
+                        {% if dso.name %}
+                            {% set dsoName = dso.name |trim('"') %}
+                        {% endif %}
+
+                        {% if dso.cat1  %}
+                            {% set paranthesisOpen = '' %}
+                            {% if dsoName %}
+                                {% set dsoName = dsoName ~ ' (' ~ dso.cat1 ~ ' ' ~ dso.id1 %}
+                                {% set paranthesisOpen = 'yes' %}
+                            {% else %}
+                                {% set dsoName = dso.cat1 ~ ' ' ~  dso.id1 %}
+                            {% endif %}
+
+                            {% if dso.cat2  %}
+                                {% if paranthesisOpen %}
+                                    {% set dsoName = dsoName ~ ', ' ~ dso.cat2 ~ ' ' ~  dso.id2 ~ ')' %}
+                                {% else %}
+                                    {% set dsoName = dsoName ~ ' (' ~ dso.cat2 ~ ' ' ~  dso.id2 ~ ')' %}
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
                         <tr {% if loop.index is odd %}class="color"{% endif %}>
-                            <td>{{ dso.name }}</td>
-                            <td>{{ dso.otherName }}</td>
+                            <td>{{ dsoName }}</td>
                             <td>{{ dso.type }}</td>
-                            <td>{{ dso.constellation }}</td>
+                            <td>{{ dso.const }}</td>
                             <td>{{ dso.comment }}</td>
                             <td>{{ dso.observedAt|date('M d Y - H:i') }}</td>
                             <td>{{ dso.obsList }}</td>
