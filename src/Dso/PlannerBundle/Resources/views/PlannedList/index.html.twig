@@ -14,7 +14,7 @@
         <div class="row">
 
             <div class="span8">
-                <h1>{{ 'views.index.list'|trans({'%entity%': 'PlannedList'}, 'JordiLlonchCrudGeneratorBundle') }}</h1>
+                <h1>Saved PlannedLists:</h1>
             </div>
             <div class="span2">
                 {% if form_errors(filterForm) %}
@@ -60,7 +60,7 @@
                     <tr>
                         <th>Id</th>
                         <th>Name</th>
-                        <th>{{ 'views.index.actions'|trans({}, 'JordiLlonchCrudGeneratorBundle') }}</th>
+                        <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -72,13 +72,10 @@
                             <td>{{ entity.name }}</td>
                             <td>
                                 <a class="btn btn-mini"
-                                   href="{{ path('planner_planned-lists_show', { 'id': entity.id }) }}">
-                                    {{ 'views.actions.show'|trans({}, 'JordiLlonchCrudGeneratorBundle') }}
-                                </a>
+                                   href="{{ path('planner_planned-lists_show', { 'id': entity.id }) }}"> show </a>
                                 <a class="btn btn-mini"
-                                   href="{{ path('planner_planned-lists_edit', { 'id': entity.id }) }}">
-                                    {{ 'views.actions.edit'|trans({}, 'JordiLlonchCrudGeneratorBundle') }}
-                                </a></td>
+                                   href="{{ path('planner_planned-lists_edit', { 'id': entity.id }) }}"> edit </a>
+                            </td>
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -97,7 +94,7 @@
                 </div>
                 <div class="col-lg-6">
                     <a class="btn btn-primary likepaginator right" href="{{ path('planner_planned-lists_new') }}">
-                        {{ 'views.index.createnew'|trans({}, 'JordiLlonchCrudGeneratorBundle') }} PlannedList
+                        Create a new PlannedList
                     </a>
                 </div>
             </div>

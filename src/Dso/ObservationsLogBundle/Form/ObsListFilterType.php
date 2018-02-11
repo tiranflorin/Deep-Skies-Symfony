@@ -15,7 +15,6 @@ class ObsListFilterType extends AbstractType
         $builder
             ->add('id', 'filter_number_range')
             ->add('name', 'filter_text')
-            ->add('period', 'filter_text')
             ->add('equipment', 'filter_text')
             ->add('conditions', 'filter_text')
         ;

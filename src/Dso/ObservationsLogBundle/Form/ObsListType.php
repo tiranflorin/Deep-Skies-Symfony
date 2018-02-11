@@ -12,7 +12,6 @@ class ObsListType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('period')
             ->add('equipment')
             ->add('conditions')
         ;

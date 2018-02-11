@@ -12,7 +12,7 @@
 {% block mainContent %}
     <div class="container">
 
-        <h1>{{ 'views.edit.edit'|trans({'%entity%': 'PlannedList'}, 'JordiLlonchCrudGeneratorBundle') }}</h1>
+        <h1>Edit PlannedList</h1>
 
         <form class="well" action="{{ path('planner_planned-lists_update', { 'id': entity.id }) }}"
               method="post" {{ form_enctype(edit_form) }}>
@@ -20,14 +20,14 @@
             {{ form_widget(edit_form) }}
             <p>
                 <button type="submit"
-                        class="btn btn-success">{{ 'views.edit.editbutton'|trans({}, 'JordiLlonchCrudGeneratorBundle') }}</button>
+                        class="btn btn-success">Edit</button>
             </p>
         </form>
 
         <div>
             <div class="float-left">
                 <a class="btn" href="{{ path('planner_planned-lists') }}">
-                    {{ 'views.recordactions.backtothelist'|trans({}, 'JordiLlonchCrudGeneratorBundle') }}
+                    Back to the list
                 </a>
             </div>
             <div class="float-left">
@@ -35,7 +35,7 @@
                     <input type="hidden" name="_method" value="DELETE"/>
                     {{ form_widget(delete_form) }}
                     <button class="btn btn-danger" type="submit"
-                            onclick="return confirm('{{ 'views.recordactions.confirm'|trans({}, 'JordiLlonchCrudGeneratorBundle')|escape('js') }}');">{{ 'views.recordactions.delete'|trans({}, 'JordiLlonchCrudGeneratorBundle') }}</button>
+                            onclick="return confirm('Delete the item?');">Delete</button>
                 </form>
             </div>
         </div>

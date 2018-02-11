@@ -26,13 +26,11 @@
 
         <div>
             <div class="float-left">
-                <a class="btn" href="{{ path('planner_planned-lists') }}">
-                    {{ 'views.recordactions.backtothelist'|trans({}, 'JordiLlonchCrudGeneratorBundle') }}
-                </a>
+                <a class="btn" href="{{ path('planner_planned-lists') }}"> Back to the list </a>
             </div>
             <div class="float-left">
                 <a class="btn btn-primary" href="{{ path('planner_planned-lists_edit', { 'id': entity.id }) }}">
-                    {{ 'views.recordactions.edit'|trans({}, 'JordiLlonchCrudGeneratorBundle') }}
+                    Edit
                 </a>
             </div>
             <div class="float-left">
@@ -40,7 +38,7 @@
                     <input type="hidden" name="_method" value="DELETE"/>
                     {{ form_widget(delete_form) }}
                     <button class="btn btn-danger" type="submit"
-                            onclick="return confirm('{{ 'views.recordactions.confirm'|trans({}, 'JordiLlonchCrudGeneratorBundle')|escape('js') }}');">{{ 'views.recordactions.delete'|trans({}, 'JordiLlonchCrudGeneratorBundle') }}</button>
+                            onclick="return confirm('Delete the item?');">Delete</button>
                 </form>
             </div>
         </div>
