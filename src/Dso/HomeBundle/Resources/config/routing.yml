@@ -13,11 +13,6 @@ dso_check_facebook:
     defaults: { _controller: DsoHomeBundle:Home:checkFacebook }
     methods:  [GET]
 
-dso_search_form:
-    pattern:  /search
-    defaults: { _controller: DsoHomeBundle:Home:search }
-    methods:  [POST]
-
 dso_home_feedback:
     pattern:  /feedback/
     defaults: { _controller: DsoHomeBundle:Feedback:feedback }

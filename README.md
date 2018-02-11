@@ -50,5 +50,12 @@ Make sure that the database schema is up to date:
 Add the administrator:
 
     $ php app/console fos:user:create superuser master@deep-skies.com choosepass --super-admin
+    
+
+8) Assets management:
+---------------------
+Run:
+
+    $ app/console fos:js-routing:dump --target="public_html/js/fos_js_routes.js"
 
 Enjoy!

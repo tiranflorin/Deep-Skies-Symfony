@@ -2,6 +2,7 @@
 
 namespace Dso\ObservationsLogBundle\Controller;
 
+use Dso\ObservationsLogBundle\Entity\DeepSkyItem;
 use Dso\ObservationsLogBundle\Services\SkylistEntry;
 use Dso\PlannerBundle\Services\SQL\MySqlService;
 use Dso\TimelineBundle\Event\CreateTimelineEvent;
@@ -75,18 +76,14 @@ class EntriesController extends Controller
         $criteria = $request->get('q', null);
         $em = $this->getDoctrine()->getManager();
         $dsos = $em->getRepository('DsoObservationsLogBundle:DeepSkyItem')
-            ->findDsosByName($criteria);
+            ->findDsosByName($criteria, 15);
 
         $data = array();
         if (!empty($dsos)) {
             $i = 0;
             foreach ($dsos as $dso_key => $dsoDetails) {
                 $data[$i]['id'] = $dsoDetails->getId();
-                $data[$i]['text'] = $dsoDetails->getName();
-                $otherName = $dsoDetails->getOtherName();
-                if (!empty($otherName)) {
-                    $data[$i]['text'] = $dsoDetails->getOtherName() . ' (' . $dsoDetails->getName() . ')';
-                }
+                $data[$i]['text'] = $this->getDsoNameFormatted($dsoDetails);
                 $i++;
             }
         }
@@ -283,5 +280,41 @@ class EntriesController extends Controller
         }
 
         return $choices;
+    }
+
+    /**
+     * @param DeepSkyItem $dsoDetails
+     * @return string
+     */
+    public function getDsoNameFormatted($dsoDetails) {
+        $niceName = "";
+        $paranthesisOpen = false;
+        $name = $dsoDetails->getName();
+        $cat1 = $dsoDetails->getCat1();
+        $cat2 = $dsoDetails->getCat2();
+        $id1 = $dsoDetails->getId1();
+        $id2 = $dsoDetails->getId2();
+        if (!empty($name)) {
+            $niceName = str_replace('"', '', $name);
+        }
+
+        if (!empty($cat1)) {
+            if (!empty($niceName)) {
+                $niceName .= ' (' . $cat1 . ' ' . $id1;
+                $paranthesisOpen = true;
+            } else {
+                $niceName .= $cat1 . ' ' . $id1;
+            }
+
+            if (!empty($cat2)) {
+                if ($paranthesisOpen) {
+                    $niceName .= ', ' . $cat2 . ' ' . $id2 . ')';
+                } else {
+                    $niceName .= ' (' . $cat2 . ' ' . $id2 . ')';
+                }
+            }
+        }
+
+        return $niceName;
     }
 }

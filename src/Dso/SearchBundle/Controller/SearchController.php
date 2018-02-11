@@ -14,39 +14,36 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class SearchController extends Controller
 {
-    public function indexAction(Request $request)
-    {
-        $searchTerm = $request->get('searchTerm');
-        if (empty($searchTerm)) {
-            $request->getSession()->getFlashBag()->add(
-                'warning',
-                'Your search enquiry was invalid!'
-            );
 
-            return $this->render('DsoHomeBundle:Home:index.html.twig');
+    /**
+     * @TODO: Need to get the image details for the retrieved results!
+     *
+     * @param Request $req
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function indexAction(Request $req)
+    {
+        $criteria = $req->get('keywords', null);
+        if (!$criteria) {
+            return $this->render('DsoHomeBundle:Home:search_results.html.twig', array(
+                '' => ''
+            ));
         }
 
-        $term = trim($request->get('searchTerm', ''));
-        $conn = $this->get('database_connection');
-        $sql = "
-            SELECT
-                *
-            FROM object
-            WHERE 1
-            AND (name LIKE :searchTerm OR other_name LIKE :searchTerm OR notes LIKE :searchTerm OR ngc_description LIKE :searchTerm)
-            ORDER BY mag ASC
-            LIMIT 100
-        "; // TODO: implement pagination and remove the 100 elements limit from the query.
+        $em = $this->getDoctrine()->getManager();
+        $dsos = $em->getRepository('DsoObservationsLogBundle:DeepSkyItem')
+            ->findDsosByName($criteria);
 
-        $stmt = $conn->prepare($sql);
-        $stmt->bindValue('searchTerm', trim("%$term%"));
-        $stmt->execute();
-        $resultsFound = $stmt->fetchAll();
-
-        return $this->render('DsoSearchBundle:Search:index.html.twig', array(
-            'term' => $term,
-            'resultsFound' => $resultsFound
-            )
+        $paginator = $this->get('knp_paginator');
+        $paginatedResults = $paginator->paginate(
+            $dsos,
+            $req->get('page', 1),
+            20
         );
+        $paginatedResults->setParam('keywords', $criteria);
+
+        return $this->render('DsoHomeBundle:Home:search_results.html.twig', array(
+            'pagination' => $paginatedResults
+        ));
     }
 }

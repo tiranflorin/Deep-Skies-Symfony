@@ -7133,6 +7133,10 @@ form.well ul li {
     max-height: 480px;
 }
 
+.select2-container--open .select2-dropdown--below {
+    margin-top: 70px;
+}
+
 .btn-facebook {
     color: #fff;
     background-color: #3b5998;

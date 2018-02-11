@@ -53,16 +53,16 @@
                                     <div class="row" style="margin-top: 10px;">
                                         <div class="col-lg-1 col-md-1 col-sm-1"></div>
                                         <div class="col-lg-1 col-md-1 col-sm-1">
-                                            <a rel="gallery" title="{{ dsoName }}" class="fancybox"
-                                               href="{{ asset("images/ngcPics/large_800x800/" ~ object.full_size) }}">
-                                                <img src="{{ asset("images/ngcPics/thumbnails_100x100/" ~ object.thumb) }}" alt="{{ object.thumb }}"/></a>
+                                            <a rel="gallery" title="{{ dsoName }}" class="fancybox"></a>
+                                               {#href="{{ asset("images/ngcPics/large_800x800/" ~ object.full_size) }}">#}
+                                                {#<img src="{{ asset("images/ngcPics/thumbnails_100x100/" ~ object.thumb) }}" alt="{{ object.thumb }}"/></a>#}
                                         </div>
                                         <div class="col-lg-10 col-md-10 col-sm-10">
                                             <div class="list-group" style="margin-left:15px;">
                                                 <div class="list-group-item">
                                                     <h4 class="list-group-item-heading">{{ dsoName }}</h4>
-                                                    <p class="list-group-item-text">Magnitude: <span class="group-item-value"> {{ object.ObjMagnitude }} </span> . Constellation: <span class="group-item-value">{{ object.Constellation }}</span></p>
-                                                    <p class="list-group-item-text">Type: <span class="group-item-value">{{ object.ObjType }}</span>.</p>
+                                                    <p class="list-group-item-text">Magnitude: <span class="group-item-value"> {{ object.mag }} </span> . Constellation: <span class="group-item-value">{{ object.Constellation }}</span></p>
+                                                    <p class="list-group-item-text">Type: <span class="group-item-value">{{ object.type }}</span>.</p>
                                                 </div>
                                             </div>
                                         </div>

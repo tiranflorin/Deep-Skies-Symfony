@@ -1,6 +1,8 @@
 (function( $ ) {
     $.fn.select2entity = function (options) {
         this.each(function () {
+            var request;
+
             // Keep a reference to the element so we can keep the cache local to this instance and so we can
             // fetch config settings since select2 doesn't expose its options to the transport method.
             var $s2 = $(this),
@@ -8,6 +10,17 @@
                 scroll = $s2.data('scroll'),
                 prefix = Date.now(),
                 cache = [];
+
+            var reqParams = $s2.data('req_params');
+            if (reqParams) {
+                $.each(reqParams, function (key, value) {
+                    $('*[name="'+value+'"]').on('change', function () {
+                        $s2.val(null);
+                        $s2.trigger('change');
+                    });
+                });
+            }
+
             // Deep-merge the options
             $s2.select2($.extend(true, {
                 // Tags support
@@ -39,21 +52,33 @@
                             }
                         } else {
                             // no caching enabled. just do the ajax request
-                            $.ajax(params).fail(failure).done(success);
+                            if (request) {
+                                request.abort();
+                            }
+                            request = $.ajax(params).fail(failure).done(success).always(function () {
+                                request = undefined;
+                            });
                         }
                     },
                     data: function (params) {
-                        // only send the 'page' parameter if scrolling is enabled
-                        if (scroll) {
-                            return {
-                                q: params.term,
-                                page: params.page || 1
-                            };
+                        var ret = {
+                            'q': params.term,
+                            'field_name': $s2.data('name')
+                        };
+
+                        var reqParams = $s2.data('req_params');
+                        if (reqParams) {
+                            $.each(reqParams, function (key, value) {
+                                ret[key] = $('*[name="'+value+'"]').val()
+                            });
                         }
 
-                        return {
-                            q: params.term
-                        };
+                        // only send the 'page' parameter if scrolling is enabled
+                        if (scroll) {
+                            ret['page'] = params.page || 1;
+                        }
+
+                        return ret;
                     },
                     processResults: function (data, params) {
                         var results, more = false, response = {};

@@ -22,24 +22,4 @@ class HomeController extends Controller
     {
         // TODO: Further check why this route is mandatory </login/check-facebook>
     }
-
-    public function searchAction(Request $request)
-    {
-        /** @var FilterResults $filterService */
-        $filterService = $this->get('dso_planner.filter_results');
-        $keywords = $request->get('keywords', '');
-        if (empty($keywords)) {
-            return $this->render('DsoHomeBundle:Home:search_results.html.twig', array(
-                '' => ''
-            ));
-        }
-
-        $filterService->setConfigurationDetails('object', null, null);
-
-        $paginatedResults = $filterService->retrieveSearchResults($request->get('page', 1), $keywords);
-
-        return $this->render('DsoHomeBundle:Home:search_results.html.twig', array(
-            'pagination' => $paginatedResults
-        ));
-    }
 }
