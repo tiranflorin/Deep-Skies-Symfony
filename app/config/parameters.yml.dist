@@ -16,3 +16,4 @@ parameters:
     facebook_client_id: my_awesome_client_id
     facebook_client_secret: my_awesome_client_secret
     google_js_api_key: blaBlaHere
+    google_analytics_property_id: UA-Gggggggg-7

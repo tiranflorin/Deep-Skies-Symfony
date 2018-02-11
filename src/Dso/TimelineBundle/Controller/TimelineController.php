@@ -109,7 +109,7 @@ class TimelineController extends Controller
         $loggedObjects = $query->getResult();
 
         return $this->render(
-            'DsoTimelineBundle:Timeline:objects_attached_to_list_text.html.twig',
+            'DsoTimelineBundle:Timeline:objects_attached_to_list.html.twig',
             array('loggedObjects' => $loggedObjects)
         );
     }

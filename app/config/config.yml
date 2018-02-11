@@ -37,6 +37,7 @@ twig:
             - 'TetranzSelect2EntityBundle:Form:fields.html.twig'
     globals:
         google_js_api_key: %google_js_api_key%
+        google_analytics_property_id: %google_analytics_property_id%
 
 # Assetic Configuration
 assetic:

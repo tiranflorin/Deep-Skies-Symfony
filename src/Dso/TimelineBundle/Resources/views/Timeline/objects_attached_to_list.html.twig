@@ -5,7 +5,7 @@
         {% set dsoName = object.name |trim('"') %}
     {% endif %}
 
-    {% if object.cat1  %}
+    {% if object.cat1 %}
         {% set paranthesisOpen = '' %}
         {% if dsoName %}
             {% set dsoName = dsoName ~ ' (' ~ object.cat1 ~ ' ' ~ object.id1 %}
@@ -14,7 +14,7 @@
             {% set dsoName = object.cat1 ~ ' ' ~  object.id1 %}
         {% endif %}
 
-        {% if object.cat2  %}
+        {% if object.cat2 %}
             {% if paranthesisOpen %}
                 {% set dsoName = dsoName ~ ', ' ~ object.cat2 ~ ' ' ~  object.id2 ~ ')' %}
             {% else %}
@@ -24,7 +24,7 @@
     {% endif %}
 
     {{ dsoName }}
-    {% if dsoName %} {#TODO: Check what's happening because some entries are't displayed -> they have no names!#}
+    {% if dsoName %}
         {% if not loop.last %}, {% endif %}
     {% endif %}
 {% endfor %}

@@ -185,7 +185,7 @@ class EntriesController extends Controller
             `logged`.`comment`,
             `logged`.`observedAt`,
             `obs_lists`.`name` AS 'obsList'
-        FROM `" . $this->container->getParameter('database_name') . "`.logged_objects AS `logged`
+        FROM logged_objects AS `logged`
         LEFT JOIN `object` AS `obj`
             ON `logged`.`obj_id` = `obj`.`id`
         LEFT JOIN `obs_lists`
@@ -283,10 +283,12 @@ class EntriesController extends Controller
     }
 
     /**
+     * TODO: Move it in a service - use this in templates as well.
+     *
      * @param DeepSkyItem $dsoDetails
      * @return string
      */
-    public function getDsoNameFormatted($dsoDetails) {
+    protected function getDsoNameFormatted($dsoDetails) {
         $niceName = "";
         $paranthesisOpen = false;
         $name = $dsoDetails->getName();
