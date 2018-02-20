@@ -43,6 +43,10 @@
                                 {% else %}
                                     {% set dsoName = dsoName ~ ' (' ~ dso.cat2 ~ ' ' ~  dso.id2 ~ ')' %}
                                 {% endif %}
+                            {% else %}
+                                {% if paranthesisOpen %}
+                                    {% set dsoName = dsoName ~ ')' %}
+                                {% endif %}
                             {% endif %}
                         {% endif %}
                         <tr {% if loop.index is odd %}class="color"{% endif %}>

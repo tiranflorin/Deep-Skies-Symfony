@@ -23,7 +23,7 @@
                         </div>
 
                         {% for object in pagination %}
-                            
+                            {#{{ dump(object) }}#}
                             {#Build the object name#}
                             {% set dsoName = '' %}
                             {% if object.name %}
@@ -44,6 +44,10 @@
                                         {% set dsoName = dsoName ~ ', ' ~ object.cat2 ~ ' ' ~  object.id2 ~ ')' %}
                                     {% else %}
                                         {% set dsoName = dsoName ~ ' (' ~ object.cat2 ~ ' ' ~  object.id2 ~ ')' %}
+                                    {% endif %}
+                                {% else %}
+                                    {% if paranthesisOpen %}
+                                        {% set dsoName = dsoName ~ ')' %}
                                     {% endif %}
                                 {% endif %}
                             {% endif %}

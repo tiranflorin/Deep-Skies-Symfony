@@ -96,19 +96,23 @@
                                 {% else %}
                                     {% set dsoName = dsoName ~ ' (' ~ object.cat2 ~ ' ' ~  object.id2 ~ ')' %}
                                 {% endif %}
+                            {% else %}
+                                {% if paranthesisOpen %}
+                                    {% set dsoName = dsoName ~ ')' %}
+                                {% endif %}
                             {% endif %}
                         {% endif %}
 
                         <div class="row">
                             <div class="col-lg-11 col-md-11 col-sm-11">
                                 <div class="row" style="margin-top: 10px;">
-                                    <div class="col-lg-1 col-md-1 col-sm-1"></div>
-                                    <div class="col-lg-1 col-md-1 col-sm-1">
+                                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+                                    <div class="col-lg-1 col-md-1 col-sm-2 col-xs-3">
                                         <a rel="gallery" title="{{ dsoName }}" class="fancybox"
                                            href="{{ asset("images/ngcPics/large_800x800/" ~ object.full_size) }}">
                                             <img src="{{ asset("images/ngcPics/thumbnails_100x100/" ~ object.thumb) }}" alt="{{ object.thumb }}"/></a>
                                     </div>
-                                    <div class="col-lg-5 col-md-5 col-sm-5">
+                                    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-8">
                                         <div class="list-group" style="margin-left:15px;">
                                             <div class="list-group-item">
                                                 <h4 class="list-group-item-heading">{{ dsoName }}</h4>
@@ -117,7 +121,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-5 col-md-5 col-sm-5">
+                                    {#<div class="col-xs-1"></div>#}
+                                    <div class="col-lg-5 col-md-5 col-sm-4 col-xs-12">
                                         <div class="list-group" style="margin-left:15px;">
                                             <div class="list-group-item">
                                                 {% if object.comment %}<p class="list-group-item-text">Comment: <span class="group-item-value"> {{ object.comment }} </span> </p>{% endif %}

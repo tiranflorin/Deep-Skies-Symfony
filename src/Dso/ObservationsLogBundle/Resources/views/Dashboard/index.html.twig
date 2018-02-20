@@ -83,6 +83,10 @@
                                     {% else %}
                                         {% set dsoName = dsoName ~ ' (' ~ entry.cat2 ~ ' ' ~  entry.id2 ~ ')' %}
                                     {% endif %}
+                                {% else %}
+                                    {% if paranthesisOpen %}
+                                        {% set dsoName = dsoName ~ ')' %}
+                                    {% endif %}
                                 {% endif %}
                             {% endif %}
                             

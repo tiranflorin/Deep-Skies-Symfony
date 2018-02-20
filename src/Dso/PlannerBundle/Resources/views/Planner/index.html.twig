@@ -72,6 +72,10 @@
                             {% else %}
                                 {% set dsoName = dsoName ~ ' (' ~ object.cat2 ~ ' ' ~  object.id2 ~ ')' %}
                             {% endif %}
+                        {% else %}
+                            {% if paranthesisOpen %}
+                                {% set dsoName = dsoName ~ ')' %}
+                            {% endif %}
                         {% endif %}
                     {% endif %}
 
