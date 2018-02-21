@@ -61,37 +61,8 @@
                         </thead>
                         <tbody>
                         {% for entry in latestLogged %}
-                            
-                            {#Build the object name#}
-                            {% set dsoName = '' %}
-                            {% if entry.name %}
-                                {% set dsoName = entry.name |trim('"') %}
-                            {% endif %}
-
-                            {% if entry.cat1  %}
-                                {% set paranthesisOpen = '' %}
-                                {% if dsoName %}
-                                    {% set dsoName = dsoName ~ ' (' ~ entry.cat1 ~ ' ' ~ entry.id1 %}
-                                    {% set paranthesisOpen = 'yes' %}
-                                {% else %}
-                                    {% set dsoName = entry.cat1 ~ ' ' ~  entry.id1 %}
-                                {% endif %}
-
-                                {% if entry.cat2  %}
-                                    {% if paranthesisOpen %}
-                                        {% set dsoName = dsoName ~ ', ' ~ entry.cat2 ~ ' ' ~  entry.id2 ~ ')' %}
-                                    {% else %}
-                                        {% set dsoName = dsoName ~ ' (' ~ entry.cat2 ~ ' ' ~  entry.id2 ~ ')' %}
-                                    {% endif %}
-                                {% else %}
-                                    {% if paranthesisOpen %}
-                                        {% set dsoName = dsoName ~ ')' %}
-                                    {% endif %}
-                                {% endif %}
-                            {% endif %}
-                            
                             <tr>
-                                <td>{{ dsoName }}</td>
+                                <td>{{ entry | dsoName }}</td>
                                 <td>{{ entry.listName }}</td>
                                 <td>{{ entry.observedAt }}</td>
                                 <td>{{ entry.comment }}</td>

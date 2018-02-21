@@ -13,3 +13,6 @@ services:
         class: Dso\ObservationsLogBundle\Services\LoggedStats
         calls:
             - [setEm, ["@doctrine.orm.entity_manager"]]
+
+    dso_observations_log.format_dso_name:
+        class: Dso\ObservationsLogBundle\Services\FormatDsoName

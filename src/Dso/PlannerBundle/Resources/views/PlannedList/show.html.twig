@@ -66,42 +66,15 @@
                         <input type="hidden" name="_method" value="DELETE"/>
                         {{ form_widget(remove_item_form) }}
                     {% for dso  in plannedObjects %}
-                        {#Build the object name#}
-                        {% set dsoName = '' %}
-                        {% if dso.name %}
-                            {% set dsoName = dso.name |trim('"') %}
-                        {% endif %}
-
-                        {% if dso.cat1  %}
-                            {% set paranthesisOpen = '' %}
-                            {% if dsoName %}
-                                {% set dsoName = dsoName ~ ' (' ~ dso.cat1 ~ ' ' ~ dso.id1 %}
-                                {% set paranthesisOpen = 'yes' %}
-                            {% else %}
-                                {% set dsoName = dso.cat1 ~ ' ' ~  dso.id1 %}
-                            {% endif %}
-
-                            {% if dso.cat2  %}
-                                {% if paranthesisOpen %}
-                                    {% set dsoName = dsoName ~ ', ' ~ dso.cat2 ~ ' ' ~  dso.id2 ~ ')' %}
-                                {% else %}
-                                    {% set dsoName = dsoName ~ ' (' ~ dso.cat2 ~ ' ' ~  dso.id2 ~ ')' %}
-                                {% endif %}
-                            {% else %}
-                                {% if paranthesisOpen %}
-                                    {% set dsoName = dsoName ~ ')' %}
-                                {% endif %}
-                            {% endif %}
-                        {% endif %}
                         <tr>
                             <td>{{ loop.index }}</td>
-                            <td>{{ dsoName }}</td>
+                            <td>{{ dso | dsoName }}</td>
                             <td>{{ dso.constellation }}</td>
                             <td>{{ dso.type }}</td>
                             <td>
                                 <input type="hidden" name="dsoId" value="{{ dso.id }}"/>
                                 <button class="btn btn-danger" type="submit" title="Remove DSO from this planned list."
-                                            onclick="return confirm('\n\nDeep sky item < {{ dso.name }} > will be removed from this list\n\nAre you sure?\n\n');">
+                                            onclick="return confirm('\n\nDeep sky item < {{ dso | dsoName }} > will be removed from this list\n\nAre you sure?\n\n');">
                                         Remove
                                 </button>
                             </td>

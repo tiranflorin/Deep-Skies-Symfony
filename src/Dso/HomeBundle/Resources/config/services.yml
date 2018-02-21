@@ -7,3 +7,10 @@ services:
             - [setMailer, [@mailer]]
             - [setTemplateService, [@templating]]
             - [setAdminEmail, [%administrator_email%]]
+
+    dso_name_format.twig_extension:
+        class: Dso\HomeBundle\Twig\DsoNameExtension
+        calls:
+            - [setFormatter, [@dso_observations_log.format_dso_name]]
+        tags:
+            - { name: twig.extension }

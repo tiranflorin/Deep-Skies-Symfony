@@ -50,48 +50,19 @@
                 </div>
 
                 {% for object in pagination %}
-
-                    {#Build the object name#}
-                    {% set dsoName = '' %}
-                    {% if object.name %}
-                        {% set dsoName = object.name |trim('"') %}
-                    {% endif %}
-
-                    {% if object.cat1  %}
-                        {% set paranthesisOpen = '' %}
-                        {% if dsoName %}
-                            {% set dsoName = dsoName ~ ' (' ~ object.cat1 ~ ' ' ~ object.id1 %}
-                            {% set paranthesisOpen = 'yes' %}
-                        {% else %}
-                            {% set dsoName = object.cat1 ~ ' ' ~  object.id1 %}
-                        {% endif %}
-
-                        {% if object.cat2  %}
-                            {% if paranthesisOpen %}
-                                {% set dsoName = dsoName ~ ', ' ~ object.cat2 ~ ' ' ~  object.id2 ~ ')' %}
-                            {% else %}
-                                {% set dsoName = dsoName ~ ' (' ~ object.cat2 ~ ' ' ~  object.id2 ~ ')' %}
-                            {% endif %}
-                        {% else %}
-                            {% if paranthesisOpen %}
-                                {% set dsoName = dsoName ~ ')' %}
-                            {% endif %}
-                        {% endif %}
-                    {% endif %}
-
                     <div class="row">
                         <div class="col-lg-11 col-md-11 col-sm-11">
                             <div class="row" style="margin-top: 10px;">
                                 <div class="col-lg-1 col-md-1 col-sm-1"></div>
                                 <div class="col-lg-1 col-md-1 col-sm-1">
-                                    <a rel="gallery" title="{{ dsoName }}" class="fancybox"
+                                    <a rel="gallery" title="{{ object | dsoName }}" class="fancybox"
                                        href="{{ asset("images/ngcPics/large_800x800/" ~ object.full_size) }}">
                                         <img src="{{ asset("images/ngcPics/thumbnails_100x100/" ~ object.thumb) }}" alt="{{ object.thumb }}"/></a>
                                 </div>
                                 <div class="col-lg-10 col-md-10 col-sm-10">
                                     <div class="list-group" style="margin-left:15px;">
                                         <div class="list-group-item">
-                                            <h4 class="list-group-item-heading">{{ dsoName }}</h4>
+                                            <h4 class="list-group-item-heading">{{ object | dsoName }}</h4>
                                             <p class="list-group-item-text">Magnitude: <span class="group-item-value"> {{ object.ObjMagnitude }} </span> . Constellation: <span class="group-item-value">{{ object.Constellation }}</span></p>
                                             {#<p class="list-group-item-text">Type: <span class="group-item-value">{{ object.ObjType }}</span> . NGC Description: <span class="group-item-value">{{ object.Ngc_desc }}</span></p>#}
                                         </div>

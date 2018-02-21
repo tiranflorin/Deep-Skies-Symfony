@@ -75,6 +75,7 @@ class EntriesController extends Controller
     public function logAjaxAction(Request $request) {
         $criteria = $request->get('q', null);
         $em = $this->getDoctrine()->getManager();
+        $nameFormatter = $this->get('dso_observations_log.format_dso_name');
         $dsos = $em->getRepository('DsoObservationsLogBundle:DeepSkyItem')
             ->findDsosByName($criteria, 15);
 
@@ -83,7 +84,7 @@ class EntriesController extends Controller
             $i = 0;
             foreach ($dsos as $dso_key => $dsoDetails) {
                 $data[$i]['id'] = $dsoDetails->getId();
-                $data[$i]['text'] = $this->getDsoNameFormatted($dsoDetails);
+                $data[$i]['text'] = $nameFormatter->formatDsoName($dsoDetails);
                 $i++;
             }
         }
@@ -280,43 +281,5 @@ class EntriesController extends Controller
         }
 
         return $choices;
-    }
-
-    /**
-     * TODO: Move it in a service - use this in templates as well.
-     *
-     * @param DeepSkyItem $dsoDetails
-     * @return string
-     */
-    protected function getDsoNameFormatted($dsoDetails) {
-        $niceName = "";
-        $paranthesisOpen = false;
-        $name = $dsoDetails->getName();
-        $cat1 = $dsoDetails->getCat1();
-        $cat2 = $dsoDetails->getCat2();
-        $id1 = $dsoDetails->getId1();
-        $id2 = $dsoDetails->getId2();
-        if (!empty($name)) {
-            $niceName = str_replace('"', '', $name);
-        }
-
-        if (!empty($cat1)) {
-            if (!empty($niceName)) {
-                $niceName .= ' (' . $cat1 . ' ' . $id1;
-                $paranthesisOpen = true;
-            } else {
-                $niceName .= $cat1 . ' ' . $id1;
-            }
-
-            if (!empty($cat2)) {
-                if ($paranthesisOpen) {
-                    $niceName .= ', ' . $cat2 . ' ' . $id2 . ')';
-                } else {
-                    $niceName .= ' (' . $cat2 . ' ' . $id2 . ')';
-                }
-            }
-        }
-
-        return $niceName;
     }
 }
