@@ -51,15 +51,15 @@
 
                 {% for object in pagination %}
                     <div class="row">
-                        <div class="col-lg-11 col-md-11 col-sm-11">
+                        <div class="col-lg-11 col-md-11 col-sm-10 col-xs-10">
                             <div class="row" style="margin-top: 10px;">
-                                <div class="col-lg-1 col-md-1 col-sm-1"></div>
-                                <div class="col-lg-1 col-md-1 col-sm-1">
+                                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+                                <div class="col-lg-1 col-md-2 col-sm-2 col-xs-3">
                                     <a rel="gallery" title="{{ object | dsoName }}" class="fancybox"
                                        href="{{ asset("images/ngcPics/large_800x800/" ~ object.full_size) }}">
                                         <img src="{{ asset("images/ngcPics/thumbnails_100x100/" ~ object.thumb) }}" alt="{{ object.thumb }}"/></a>
                                 </div>
-                                <div class="col-lg-10 col-md-10 col-sm-10">
+                                <div class="col-lg-10 col-md-9 col-sm-9 col-xs-7">
                                     <div class="list-group" style="margin-left:15px;">
                                         <div class="list-group-item">
                                             <h4 class="list-group-item-heading">{{ object | dsoName }}</h4>
@@ -70,7 +70,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-1 col-md-1 col-sm-1">
+                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
                             <button class="add-item-to-list" data-dsoId="{{ object.Object_id }}" type="button" title="Add item to observing list"> + </button>
                         </div>
                     </div>
