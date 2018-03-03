@@ -1,12 +1,9 @@
 {% extends 'base.html.twig' %}
-{% block wrapperClasses %}
-    class="extra-left-space"
-{% endblock %}
-{% block side_nav %}
-    {% include 'DsoObservationsLogBundle:Dashboard:side_nav.html.twig' %}
-{% endblock %}
 {% block mainContent %}
-    <div class="row">
+<div class="row">
+    <div class="col-lg-12 col-sm-12 col-xs-12 main">
+        <h1 class="page-header">Manage your deep sky observations</h1>
+        {% include 'DsoObservationsLogBundle:Dashboard:horizontal_nav.html.twig' %}
         <div class="col-lg-12">
             {% for flashMessage in app.session.flashbag.get('notice') %}
                 <div class="alert alert-success">
@@ -58,5 +55,6 @@
             {{ form_row(form.save) }}
             {{ form_end(form, {'render_rest': false}) }}
         </div>
+    </div>
     </div>
 {% endblock %}

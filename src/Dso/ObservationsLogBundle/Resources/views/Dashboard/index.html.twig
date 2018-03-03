@@ -1,15 +1,9 @@
 {% extends 'base.html.twig' %}
-{% block wrapperClasses %}
-    class="extra-left-space"
-{% endblock %}
-{% block side_nav %}
-    {% include 'DsoObservationsLogBundle:Dashboard:side_nav.html.twig' %}
-{% endblock %}
 {% block mainContent %}
     <div class="row">
         <div class="col-lg-12 col-sm-12 col-xs-12 main">
-            <h1 class="page-header">Dashboard</h1>
-
+            <h1 class="page-header">Manage your deep sky observations</h1>
+            {% include 'DsoObservationsLogBundle:Dashboard:horizontal_nav.html.twig' %}
             <div class="row">
                 {#Only render this panel for the Super Admin user.#}
                 {% if app.user and is_granted('ROLE_SUPER_ADMIN') %}
@@ -28,13 +22,13 @@
             </div>
 
             <div class="row placeholders">
-                <div class="col-xs-6 col-sm-4 placeholder">
+                <div class="col-xs-12 col-md-4 col-sm-6 placeholder">
                     <div id="dso_types_observed_chart" style="min-width: 370px; height: 350px; margin: 0 auto"></div>
                 </div>
-                <div class="col-xs-6 col-sm-4 placeholder">
+                <div class="col-xs-12 col-md-4 col-sm-6 placeholder">
                     <div id="most_10observed_chart" style="min-width: 370px; height: 350px; margin: 0 auto"></div>
                 </div>
-                <div class="col-xs-6 col-sm-4 placeholder">
+                <div class="col-xs-12 col-md-4 col-sm-6 placeholder">
                     <div id="sessions_per_year_chart" style="min-width: 370px; height: 350px; margin: 0 auto"></div>
                 </div>
             </div>

@@ -8,6 +8,11 @@ body{
 
 h1 {
     margin: 0.3em 0;
+    font-size: 2em;
+}
+
+h2 {
+    font-size: 1.4em;
 }
 
 img.img-responsive {
@@ -95,7 +100,7 @@ footer p {
 }
 
 #import-form {
-    margin-left: 50px;
+    margin-left: 15px;
     text-align: left;
 }
 
