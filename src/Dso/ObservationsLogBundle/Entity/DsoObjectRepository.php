@@ -123,4 +123,24 @@ class DsoObjectRepository extends EntityRepository
 
         return $conditionPairs;
     }
+
+    public function findDsosByIds($dsoIds)
+    {
+        if (empty($dsoIds)) {
+            return array();
+        }
+
+        $query = '
+            SELECT o
+            FROM DsoObservationsLogBundle:DeepSkyItem o
+            WHERE o.id IN(:dso_ids)
+            ORDER BY o.name, o.mag ';
+
+        $query = $this->getEntityManager()
+            ->createQuery($query);
+        $query->setMaxResults(70);
+        $query->setParameter('dso_ids', $dsoIds);
+
+        return $query->getResult();
+    }
 }

@@ -17,3 +17,4 @@ parameters:
     facebook_client_secret: my_awesome_client_secret
     google_js_api_key: blaBlaHere
     google_analytics_property_id: UA-Gggggggg-7
+    dso_details_external_search_api: https://csillagtura.ro/projektek/aladin-photo/dso.php
