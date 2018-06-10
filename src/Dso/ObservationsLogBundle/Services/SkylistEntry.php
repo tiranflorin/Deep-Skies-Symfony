@@ -172,6 +172,7 @@ class SkylistEntry {
             'equipment' => '',
             'conditions' => '',
             'visibilityLevel' => 'private',
+            'description' => '',
         );
         $merged = array_merge($defaults, $details);
 
@@ -184,6 +185,7 @@ class SkylistEntry {
         $obsList->setUserId($merged['userId']);
         $obsList->setLocationId($merged['locationId']);
         $obsList->setVisibilityLevel($merged['visibilityLevel']);
+        $obsList->setDescription($merged['description']);
 
         $this->em->persist($obsList);
         $this->em->flush();
@@ -312,6 +314,12 @@ class SkylistEntry {
             if ($skylistObject->getCommonName() !== NULL) {
                 $commonName = $skylistObject->getCommonName();
             }
+
+            if (empty($commonName) && !empty($otherName)) {
+                $commonName = $otherName;
+                $otherName = '';
+            }
+
             $stmt->bindValue('common_name', str_replace(' ', '', $commonName));
             $stmt->bindValue('other_names', str_replace(' ', '', $otherName));
             $stmt->execute();

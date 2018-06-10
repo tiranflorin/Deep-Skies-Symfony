@@ -39,6 +39,9 @@ class ObsList
     /** @ORM\Column(type="datetime") */
     protected $end;
 
+    /** @ORM\Column(type="text", nullable=TRUE) */
+    protected $description;
+
     /** @ORM\Column(type="string", nullable=TRUE) */
     protected $equipment;
 
@@ -265,6 +268,25 @@ class ObsList
     public function getEnd()
     {
         return $this->end;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param mixed $description
+     * @return ObsList
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
     }
 
     /**

@@ -37,6 +37,11 @@
                     <div class="col-lg-10 col-md-8 col-sm-6">
                         <p>Added by: <strong>{{ event.username }}</strong></p>
                     </div>
+                    {% if event.obsDescription is not empty %}
+                        <div class="col-lg-12 col-md-12 col-sm-12" style="padding:15px;">
+                            <span><p><strong>Session notes:</strong> </p> {{ event.obsDescription | nl2br }}</span>
+                        </div>
+                    {% endif %}
                     {% if event.obsEquipment is not empty %}
                         <div class="col-lg-2 col-md-4 col-sm-6">
                             <div class="timeline-heading">

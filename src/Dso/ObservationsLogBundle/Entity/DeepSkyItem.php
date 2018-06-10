@@ -33,147 +33,147 @@ class DeepSkyItem
     /**
      * @var string
      *
-     * @ORM\Column(name="cat1", type="string", length=255, nullable=false)
+     * @ORM\Column(name="cat1", type="string", length=255, nullable=true)
      */
     private $cat1;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="id1", type="string", length=255, nullable=false)
+     * @ORM\Column(name="id1", type="string", length=255, nullable=true)
      */
     private $id1;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="cat2", type="string", length=255, nullable=false)
+     * @ORM\Column(name="cat2", type="string", length=255, nullable=true)
      */
     private $cat2;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="id2", type="string", length=255, nullable=false)
+     * @ORM\Column(name="id2", type="string", length=255, nullable=true)
      */
     private $id2;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="type", type="string", length=255, nullable=false)
+     * @ORM\Column(name="type", type="string", length=255, nullable=true)
      */
     private $type;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="const", type="string", length=255, nullable=false)
+     * @ORM\Column(name="const", type="string", length=255, nullable=true)
      */
     private $constellation;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="rahour", type="string", length=30, nullable=false)
+     * @ORM\Column(name="rahour", type="string", length=30, nullable=true)
      */
     private $raFloat;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="decdeg", type="string", length=30, nullable=false)
+     * @ORM\Column(name="decdeg", type="string", length=30, nullable=true)
      */
     private $decFloat;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="rarad", type="string", length=30, nullable=false)
+     * @ORM\Column(name="rarad", type="string", length=30, nullable=true)
      */
     private $raRad;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="decrad", type="string", length=30, nullable=false)
+     * @ORM\Column(name="decrad", type="string", length=30, nullable=true)
      */
     private $decRad;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="databaseid", type="string", length=30, nullable=false)
+     * @ORM\Column(name="databaseid", type="string", length=30, nullable=true)
      */
     private $databaseId;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="semimajor", type="string", length=30, nullable=false)
+     * @ORM\Column(name="semimajor", type="string", length=30, nullable=true)
      */
     private $semiMajor;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="semiminor", type="string", length=30, nullable=false)
+     * @ORM\Column(name="semiminor", type="string", length=30, nullable=true)
      */
     private $semiMinor;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="semimajorangle", type="string", length=30, nullable=false)
+     * @ORM\Column(name="semimajorangle", type="string", length=30, nullable=true)
      */
     private $semiMajorAngle;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="object_source", type="string", length=30, nullable=false)
+     * @ORM\Column(name="object_source", type="string", length=30, nullable=true)
      */
     private $objectSource;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="dupid", type="string", length=30, nullable=false)
+     * @ORM\Column(name="dupid", type="string", length=30, nullable=true)
      */
     private $dupId;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="dupcat", type="string", length=30, nullable=false)
+     * @ORM\Column(name="dupcat", type="string", length=30, nullable=true)
      */
     private $dupCat;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="display_mag", type="string", length=30, nullable=false)
+     * @ORM\Column(name="display_mag", type="string", length=30, nullable=true)
      */
     private $displayMag;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="mag", type="decimal", precision=3, scale=1, nullable=false)
+     * @ORM\Column(name="mag", type="decimal", precision=3, scale=1, nullable=true)
      */
     private $mag;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="other_names", type="string", length=255, nullable=false)
+     * @ORM\Column(name="other_names", type="string", length=255, nullable=true)
      */
     private $otherName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="notes", type="text", nullable=false)
+     * @ORM\Column(name="notes", type="text", nullable=true)
      */
     private $notes;
 

@@ -141,7 +141,8 @@ class TimelineController extends Controller
             obs_lists.id as 'obsListId',
             obs_lists.name as 'obsListName',
             obs_lists.equipment as 'obsEquipment',
-            obs_lists.conditions as 'obsConditions'
+            obs_lists.conditions as 'obsConditions',
+            obs_lists.description as 'obsDescription'
         FROM `timeline_events` AS `timeline`
         LEFT JOIN `obs_lists`
             ON `timeline`.`obs_list_id` = `obs_lists`.`id`
