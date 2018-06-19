@@ -130,8 +130,6 @@ class DeepSkyItem
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="object_source", type="string", length=30, nullable=true)
      */
     private $objectSource;
 

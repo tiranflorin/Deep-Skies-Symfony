@@ -44,7 +44,7 @@ class EntriesController extends Controller
                 'choices'  => array('private' => 'Private', 'public' => 'Public'),
                 'label' => 'Visibility Level (Public actions will be made visible for everyone)'
             ))
-            ->add('description', 'textarea', array('label' => 'Description (optional)'))
+            ->add('description', 'textarea', array('label' => 'Description (optional)', 'required' => false))
             ->add('start', 'text')
             ->add('end', 'text')
             ->add('equipment', 'text')
@@ -97,7 +97,7 @@ class EntriesController extends Controller
     {
         $form = $this->createFormBuilder()
             ->add('skylist_file', 'file', array('label' => 'File: '))
-            ->add('description', 'textarea', array('label' => 'Description (optional)'))
+            ->add('description', 'textarea', array('label' => 'Description (optional)', 'required' => false))
             ->add('locationId', 'choice', array(
                 'choices'  => $this->buildLocationChoices(),
                 'label' => 'Location (Select from observing sites defined on your profile)'

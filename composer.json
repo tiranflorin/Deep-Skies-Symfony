@@ -51,7 +51,8 @@
         "braincrafted/bootstrap-bundle": "~2.0",
         "tetranz/select2entity-bundle": "2.*",
         "hwi/oauth-bundle": "~0.5",
-        "uran1980/fancybox-bundle": "*"
+        "uran1980/fancybox-bundle": "*",
+        "guzzlehttp/guzzle": "^6.3"
     },
     "require-dev": {
       "phpunit/phpunit": "4.8.*"
