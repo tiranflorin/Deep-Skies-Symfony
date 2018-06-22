@@ -57,6 +57,40 @@ class DsoObjectRepository extends EntityRepository
         return $query->getResult();
     }
 
+    public function findDsosByCatalogue($criteria, $limit = null)
+    {
+        if (NULL === $criteria) {
+            return array();
+        }
+
+        $query = '
+            SELECT o
+            FROM DsoObservationsLogBundle:DeepSkyItem o
+            WHERE
+            (o.cat1 = :cat1 AND o.id1 = :id1) OR
+            (o.cat2 = :cat2 AND o.id2 = :id2)
+            ORDER BY o.name ';
+
+        $query = $this->getEntityManager()
+            ->createQuery($query);
+        if (!is_null($limit)) {
+            $query->setMaxResults($limit);
+        }
+
+        $parsedCriteria = $this->parseCriteria($criteria);
+        if (!empty($parsedCriteria)) {
+            foreach ($parsedCriteria as $conditionPair) {
+                if (in_array($conditionPair['param']['name'], ['cat1', 'cat2', 'id1', 'id2'])) {
+                    $query->setParameter($conditionPair['param']['name'], $conditionPair['param']['value']);
+                }
+            }
+        }
+
+        return $query->getResult();
+
+        // TODO: Maybe other queries by other categories if nothing is found
+    }
+
     protected function getFirstNumberPositionInString($text)
     {
         preg_match('/^\D*(?=\d)/', $text, $m);
@@ -93,7 +127,7 @@ class DsoObjectRepository extends EntityRepository
                     'query' => ' OR ((o.cat1 LIKE :cat1) ',
                     'param' => array(
                         'name' => 'cat1',
-                        'value' => '%' . $begin
+                        'value' => $begin
                     )
                 );
                 $conditionPairs[] = array(
@@ -108,7 +142,7 @@ class DsoObjectRepository extends EntityRepository
                     'query' => ' OR ((o.cat2 LIKE :cat2) ',
                     'param' => array(
                         'name' => 'cat2',
-                        'value' => '%' . $begin
+                        'value' => $begin
                     )
                 );
                 $conditionPairs[] = array(

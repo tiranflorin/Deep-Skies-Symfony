@@ -395,7 +395,7 @@ class SkylistEntry {
 
     public function findDsoByCatalogue($criteria) {
         $resultsFound = $this->em->getRepository('DsoObservationsLogBundle:DeepSkyItem')
-            ->findDsosByName($criteria, 1);
+            ->findDsosByCatalogue($criteria, 1);
         if (!empty($resultsFound)) {
             /** @var DeepSkyItem $objDetails */
             $objDetails = reset($resultsFound);
