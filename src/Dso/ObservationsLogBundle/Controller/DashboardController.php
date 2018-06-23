@@ -74,14 +74,11 @@ class DashboardController extends Controller
         $dataToRender = array();
         /** @var DiagramData $diagramData */
         $diagramData = $this->get('dso_observations_log.diagram_data');
+        $dsoNameFormat = $this->get('dso_name_format.twig_extension');
         $mostObserved =  $diagramData->getMost10Observed($this->getUser()->getId());
 
         foreach ($mostObserved as $item) {
-            $name = $item['name'];
-            if (!empty($item['other_name'])) {
-                $name = $item['other_name'] . ' (' . $name . ')';
-            }
-            $values['name'] = $name;
+            $values['name'] = $dsoNameFormat->formatDsoName($item);
             $values['data'] = array( (int) $item['nb_times']);
 
             array_push($dataToRender, $values);
