@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+{% block pageTitle %}{{ status_code }} Page not found   {% endblock %}
+{% block mainContent %}
+    {% image '@DsoHomeBundle/Resources/public/images/supernova-explosion-SN2010jl.jpg' %}
+        <img src="{{ asset_url }}" alt="Supernova explosion" />
+    {% endimage %}
+    <h1>Oops! The page you are looking for doesn't exist.</h1>
+    <h2>Check for any URL  misspelling or <a href="{{ path('dso_home_homepage') }}">return to the homepage</a>.</h2>
+{% endblock %}
