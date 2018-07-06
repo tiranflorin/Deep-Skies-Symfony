@@ -14,6 +14,12 @@ class ObsListType extends AbstractType
             ->add('name')
             ->add('equipment')
             ->add('conditions')
+            ->add('description')
+            ->add('visibilityLevel',  'choice', array(
+                'choices'  => array(
+                    'private' => 'Private', 'public' => 'Public'
+                ))
+            )
         ;
     }
 

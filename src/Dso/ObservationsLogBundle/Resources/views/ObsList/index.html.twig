@@ -55,6 +55,8 @@
                 <tr>
                     <th>Id</th>
                     <th>Name</th>
+                    <th>Visibility level</th>
+                    <th>User Id</th>
                     <th>Equipment</th>
                     <th>Conditions</th>
                     <th>{{ 'views.index.actions'|trans({}, 'JordiLlonchCrudGeneratorBundle') }}</th>
@@ -65,6 +67,8 @@
                     <tr>
                         <td><a href="{{ path('obs-lists_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
                         <td>{{ entity.name }}</td>
+                        <td>{{ entity.visibilityLevel }}</td>
+                        <td>{{ entity.userId }}</td>
                         <td>{{ entity.equipment }}</td>
                         <td>{{ entity.conditions }}</td>
                         <td>

@@ -2,6 +2,9 @@
 
 namespace Dso\ObservationsLogBundle\Controller;
 
+use Doctrine\ORM\UnitOfWork;
+use Dso\TimelineBundle\Entity\TimelineEvent;
+use Dso\TimelineBundle\Event\CreateTimelineEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -234,6 +237,9 @@ class ObsListController extends Controller
         $editForm->bind($request);
 
         if ($editForm->isValid()) {
+
+            $this->handleTimelineSync($entity);
+
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add('success', 'flash.update.success');
@@ -269,6 +275,8 @@ class ObsListController extends Controller
                 throw $this->createNotFoundException('Unable to find ObsList entity.');
             }
 
+            $this->cleanupTimeline($entity);
+
             $em->remove($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add('success', 'flash.delete.success');
@@ -292,5 +300,54 @@ class ObsListController extends Controller
             ->add('id', 'hidden')
             ->getForm()
         ;
+    }
+
+    private function cleanupTimeline(ObsList $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $timelineRepo = $em->getRepository(TimelineEvent::class);
+        $eventsFound = $timelineRepo->findBy([
+            'obsListId' => $entity->getId()
+        ]);
+
+        if (!(empty($eventsFound))) {
+            foreach ($eventsFound as $timelineEvent) {
+                $em->remove($timelineEvent);
+            }
+
+            $em->flush();
+        }
+    }
+
+    private function handleTimelineSync(ObsList $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        /** @var UnitOfWork $uow */
+        $uow = $em->getUnitOfWork();
+        $uow->computeChangeSets();
+        $changeSet = $uow->getEntityChangeSet($entity);
+
+        if (!empty($changeSet)) {
+            if (isset($changeSet['visibilityLevel'])) {
+
+                // The case where the visibility was changed from private to public.
+                if ($changeSet['visibilityLevel'][0] == 'private' &&
+                    $changeSet['visibilityLevel'][1] == 'public') {
+
+                    $this->get('event_dispatcher')->dispatch(
+                        CreateTimelineEvent::CREATE_TIMELINE_EVENT,
+                        new CreateTimelineEvent(
+                            array(
+                                'name' => $entity->getName(),
+                                'userId' => $entity->getUserId(),
+                                'obsListId' => $entity->getId()
+                            )
+                        )
+                    );
+                } else {
+                    $this->cleanupTimeline($entity);
+                }
+            }
+        }
     }
 }
