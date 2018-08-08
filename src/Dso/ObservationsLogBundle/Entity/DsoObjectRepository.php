@@ -57,10 +57,35 @@ class DsoObjectRepository extends EntityRepository
         return $query->getResult();
     }
 
+    public function findDsosBySimpleName($name, $limit = null)
+    {
+        if (NULL === $name) {
+            return [];
+        }
+
+        $query = '
+            SELECT o
+            FROM DsoObservationsLogBundle:DeepSkyItem o
+            WHERE
+            (o.name = :name)
+            OR (o.otherName = :otherName)
+            ORDER BY o.name, o.mag ';
+
+        $query = $this->getEntityManager()
+            ->createQuery($query);
+        if (!is_null($limit)) {
+            $query->setMaxResults($limit);
+        }
+        $query->setParameter('name', $name);
+        $query->setParameter('otherName', $name);
+
+        return $query->getResult();
+    }
+
     public function findDsosByCatalogue($criteria, $limit = null)
     {
         if (NULL === $criteria) {
-            return array();
+            return [];
         }
 
         $query = '
@@ -84,9 +109,12 @@ class DsoObjectRepository extends EntityRepository
                     $query->setParameter($conditionPair['param']['name'], $conditionPair['param']['value']);
                 }
             }
+
+            return $query->getResult();
         }
 
-        return $query->getResult();
+        return [];
+
 
         // TODO: Maybe other queries by other categories if nothing is found
     }

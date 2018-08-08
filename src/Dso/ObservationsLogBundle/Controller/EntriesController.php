@@ -3,6 +3,7 @@
 namespace Dso\ObservationsLogBundle\Controller;
 
 use Dso\ObservationsLogBundle\Entity\DeepSkyItem;
+use Dso\ObservationsLogBundle\Services\ExternalEntry;
 use Dso\ObservationsLogBundle\Services\SkylistEntry;
 use Dso\PlannerBundle\Services\SQL\MySqlService;
 use Dso\TimelineBundle\Event\CreateTimelineEvent;
@@ -114,38 +115,76 @@ class EntriesController extends Controller
             $data = $form->getData();
             /** @var UploadedFile $uploadedFile */
             $uploadedFile = $data['skylist_file'];
-            if ('skylist' !== $uploadedFile->getClientOriginalExtension()) {
+            $allowedExtensions = ['skylist', 'csv'];
+            $fileExtention = $uploadedFile->getClientOriginalExtension();
+            if (!in_array($fileExtention, $allowedExtensions)) {
                 $request->getSession()->getFlashBag()->add(
                     'error',
-                    'Invalid file! Only "skylist" entries allowed.'
+                    'Invalid file! Only "skylist" anc "csv" entries allowed.'
                 );
 
                 return $this->redirect($this->generateUrl('dso_observations_log_entries_import_external'));
             }
 
             $userId = $this->getUser()->getId();
-            $content = file_get_contents($uploadedFile->getPath() . '/' . $uploadedFile->getFilename());
-            /** @var SkylistEntry $skylistService */
-            $skylistService = $this->get('dso_observations_log.skylist_entry');
-            if (TRUE === $skylistService->doesEntryExist($uploadedFile->getClientOriginalName(), $userId)) {
-                $request->getSession()->getFlashBag()->add('error', 'Duplicate file! Skylist entry already added.');
+            /** @var ExternalEntry $externalService */
+            $externalService = $this->get('dso_observations_log.external_entry');
+            if (TRUE === $externalService->doesEntryExist($uploadedFile->getClientOriginalName(), $userId)) {
+                $request->getSession()->getFlashBag()->add('error', 'Duplicate file! Entry already added.');
 
                 return $this->redirect($this->generateUrl('dso_observations_log_entries_import_external'));
             }
 
-            $parsedContent = $skylistService->parseContent($content);
-            /** @var LoggedObject $firstObservedItem */
-            $firstObservedItem = reset($parsedContent);
-            $listId = $skylistService->createObservingList(array(
-                    'name' => $uploadedFile->getClientOriginalName(),
-                    'userId' =>  $userId,
-                    'start' => $firstObservedItem->getObservedAt(),
-                    'end' => $firstObservedItem->getObservedAt(),
-                    'locationId' => $data['locationId'],
-                    'visibilityLevel' => $data['visibilityLevel'],
-                    'description' => $data['description'],
-                )
-            );
+            $parsedContent = [];
+
+            switch ($fileExtention) {
+                case 'skylist':
+                    $content = file_get_contents($uploadedFile->getPath() . '/' . $uploadedFile->getFilename());
+                    $skylistService = $this->get('dso_observations_log.skylist_entry');
+                    $parsedContent = $skylistService->parseContent($content);
+                    /** @var LoggedObject $firstObservedItem */
+                    $firstObservedItem = reset($parsedContent);
+                    $listId = $externalService->createObservingList(array(
+                            'name' => $uploadedFile->getClientOriginalName(),
+                            'userId' =>  $userId,
+                            'start' => $firstObservedItem->getObservedAt(),
+                            'end' => $firstObservedItem->getObservedAt(),
+                            'locationId' => $data['locationId'],
+                            'visibilityLevel' => $data['visibilityLevel'],
+                            'description' => $data['description'],
+                        )
+                    );
+                    break;
+
+                case 'csv':
+                    // TODO: validate size !? and column names and positions
+                    $csvService = $this->get('dso_observations_log.csv_entry');
+                    $parsedContent = [];
+                    if (($handle = fopen($uploadedFile->getPath() . '/' . $uploadedFile->getFilename(), "r")) !== FALSE) {
+                        $i=0;
+                        while (($row = fgetcsv($handle)) !== FALSE) {
+                            // Ignore the fist line with column names
+                            if ($i > 0) {
+                                $parsedContent[] = $csvService->createLoggedObjectFromArray($row);
+                            }
+                            $i++;
+                        }
+                        fclose($handle);
+                    }
+                    /** @var LoggedObject $firstObservedItem */
+                    $firstObservedItem = reset($parsedContent);
+                    $listId = $externalService->createObservingList(array(
+                            'name' => $uploadedFile->getClientOriginalName(),
+                            'userId' =>  $userId,
+                            'start' => $firstObservedItem->getObservedAt(),
+                            'end' => $firstObservedItem->getObservedAt(),
+                            'locationId' => $data['locationId'],
+                            'visibilityLevel' => $data['visibilityLevel'],
+                            'description' => $data['description'],
+                        )
+                    );
+                    break;
+            }
 
             if ($data['visibilityLevel'] === 'public') {
                 $this->get('event_dispatcher')->dispatch(
@@ -160,7 +199,7 @@ class EntriesController extends Controller
                 );
             }
 
-            $skylistService->persistDsos($parsedContent, $userId, $listId);
+            $externalService->persistDsos($parsedContent, $userId, $listId);
             $request->getSession()->getFlashBag()->add('notice', 'Your file has been uploaded and processed!');
 
             return $this->redirect($this->generateUrl('dso_observations_log_entries_import_external'));

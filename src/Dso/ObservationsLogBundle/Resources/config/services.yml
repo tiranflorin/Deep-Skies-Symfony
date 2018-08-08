@@ -1,6 +1,16 @@
 services:
+    dso_observations_log.external_entry:
+        class: Dso\ObservationsLogBundle\Services\ExternalEntry
+        calls:
+            - [setEm, ["@doctrine.orm.entity_manager"]]
+
     dso_observations_log.skylist_entry:
         class: Dso\ObservationsLogBundle\Services\SkylistEntry
+        calls:
+            - [setEm, ["@doctrine.orm.entity_manager"]]
+
+    dso_observations_log.csv_entry:
+        class: Dso\ObservationsLogBundle\Services\CsvEntry
         calls:
             - [setEm, ["@doctrine.orm.entity_manager"]]
 
