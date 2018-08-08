@@ -7,9 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Class LoggedObject
  *
- * @ORM\Entity
  * @ORM\Table(name="logged_objects")
  * @ORM\HasLifecycleCallbacks()
+ * @ORM\Entity(repositoryClass="Dso\ObservationsLogBundle\Entity\LoggedObjectRepository")
  *
  * @package Dso\ObservationsLogBundle\Entity
  *

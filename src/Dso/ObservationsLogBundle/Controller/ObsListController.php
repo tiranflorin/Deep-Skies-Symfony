@@ -3,6 +3,7 @@
 namespace Dso\ObservationsLogBundle\Controller;
 
 use Doctrine\ORM\UnitOfWork;
+use Dso\ObservationsLogBundle\Entity\LoggedObject;
 use Dso\TimelineBundle\Entity\TimelineEvent;
 use Dso\TimelineBundle\Event\CreateTimelineEvent;
 use Symfony\Component\HttpFoundation\Request;
@@ -275,6 +276,8 @@ class ObsListController extends Controller
                 throw $this->createNotFoundException('Unable to find ObsList entity.');
             }
 
+            $loggedObjectsRepo = $em->getRepository(LoggedObject::class);
+            $loggedObjectsRepo->deleteByUserIdAndObsListId($entity->getUserId(), $entity->getId());
             $this->cleanupTimeline($entity);
 
             $em->remove($entity);
