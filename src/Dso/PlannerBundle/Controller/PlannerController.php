@@ -235,6 +235,7 @@ class PlannerController extends Controller
         $user = $this->get('security.context')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
         $listIds = $request->request->get('listIds', array()); // TODO: check if these exist in DB
+        $notes = $request->request->get('notes');
 
         $newObsListName = $request->request->get('listName');
         if (!empty($newObsListName)) {
@@ -246,7 +247,8 @@ class PlannerController extends Controller
             $plannedObject = new PlannedObject();
             $plannedObject->setObjId($request->request->get('selectedDsoId'))
                 ->setListId($listId)
-                ->setUserId($user->getId());
+                ->setUserId($user->getId())
+                ->setNotes($notes);
             $em->persist($plannedObject);
         }
         $em->flush();

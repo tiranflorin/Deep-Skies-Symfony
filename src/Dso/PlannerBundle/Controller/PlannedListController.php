@@ -4,6 +4,7 @@ namespace Dso\PlannerBundle\Controller;
 
 use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -15,6 +16,7 @@ use Pagerfanta\View\TwitterBootstrapView;
 use Dso\PlannerBundle\Entity\PlannedList;
 use Dso\PlannerBundle\Form\Type\PlannedListType;
 use Dso\PlannerBundle\Form\Type\PlannedListFilterType;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * PlannedList controller.
@@ -119,7 +121,9 @@ class PlannedListController extends Controller
         $user = $this->get('security.context')->getToken()->getUser();
         $queryBuilder = $em->createQueryBuilder();
         $query = $queryBuilder
-            ->select('d')
+            ->select(
+                'd',
+                'p.notes')
             ->distinct()
             ->from('Dso\ObservationsLogBundle\Entity\DeepSkyItem', 'd')
             ->innerJoin(
@@ -140,7 +144,6 @@ class PlannedListController extends Controller
             'entity'         => $entity,
             'plannedObjects' => $plannedObjects,
             'delete_form'    => $deleteForm->createView(),
-            'remove_item_form'    => $deleteForm->createView(),
         );
     }
 
@@ -241,44 +244,40 @@ class PlannedListController extends Controller
     /**
      * Removes a DSO from a PlannedList.
      *
-     * @Route("/remove-item/{listId}", name="planner_planned-lists_remove_item")
+     * @Route("/remove-item/{listId}/{dsoId}", name="planner_planned-lists_remove_item", options={"expose"=true})
      * @Method("DELETE")
      */
-    public function removeFromListAction(Request $request, $listId)
+    public function removeFromListAction(Request $request, $listId, $dsoId)
     {
-        $form = $this->createDeleteForm($listId);
-        $form->bind($request);
-
-        if ($form->isValid()) {
-            $dsoId = $request->request->get('dsoId');
-            if (empty($dsoId)) {
-                $this->get('session')->getFlashBag()->add('error', 'flash.delete.error');
-
-                return $this->redirect($this->generateUrl('planner_planned-lists_show', array('id' => $listId)));
-            }
-
-            $em = $this->getDoctrine()->getManager();
-            // We can have duplicates.
-            $resultsFound = $em->getRepository('DsoPlannerBundle:PlannedObject')->findBy(
-                array(
-                    'objId' => $dsoId,
-                    'listId' => $listId,
-                )
-            );
-
-            if (!empty($resultsFound)) {
-                foreach ($resultsFound as $plannedList) {
-                    $em->remove($plannedList);
-                }
-                $em->flush();
-            }
-
-            $this->get('session')->getFlashBag()->add('success', 'flash.delete.success');
-        } else {
-            $this->get('session')->getFlashBag()->add('error', 'flash.delete.error');
+        if (!$request->isXMLHttpRequest()) {
+            return new Response('Hijack attempt!', Response::HTTP_BAD_REQUEST );
         }
 
-        return $this->redirect($this->generateUrl('planner_planned-lists_show', array('id' => $listId)));
+        if (empty($listId) || empty($dsoId)) {
+            $this->get('session')->getFlashBag()->add('error', 'flash.delete.error');
+
+            return $this->redirect($this->generateUrl('planner_planned-lists_show', array('id' => $listId)));
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        // We can have duplicates.
+        $resultsFound = $em->getRepository('DsoPlannerBundle:PlannedObject')->findBy(
+            array(
+                'objId' => $dsoId,
+                'listId' => $listId,
+            )
+        );
+
+        if (!empty($resultsFound)) {
+            foreach ($resultsFound as $plannedList) {
+                $em->remove($plannedList);
+            }
+            $em->flush();
+        }
+
+        $this->get('session')->getFlashBag()->add('success', 'flash.delete.success');
+
+        return new JsonResponse();
     }
 
     /**

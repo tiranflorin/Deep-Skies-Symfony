@@ -33,6 +33,9 @@ class PlannedObject
     /** @ORM\Column(type="integer", name="list_id") */
     protected $listId;
 
+    /** @ORM\Column(type="text", name="notes") */
+    protected $notes;
+
     /**
      * Get id
      *
@@ -110,5 +113,28 @@ class PlannedObject
     public function getListId()
     {
         return $this->listId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNotes()
+    {
+        if ($this->notes == 0) {
+            $this->notes = null;
+        }
+
+        return $this->notes;
+    }
+
+    /**
+     * @param mixed $notes
+     * @return PlannedObject
+     */
+    public function setNotes($notes)
+    {
+        $this->notes = $notes;
+
+        return $this;
     }
 }

@@ -49,7 +49,7 @@
         </div>
         {% if plannedObjects is not empty %}
         <div class="row">
-            <div class="span12">
+            <div class="span12" id="planned-lists">
                 <table class="table table-striped table-bordered table-condensed">
                     <thead>
                     <tr>
@@ -57,33 +57,79 @@
                         <th>Name</th>
                         <th>Constellation</th>
                         <th>Type</th>
+                        <th>Notes</th>
                         <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <form action="{{ path('planner_planned-lists_remove_item', {'listId': entity.id }) }}" method="post">
-                        <input type="hidden" name="_method" value="DELETE"/>
-                        {{ form_widget(remove_item_form) }}
                     {% for dso  in plannedObjects %}
                         <tr>
                             <td>{{ loop.index }}</td>
-                            <td>{{ dso | dsoName }}</td>
-                            <td>{{ dso.constellation }}</td>
-                            <td>{{ dso.type }}</td>
+                            <td>{{ dso[0] | dsoName }}</td>
+                            <td>{{ dso[0].constellation }}</td>
+                            <td>{{ dso[0].type }}</td>
+                            <td>{{ dso.notes }}</td>
                             <td>
-                                <input type="hidden" name="dsoId" value="{{ dso.id }}"/>
-                                <button class="btn btn-danger" type="submit" title="Remove DSO from this planned list."
-                                            onclick="return confirm('\n\nDeep sky item < {{ dso | dsoName }} > will be removed from this list\n\nAre you sure?\n\n');">
-                                        Remove
+                                <button class="btn btn-danger delete-item" type="button" title="Remove DSO from this planned list."
+                                data-entityId="{{ entity.id }}" data-dsoId="{{ dso[0].id }}">
+                                                    {#return confirm('\n\nDeep sky item < {{ dso[0] | dsoName }} > will be removed from this list\n\nAre you sure?\n\n');">#}
+                                    Remove
                                 </button>
                             </td>
                         </tr>
                     {% endfor %}
-                    </form>
                     </tbody>
                 </table>
             </div>
         </div>
         {% endif %}
+        <div id="dialog-remove-dso" title="Remove item from list">
+            <p>The selected item will be removed from this list.</p>
+            <p><strong>Are you sure? </strong></p>
+        </div>
     </div>
+{% endblock %}
+{% block footer_javascripts %}
+    {{ parent() }}
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script type="text/javascript">
+        $("#dialog-remove-dso").dialog({
+            autoOpen: false,
+            resizable: false,
+            height: "auto",
+            width: 450,
+            modal: true,
+            buttons: {
+                "Yes": function () {
+                    var entityId = $(this).data("entityId");
+                    var dsoId = $(this).data('dsoId');
+                    var that = this;
+                    $.ajax({
+                        type: "delete",
+                        url: Routing.generate('planner_planned-lists_remove_item', {
+                            "listId": entityId,
+                            "dsoId": dsoId
+                        }),
+                        success: function () {
+                            $(that).dialog("close");
+                            location.reload();
+                        },
+                        error: function (response) {
+                            console.log(response); // TODO
+                            $(that).dialog("close");
+                        }
+                    });
+                },
+                "No": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        $( "#planned-lists .delete-item" ).on( "click", function() {
+            var dsoId = $(this).attr("data-dsoId");
+            var entityId = $(this).attr("data-entityId");
+            $( "#dialog-remove-dso" ).data('dsoId', dsoId).data('entityId', entityId).dialog( "open" );
+        });
+    </script>
 {% endblock %}

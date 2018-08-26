@@ -80,7 +80,9 @@ $(function () {
 
     $("#dialog-form").submit(function (event) {
         event.preventDefault();
+        var that = this;
         var newListName = $(this).find('#list_name').val();
+        var notes = $(this).find('#item_notes').val();
         var selectedCheckboxes = $(this).find('input:checkbox:checked').map(function () {
             return this.value;
         }).get();
@@ -96,10 +98,12 @@ $(function () {
             data: {
                 selectedDsoId: selectedDsoId,
                 listName: newListName,
-                listIds: selectedCheckboxes
+                listIds: selectedCheckboxes,
+                notes: notes
             },
             dataType: "json",
             success: function (response) {
+                $(that).find('#item_notes').val('');
                 dialog.dialog("close");
                 dialogOk.dialog("open");
             },
