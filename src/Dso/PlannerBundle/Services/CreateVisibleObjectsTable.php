@@ -108,6 +108,7 @@ class CreateVisibleObjectsTable
           *
         FROM `object`
         WHERE decdeg > {$desiredDeclination}
+        AND mag <= 15.1 OR mag >= 20
         ";
 
         try {
@@ -200,7 +201,7 @@ class CreateVisibleObjectsTable
             `long` varchar(255) NOT NULL DEFAULT '',
             `altitude` varchar(255) NOT NULL DEFAULT '',
             `azimuth` varchar(255) NOT NULL DEFAULT '',
-            `creation` TIMESTAMP DEFAULT '0000-00-00 00:00:00',
+            `creation` TIMESTAMP DEFAULT NOW(),
             PRIMARY KEY (`id`,`object_id`)) ENGINE=MyIsam AUTO_INCREMENT=1 DEFAULT CHARSET=utf8
         ";
 
@@ -216,37 +217,52 @@ class CreateVisibleObjectsTable
      */
     protected function createIntermediaryTable()
     {
-        $sSql = "
+        $dropSql = "DROP TABLE IF EXISTS `{$this->intermediaryTableName}`";
+        $createSql = "
         CREATE TABLE IF NOT EXISTS `{$this->intermediaryTableName}`(
-         `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-         `name` varchar(255) CHARACTER SET latin1 NOT NULL DEFAULT '',
-         `other_names` varchar(255) CHARACTER SET latin1 NOT NULL DEFAULT '',
-         `type` varchar(255) CHARACTER SET latin1 NOT NULL DEFAULT '',
-         `const` varchar(255) CHARACTER SET latin1 NOT NULL DEFAULT '',
-         `id1` varchar(255) CHARACTER SET latin1,
-         `id2` varchar(255) CHARACTER SET latin1,
-         `cat1` varchar(30) CHARACTER SET latin1,
-         `cat2` varchar(30) CHARACTER SET latin1,
-         `rahour` varchar(30) CHARACTER SET latin1,
-         `decdeg` varchar(30) CHARACTER SET latin1,
-         `rarad` varchar(30) CHARACTER SET latin1,
-         `decrad` varchar(30) CHARACTER SET latin1,
-         `databaseid` varchar(255) CHARACTER SET latin1,
-         `semimajor` varchar(255) CHARACTER SET latin1,
-         `semininor` varchar(255) CHARACTER SET latin1,
-         `semimajorangle` varchar(255) CHARACTER SET latin1,
-         `object_source` varchar(255) CHARACTER SET latin1,
-         `dupid` varchar(255) CHARACTER SET latin1,
-         `dupcat` varchar(255) CHARACTER SET latin1,
-         `display_mag` varchar(255) CHARACTER SET latin1,
-         `mag` decimal(3,1) NOT NULL DEFAULT '0.0',
-         `notes` text CHARACTER SET latin1 NOT NULL,
-         PRIMARY KEY (`id`)
-        ) ENGINE=MyIsam DEFAULT CHARSET=utf8
+          `id` int(11) NOT NULL AUTO_INCREMENT,
+          `rahour` float DEFAULT NULL,
+          `decdeg` float DEFAULT NULL,
+          `type` varchar(20) DEFAULT NULL,
+          `const` varchar(20) DEFAULT NULL,
+          `mag` float DEFAULT NULL,
+          `name` text,
+          `rarad` float DEFAULT NULL,
+          `decrad` float DEFAULT NULL,
+          `databaseid` int(11) DEFAULT NULL,
+          `semimajor` float DEFAULT NULL,
+          `semiminor` float DEFAULT NULL,
+          `semimajorangle` float DEFAULT NULL,
+          `object_source` int(11) DEFAULT NULL,
+          `id1` varchar(25) DEFAULT NULL,
+          `cat1` varchar(25) DEFAULT NULL,
+          `id2` varchar(25) DEFAULT NULL,
+          `cat2` varchar(25) DEFAULT NULL,
+          `dupid` varchar(25) DEFAULT NULL,
+          `dupcat` varchar(25) DEFAULT NULL,
+          `display_mag` float DEFAULT NULL,
+          `other_names` text,
+          `nice_foto_target_at_focals` tinytext,
+          `id3` int(11) DEFAULT NULL,
+          `cat3` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+          `arp_comment` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+          `arp_category` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+          `description_nosearch` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+          `searchable_but_dontdisplay` varchar(200) CHARACTER SET utf8mb4 NOT NULL DEFAULT '',
+          `id4` int(11) NOT NULL DEFAULT '0',
+          `cat4` varchar(10) NOT NULL DEFAULT '',
+          `id5` int(11) DEFAULT '0',
+          `cat5` varchar(10) NOT NULL DEFAULT '',
+          `boring_target` int(11) NOT NULL DEFAULT '0',
+          `deleted` int(11) NOT NULL DEFAULT '0',
+          `notes` varchar(300) DEFAULT NULL,
+          PRIMARY KEY (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
         ";
 
         try {
-            $this->mysqlService->executeQuery($sSql);
+            $this->mysqlService->executeQuery($dropSql);
+            $this->mysqlService->executeQuery($createSql);
         } catch (QueryExecutionFailureException $e) {
             echo 'Caught exception: ',  $e->getMessage(), ' File: ', $e->getFile(), "\n";
         }
