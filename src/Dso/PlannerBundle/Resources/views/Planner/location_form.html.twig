@@ -5,7 +5,7 @@
         <form action="{{ path('dso_planner_update_location_settings') }}" method="post" name="form" class="form-validation">
             <div class="row">
                 <div class="col-lg-7 col-md-7">
-                    <input type="text" name="name" class="form-control form-control-warning" id="address-name" placeholder="Observing site name" autofocus
+                    <input type="text" name="name" class="form-control form-control-warning" id="address-name" required="required" placeholder="Observing site name" autofocus
                     {% if currentObservingSite.name is not null %} value="{{ currentObservingSite.name }}"{% endif %}>
                     <div id="address-name-warning" class="address-issue-warning has-warning"></div>
                 </div>
@@ -16,12 +16,12 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-7 col-md-7"><input type="text" name="latitude" class="form-control" id="address-lat" placeholder="Latitude" autofocus
+                <div class="col-lg-7 col-md-7"><input type="text" required="required" name="latitude" class="form-control" id="address-lat" placeholder="Latitude" autofocus
                             {% if currentObservingSite.latitude is not null %} value="{{ currentObservingSite.latitude }}"{% endif %}></div>
                 <div class="col-lg-5 col-md-5"><small class="text-muted">(Eg. 43.234)</small></div>
             </div>
             <div class="row">
-                <div class="col-lg-7 col-md-7"><input type="text" name="longitude" class="form-control" id="address-long" placeholder="Longitude"
+                <div class="col-lg-7 col-md-7"><input type="text" required="required" name="longitude" class="form-control" id="address-long" placeholder="Longitude"
                             {% if currentObservingSite.longitude is not null %} value="{{ currentObservingSite.longitude }}"{% endif %}></div>
                 <div class="col-lg-5 col-md-5"><small class="text-muted">(Eg. 24.531)</small></div>
             </div>
@@ -29,7 +29,6 @@
                 <div class="col-lg-7 col-md-7" style="margin-top: 10px;">
                     <select class="form-control" name="timezone">
                         <div class="form-group">
-                        <option  value="0">Select timezone</option>
                         {% for zone in timezones %}
                         <option value="{{ zone.zone }}"
                                 {% if zone.zone == currentObservingSite.timezone %} selected="selected" {% endif %} >
@@ -40,11 +39,11 @@
                         </div>
                     </select>
                 </div>
-                <div class="col-lg-5 col-md-5"><small class="text-muted">(Eg. Europe/Bucharest)</small></div>
+                <div class="col-lg-5 col-md-5"><small class="text-muted">(Select your observing site's timezone)</small></div>
             </div>
             <div class="row">
                 <div class="col-lg-7 col-md-7">
-                    <input type="text" id="datetimepicker" name="datetime" class="form-control" placeholder="DateTime"
+                    <input type="text" id="datetimepicker" name="datetime" class="form-control" placeholder="DateTime" required="required"
                             {% if currentObservingSite.datetime is not null %} value="{{ currentObservingSite.datetime }}"{% endif %}></div>
                 <div class="col-lg-5 col-md-5"><small class="text-muted">(Eg. {{ 'now'|date('Y-m-d H') }}:00)</small></div>
             </div>

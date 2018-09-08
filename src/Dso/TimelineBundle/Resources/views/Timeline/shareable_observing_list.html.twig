@@ -35,7 +35,13 @@
                         </div>
                     </div>
                     <div class="col-lg-10 col-md-8 col-sm-6">
-                        <p>Added by: <strong>{{ event.username }}</strong></p>
+                        <p><strong>Added by: </strong>{{ event.username }}</p>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12" style="padding-left:15px;padding-top: 5px">
+                        <span><p><strong>User's timezone: </strong>{{ event.timezone }}</p></span>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12" style="padding-left:15px;padding-top: 5px">
+                        <span><i class="fa fa-map-marker fa-2x" style="vertical-align: middle;"></i><strong> Observing site</strong>: {{ event.observingSite }}</span>
                     </div>
                     {% if event.obsDescription is not empty %}
                         <div class="col-lg-12 col-md-12 col-sm-12" style="padding:15px;">

@@ -142,12 +142,16 @@ class TimelineController extends Controller
             obs_lists.name as 'obsListName',
             obs_lists.equipment as 'obsEquipment',
             obs_lists.conditions as 'obsConditions',
-            obs_lists.description as 'obsDescription'
+            obs_lists.description as 'obsDescription',
+            location.time_zone as 'timezone',
+            location.name as 'observingSite'
         FROM `timeline_events` AS `timeline`
         LEFT JOIN `obs_lists`
             ON `timeline`.`obs_list_id` = `obs_lists`.`id`
         LEFT JOIN `fos_user`
             ON `timeline`.`user_id` = `fos_user`.`id`
+        LEFT JOIN `observing_sites` AS location
+            ON `obs_lists`.`location_id` = `location`.`id`
         WHERE `obs_lists`.`id` = $observingListId
         ORDER BY `timeline`.`id` DESC
         ";
@@ -203,6 +207,7 @@ class TimelineController extends Controller
         );
 
         $loggedObjects = $stmt->fetchAll();
+        $loggedObjects = $this->get('dso_observations_log.logged_stats')->alterObjectsDateTimeForDisplay($loggedObjects, $results[0]['timezone']);
 
         return $this->render(
             'DsoTimelineBundle:Timeline:shareable_observing_list.html.twig',

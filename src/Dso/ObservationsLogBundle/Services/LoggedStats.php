@@ -27,12 +27,15 @@ class LoggedStats {
             lists.`name` AS listName,
             logged.comment AS comment,
             logged.observedAt AS observedAt,
-            lists.equipment AS equipment
+            lists.equipment AS equipment,
+            location.time_zone as timezone
             FROM logged_objects AS logged
             INNER JOIN object AS obj_details
             ON obj_details.id = logged.obj_id
             INNER JOIN obs_lists AS lists
             ON lists.id = logged.list_id
+            INNER JOIN `observing_sites` AS location
+            ON `lists`.`location_id` = `location`.`id`
             WHERE logged.user_id = (:userId)
             ORDER BY logged.id DESC
             LIMIT 20;
@@ -44,7 +47,7 @@ class LoggedStats {
         $stmt->execute();
         $results = $stmt->fetchAll();
 
-        return $results;
+        return $this->alterObjectsDateTimeForDisplay($results, $results[0]['timezone']);
     }
 
     public function getUniqueObjectsCount($userId) {
@@ -102,5 +105,18 @@ class LoggedStats {
         $this->em = $em;
 
         return $this;
+    }
+
+    public function alterObjectsDateTimeForDisplay($loggedObjects, $timezone) {
+        $format = 'Y-m-d H:i:s';
+        $utcTimezone = new \DateTimeZone('UTC');
+        $displayTimezone = new \DateTimeZone($timezone);
+        foreach ($loggedObjects as &$loggedObject) {
+            $dt = \DateTime::createFromFormat($format, $loggedObject['observedAt'], $utcTimezone);
+            $dt->setTimezone($displayTimezone);
+            $loggedObject['observedAt'] = $dt->format('Y-m-d H:i:s');
+        }
+
+        return $loggedObjects;
     }
 }

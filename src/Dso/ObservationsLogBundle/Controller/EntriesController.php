@@ -227,12 +227,15 @@ class EntriesController extends Controller
             `obj`.`name`,
             `logged`.`comment`,
             `logged`.`observedAt`,
-            `obs_lists`.`name` AS 'obsList'
+            `obs_lists`.`name` AS 'obsList',
+            location.time_zone as 'timezone'
         FROM logged_objects AS `logged`
         LEFT JOIN `object` AS `obj`
             ON `logged`.`obj_id` = `obj`.`id`
         LEFT JOIN `obs_lists`
             ON `logged`.`list_id` = `obs_lists`.`id`
+        LEFT JOIN `observing_sites` AS location
+            ON `obs_lists`.`location_id` = `location`.`id`
         WHERE `logged`.`user_id` = (?)
         ORDER BY `logged`.`id` DESC
         ";
@@ -241,8 +244,11 @@ class EntriesController extends Controller
             array($this->getUser()->getId()),
             array(\PDO::PARAM_INT)
         );
+
+        $results = $stmt->fetchAll();
+        $results = $this->get('dso_observations_log.logged_stats')->alterObjectsDateTimeForDisplay($results, $results[0]['timezone']);
         $pagination = $paginator->paginate(
-            $stmt->fetchAll(),
+            $results,
             $request->query->getInt('page', 1),
             20
         );
