@@ -46,6 +46,10 @@ class LoggedStats {
         $stmt->bindValue('userId', $userId);
         $stmt->execute();
         $results = $stmt->fetchAll();
+        
+        if (empty($results)) {
+            return [];
+        }
 
         return $this->alterObjectsDateTimeForDisplay($results, $results[0]['timezone']);
     }
