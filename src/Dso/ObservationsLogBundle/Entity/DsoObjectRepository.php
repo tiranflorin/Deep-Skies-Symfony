@@ -29,7 +29,7 @@ class DsoObjectRepository extends EntityRepository
             FROM DsoObservationsLogBundle:DeepSkyItem o
             WHERE
             (o.name LIKE :name)
-            OR (o.otherName LIKE :otherName)';
+            OR (o.otherNames LIKE :otherName)';
         $orderBy = ' ORDER BY o.name, o.mag ';
 
         $wherePart = '';
@@ -59,7 +59,7 @@ class DsoObjectRepository extends EntityRepository
 
     public function findDsosBySimpleName($name, $limit = null)
     {
-        if (NULL === $name) {
+        if (empty($name)) {
             return [];
         }
 
@@ -68,7 +68,7 @@ class DsoObjectRepository extends EntityRepository
             FROM DsoObservationsLogBundle:DeepSkyItem o
             WHERE
             (o.name = :name)
-            OR (o.otherName = :otherName)
+            OR (o.otherNames = :otherName)
             ORDER BY o.name, o.mag ';
 
         $query = $this->getEntityManager()
